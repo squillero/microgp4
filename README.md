@@ -12,5 +12,5 @@ MicroGP (µGP, `&micro;GP`) is an evolutionary optimizer able to outperform both
 
 MicroGP first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information; [several different techniques](https://scholar.google.com/scholar?q=%28+squillero+OR+tonda+%29+AND+microgp) are used to explore efficiently the search space, and eventually pinpoint the best solution. The project started [around Y2K](HISTORY.md) and benefited of the effort of [several people](CONTRIBUTORS.md). MicroGP has been first [coded in C in 2002](https://github.com/squillero/microgp2) and then [re-engineered in C++ in 2006](https://github.com/squillero/microgp3). This version is in Python, it has been redesigned from scratch once again to take advantage of the peculiar features of the language and to exploit its huge standard library. 
 
-**Copyright © 2019 Giovanni Squillero and Alberto Tonda**  
+**Copyright © 2020 Giovanni Squillero and Alberto Tonda**  
 MicroGP v4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache-2.0 license](https://tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).
