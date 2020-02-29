@@ -1,12 +1,10 @@
 µCredits
 ========
 
-This is the official list of people who contributed with code, ideas, drawings,
-music or other means to the MicroGP project. 
-The *AUTHORS* file lists the copyright holders.
+This file ([CONTRIBUTORS](./CONTRIBUTORS.md)) is the list of people who contributed with code, ideas, drawings, music or other means to the MicroGP project. The file [AUTHORS](./AUTHORS) lists the copyright holders.
 
 * Alberto Cerato: Case study: peripheral test
-* Alberto Tonda: Evolutionary core design; coding (µGP v3, µGP v4 & Borg v2)
+* Alberto Tonda: Evolutionary core design; coding (µGP v3 & Borg v2)
 * Alessandro Aimo: Coding (µGP v3)
 * Alessandro Salomone: Coding (µGP v3); spare support
 * Andrea Maffiotto: Backend exploitation; case study: stress test
@@ -15,7 +13,7 @@ The *AUTHORS* file lists the copyright holders.
 * Danilo Ravotto: Test & verification engineering; case studies management
 * Davide Decicco: Case study: Test program generation (i8051)
 * Doina Bucur: Case studies: WSNs + DTNs
-* Edgar Ernesto Sanchez Sanchez: Evolutionary core design; test & verification engineering; case studies management; coding (µGP v3)
+* Edgar Ernesto Sanchez Sanchez: Evolutionary core design; test & verification engineering; case studies management
 * Ennio Guglielmetto: Logo (µGP v3)
 * Fabio Salto: Test & verification engineering; case studies: i8051; dlx; mips2 & sparc8
 * Francisco Javier Navas Torres: Coding & documentation (µGP v3)
@@ -26,7 +24,7 @@ The *AUTHORS* file lists the copyright holders.
 * Gianluca Zaniolo: Case study: post-silicon verification (Pentium 4)
 * Gianni Zizzi: Case study: automatic malware generation
 * Giovanni Iacca: Case studies: WSNs + DTNs
-* Giovanni Squillero: Idea; project management; evolutionary core design; test & verification engineering; coding (µGP v2, µGP v3 & µGP v4)
+* Giovanni Squillero: Idea & evolutionary core design; project management; coding (µGP v2 & µGP v4)
 * Giuseppe Macchia: Case study: Test program generation (sparc8) + hw accelerator
 * Giuseppe Parlato: Case study: functional failing test generation (Core i7-950)
 * Giuseppe Trovato: Coding (Borg); case studies: Core war & dlx
@@ -46,7 +44,7 @@ The *AUTHORS* file lists the copyright holders.
 * Samuel Guedes: Coding (DMAB v1)
 * Simone Milano: Coding (µGP v3)
 * Skip Lindsay: Case study: post-silicon verification (Pentium 4)
-* Sonia Drappero: Evolutionary core design (moea & group evolution); coding (µGP v3)
+* Sonia Drappero: MOEA & group evolution; coding (µGP v3)
 * Tim Neutel: Logo (µGP v3)
 * Tommaso Rosato: Coding (frantumator); case study: on-line test (i8051)
 * Zul Nazdri: Case study: spare support on core war and redcode
