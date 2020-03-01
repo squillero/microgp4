@@ -23,7 +23,7 @@ pip install microgp
 #### Documentation
 
 * The full documentation for MicroGP v4 is on *Read The Docs* at ~~[https://microgp.readthedocs.com](https://microgp.readthedocs.com)~~
-* MicroGP v3 *"Bluebell"* is thoroughly described in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
+* MicroGP v3 *"Bluebell"* is described in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
 * MicroGP v2 is described in the paper "MicroGP — An Evolutionary Assembly Program Generator", *Genetic Programming and Evolvable Machines*,  vol. 6, 247–263 (2005), [10.1007/s10710-005-2985-x](http://dx.doi.org/10.1007/s10710-005-2985-x)
 
 ### Licence
