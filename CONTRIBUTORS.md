@@ -11,11 +11,11 @@ The file [CONTRIBUTORS](./CONTRIBUTORS.md) give credits to people who contribute
 * Antonio Casaschi: Case study (i8051)
 * Alberto Cerato: Case study (peripheral test)
 * Fulvio Corno: Test & verification engineering (µGP v2)
-* Gianluca Cumani: Coding (µGP v1); case studies (SPARC Ultra)
+* Gianluca Cumani: Coding (µGP v1); Case study (SPARC Ultra)
 * Davide Decicco: Case study (i8051)
 * Maria di Vincenzo: Case study (Core i7-950)
-* Sonia Drappero: MOEA & group evolution; coding (µGP v3)
-* Edgar Ernesto Sanchez Sanchez: Evolutionary core design; test & verification engineering; case studies management
+* Sonia Drappero: MOEA & group evolution; Coding (µGP v3)
+* Edgar Ernesto Sanchez Sanchez: Test & verification engineering; Case studies management
 * Paolo Ferretti: Case study (68hc11)
 * Gianluca Fisanotti: Case study (Pentium E2180)
 * Michelangelo Grosso: Test & verification engineering
@@ -27,26 +27,26 @@ The file [CONTRIBUTORS](./CONTRIBUTORS.md) give credits to people who contribute
 * Skip Lindsay: Case study (Pentium 4)
 * Marco Loggia: Case studies (MIPS2 & SPARC8)
 * Giuseppe Macchia: Case study (SPARC8) + HW accelerator
-* Andrea Maffiotto: Backend exploitation; case study (stress test)
+* Andrea Maffiotto: Backend exploitation; Case study (stress test)
 * Nicolò Malfatto: Coding (µGP v4)
 * Onofrio Mancuso: Performance assessment (µGP v3)
 * Simone Milano: Coding (µGP v3)
-* Luca Motta: Coding (µGP v3); spare support
+* Luca Motta: Coding (µGP v3); Spare support
 * Zul Nazdri: Case study (Core War)
 * Tim Neutel: Logo (µGP v3)
-* Pier Paolo Ucchino: Generic support; case study (Core War)
+* Pier Paolo Ucchino: Generic support; Case study (Core War)
 * Giuseppe Parlato: Case study (Core i7-950)
-* Danilo Ravotto: Test & verification engineering; case studies management
-* Tommaso Rosato: Coding (frantumator); case study (i8051)
-* Alessandro Salomone: Coding (µGP v3); spare support
-* Fabio Salto: Test & verification engineering; case studies (i8051; DLX; MIPS2 & SPARC8)
-* Massimiliano Schillaci: Evolutionary core design; test & verification engineering; coding (µGP v3); case study (PowerPC) 750
+* Danilo Ravotto: Test & verification engineering; Case studies management
+* Tommaso Rosato: Coding (frantumator); Case study (i8051)
+* Alessandro Salomone: Coding (µGP v3); Spare support
+* Fabio Salto: Test & verification engineering; Case studies (i8051; DLX; MIPS2 & SPARC8)
+* Massimiliano Schillaci: Evolutionary core design; Test & verification engineering; Coding (µGP v3); Case study (PowerPC) 750
 * Matteo Sonza Reorda: Test & verification engineering
-* Giovanni Squillero: Evolutionary core design; project management; coding (µGP v2 & µGP v4)
-* Luca Sterpone: FPGA-related enhancements
+* Giovanni Squillero: Evolutionary core design; Project management; Coding (µGP v2 & µGP v4)
+* Luca Sterpone: FPGA accelerator
 * Antonio Tomasiello: Case study (i8051)
-* Alberto Tonda: Evolutionary core design; coding (µGP v3 & Borg v2)
-* Giuseppe Trovato: Coding (Borg); case studies (Core War & DLX)
+* Alberto Tonda: Evolutionary core design; Coding (µGP v3 & Borg v2)
+* Giuseppe Trovato: Coding (Borg); Case studies (Core War & DLX)
 * Gianluca Zaniolo: Case study (Pentium 4)
 * Gianni Zizzi: Case study (malware)
 
