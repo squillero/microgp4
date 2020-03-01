@@ -13,7 +13,7 @@ inside the nodes. The graph is eventually transformed into a valid assembly-lang
 ## MicroGP v2
 
 > Copyright © 2002-2006 Giovanni Squillero; distributed under 
-[GPL2](https://tldrlegal.com/license/gnu-general-public-license-v2);
+[GPL2](https://www.tldrlegal.com/l/gpl2);
 available on [GitHub](https://github.com/squillero/microgp2).
 
 As its predecessor, MicroGP v2 internally encodes programs as graphs (directed multigraphs, this time), but it allows to load the list of the parametric code fragments (*macros*) from a file, targeting a specific microprocessor (hence the micro in the name). The evolutionary core has been completely re-designed looking at the *Genetic Programming* paradigm (hence the GP in the name). 
@@ -27,7 +27,7 @@ With time, MicroGP v2 has been coerced into solving problems it was not meant fo
 ## MicroGP v3
 
 > Copyright © 2006-2016 Giovanni Squillero; distributed under 
-[GPL3](https://tldrlegal.com/license/gnu-general-public-license-v3-%28gpl-3%29);
+[GPL3](https://www.tldrlegal.com/l/gpl-3.0);
 available on both [GitHub](https://github.com/squillero/microgp3) 
 and [Sourceforge](https://sourceforge.net/projects/ugp3/).
 
@@ -37,8 +37,8 @@ The development of the third version started in 2006 (release: *Noodle Soup*) wi
 
 ## MicroGP v4
 
-> Copyright © 2019 Giovanni Squillero and Alberto Tonda; distributed under the
-[Apache 2.0](https://tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29) license; available on [GitHub](https://github.com/squillero/microgp4).
+> Copyright © 2020 Giovanni Squillero and Alberto Tonda; distributed under the
+[Apache 2.0](https://www.tldrlegal.com/l/apache2) license; available on [GitHub](https://github.com/squillero/microgp4).
 
 
-MicroGP v4 *Plov* is ...
+MicroGP v4 *Kiwi* is ...
