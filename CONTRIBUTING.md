@@ -6,12 +6,11 @@ First off, thanks for taking the time to contribute! :+1:
 #### Table Of Contents
 
 * [How Can I Contribute?](#how-can-i-contribute)
-* [Coding style](#python-coding-style)
-* [Conventions](#conventions)
+* [Coding style](#coding-style)
 
 ## How Can I Contribute?
 
-* [~~Donating money~~](#Donations)
+* [~~Donating money~~](#money-donations)
 * Join the team (looking for a Master/PhD Thesis?)
 * Use the tool and report a success story
 * Use the tool and submit a bug report
@@ -66,12 +65,12 @@ def run_paranoia_checks(self):
     assert self.is_valid(self.value), "Meaningful message"
 ```
 
-## Donations
+## Money Donations
 
-First of all, **thanks for trying**, but we do not accept money donations:
+Thanks for trying, but we do not accept money donations:
 
 * Giovanni and Alberto are working on MicroGP as an integral part of their research activities. Thus, they are already paid by their institutions, namely: *Politecnico di Torino* (Italy) and *French National Institute for Agricultural Research* (France).
 * Students worked, are working, and will work on MicroGP for their academic curricula, either master theses or Ph.D. programs.
 * A few volunteers did a terrific job on specific topics, but, being volunteers, they did not ask for a wage.
 
-So, why not donating time instead of money? 
+So, why not donating **time** instead of money? Please contact Giovanni or Alberto and join the project. 
