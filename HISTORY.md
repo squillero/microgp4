@@ -39,5 +39,4 @@ The development of the third version started in 2006 (release: *Noodle Soup*) wi
 
 > Copyright © 2020 Giovanni Squillero and Alberto Tonda; distributed under [Apache-2.0](https://www.tldrlegal.com/l/apache2); available on [GitHub](https://github.com/squillero/microgp4).
 
-
 MicroGP v4 *Kiwi* is ...
