@@ -1,11 +1,12 @@
 µCredits
 ========
 
-This file ([CONTRIBUTORS](./CONTRIBUTORS.md)) is the list of people who contributed with code, ideas, drawings, music or other means to the MicroGP project. The file [AUTHORS](./AUTHORS) lists the copyright holders.
+The file [CONTRIBUTORS](./CONTRIBUTORS.md) give credits to people who contributed with code, ideas, drawings, music or other means to the MicroGP project. The file [AUTHORS](./AUTHORS) lists the copyright holders.
 
 * Alberto Cerato: Case study: peripheral test
 * Alberto Tonda: Evolutionary core design; coding (µGP v3 & Borg v2)
 * Alessandro Aimo: Coding (µGP v3)
+* Luca Barillari: Coding (µGP v4)
 * Alessandro Salomone: Coding (µGP v3); spare support
 * Andrea Maffiotto: Backend exploitation; case study: stress test
 * Antonio Casaschi: Case study: Test program generation (i8051)
@@ -49,4 +50,4 @@ This file ([CONTRIBUTORS](./CONTRIBUTORS.md)) is the list of people who contribu
 * Tommaso Rosato: Coding (frantumator); case study: on-line test (i8051)
 * Zul Nazdri: Case study: spare support on core war and redcode
 
-**Note**: If you think you should be listed here, please contact Alberto or Giovanni.
+> **Note**: If you think you should be listed here, please contact Alberto or Giovanni.

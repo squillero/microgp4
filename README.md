@@ -12,18 +12,18 @@ MicroGP v4
 
 MicroGP (µGP, `ugp`) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
 
-MicroGP first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information; [several different techniques](https://scholar.google.com/scholar?q=%28+squillero+OR+tonda+%29+AND+microgp) are used to explore efficiently the search space, and eventually pinpoint the best solution. The first prototype was created [around Y2K](HISTORY.md), a fully working version was [coded in C in 2002](https://github.com/squillero/microgp2) and then [re-engineered in C++ in 2006](https://github.com/squillero/microgp3). This version is in Python, it has been redesigned from scratch once again to take advantage of the peculiar features of the language and to exploit its huge standard library. It would not have been possible without the help and support of [several people](CONTRIBUTORS.md). 
+MicroGP first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information; [several different techniques](https://scholar.google.com/scholar?q=%28+squillero+OR+tonda+%29+AND+microgp) are used to explore efficiently the search space, and eventually pinpoint the best solution. The first prototype was created [around Y2K](HISTORY.md), a fully working version was [coded in C in 2002](https://github.com/squillero/microgp2) and then [re-engineered in C++ in 2006](https://github.com/squillero/microgp3). This version is in Python, it has been redesigned from scratch once again to take advantage of the peculiar features of the language and to exploit its huge standard library. MicroGP would not have been possible without the help and support of [several people](CONTRIBUTORS.md). 
 
-### Installation
+#### Installation
 
 ```shell script
 pip install microgp
 ```
 
-### Documentation
+#### Documentation
 
-* The full documentation for MicroGP v4 is on *Read The Docs* at ~~[https://microgp.readthedocs.com](https://microgp.readthedocs.com)~~.
-* MicroGP v3 *Bluebell* is thoroughly described in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
+* The full documentation for MicroGP v4 is on *Read The Docs* at ~~[https://microgp.readthedocs.com](https://microgp.readthedocs.com)~~
+* MicroGP v3 *"Bluebell"* is thoroughly described in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
 * MicroGP v2 is described in the paper "MicroGP — An Evolutionary Assembly Program Generator", *Genetic Programming and Evolvable Machines volume*, Mach 6, 247–263 (2005), [10.1007/s10710-005-2985-x](http://dx.doi.org/10.1007/s10710-005-2985-x)
 
 ### Licence
