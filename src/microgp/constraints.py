@@ -290,7 +290,7 @@ class Constraints(Paranoid, Pedantic):
         self._stats['valid_individuals'] = 0
         self._stats['valid_individuals_warn_threshold'] = 0.01
         assert file_name.find("{id}"), "file_name doesn't contain \"{id}\"."
-        self._file_name = "solution{id}.ugp"
+        self._file_name = file_name
         self._evaluator = None
 
     def add_macro(self, macro: Macro) -> None:

@@ -14,5 +14,7 @@
 
 int darwin()
 {
-    return 23+34;
+    int var = 1;
+    var = 22*var;
+    return var;
 }

@@ -89,30 +89,29 @@ if __name__ == "__main__":
     lambda_ = 7
     max_age = 10
 
-    for _ in range(1):
-        darwin = ugp.Darwin(
-            constraints=library,
-            operators=operators,
-            mu=mu,
-            nu=nu,
-            lambda_=lambda_,
-            sigma=sigma,
-            max_age=max_age,
-        )
+    darwin = ugp.Darwin(
+        constraints=library,
+        operators=operators,
+        mu=mu,
+        nu=nu,
+        lambda_=lambda_,
+        sigma=sigma,
+        max_age=max_age,
+    )
 
-        # Evolve____________________________________________________________________________________________________________
-        darwin.evolve()
-        logging.bare("This is the final population:")
-        for individual in darwin.population:
-            msg = f"Solution {str(individual.id)} "
-            ugp.print_individual(individual, msg=msg, plot=True)
-            ugp.logging.bare(f"Fitness: {individual.fitness}")
-            ugp.logging.bare("")
+    # Evolve____________________________________________________________________________________________________________
+    darwin.evolve()
+    logging.bare("This is the final population:")
+    for individual in darwin.population:
+        msg = f"Solution {str(individual.id)} "
+        ugp.print_individual(individual, msg=msg, plot=True)
+        ugp.logging.bare(f"Fitness: {individual.fitness}")
+        ugp.logging.bare("")
 
-        # Print best individuals
-        ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
+    # Print best individuals
+    ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
 
-        ugp.delete_solutions()
+    ugp.delete_solutions()
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)

@@ -138,7 +138,7 @@ class Darwin:
         # Continue until one or more of the stopping condition in the list is true
         # while all((not f(self) for f in self._stopping_conditions)):
         i = 0
-        while self._generation < 10:
+        while self._generation < 20:
             self.do_generation()
             i += 1
             if i % 20 == 0:

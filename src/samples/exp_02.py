@@ -58,62 +58,93 @@ if __name__ == "__main__":
 
     # Define parameters
     reg_alternatives = ['%eax', '%ebx', '%ecx', '%edx']
-    instr_alternatives = ['add', 'sub', 'mov', 'and', 'or', 'xor', 'cmp']
-    instr_op_alternatives = ['incl', 'decl', 'notl']
-    branch_alternatives = ['ja', 'jz', 'jnz', 'je', 'jne', 'jc', 'jnc', 'jo', 'jno']
+    instr_alternatives = ['add', 'sub', 'and', 'or', 'xor']
+    shift_alternatives = ['shr', 'shl']
+    # instr_op_alternatives = ['incl', 'decl', 'notl']
+    # branch_alternatives = ['ja', 'jz', 'jnz', 'je', 'jne', 'jc', 'jnc', 'jo', 'jno']
     reg_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=reg_alternatives)
     instr_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=instr_alternatives)
-    bitstr_param = ugp.make_parameter(ugp.parameter.Bitstring, len_=32)  # {bitstr:02X}
-    branch_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=branch_alternatives)
+    shift_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=shift_alternatives)
+    integer = ugp.make_parameter(ugp.parameter.Integer, min=-32768, max=32767)
+    int8 = ugp.make_parameter(ugp.parameter.Integer, min=0, max=256)
+    # bitstr_param = ugp.make_parameter(ugp.parameter.Bitstring, len_=32)  # {bitstr:02X}
+    # branch_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=branch_alternatives)
     jmp_param = ugp.make_parameter(ugp.parameter.LocalReference,
                                    allow_self=False,
                                    allow_forward=True,
-                                   allow_backward=True,
+                                   allow_backward=False,
                                    frames_up=0)
-    instr_op_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=instr_op_alternatives)
+    # instr_op_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=instr_op_alternatives)
 
     # Define the macros
-    direct_macro = ugp.Macro("{instr} {regS}, {regD}", {'instr': instr_param, 'regS': reg_param, 'regD': reg_param})
-    const_macro = ugp.Macro("{instr} %0x{bitstr}, {regD}",
-                            {'instr': instr_param, 'bitstr': bitstr_param, 'regD': reg_param})
-    instr_op_macro = ugp.Macro("{instr} {reg}", {'instr': instr_param, 'reg': reg_param})
-    branch_macro = ugp.Macro("{branch} {jmp}", {'branch': branch_param, 'jmp': jmp_param})
+    jmp1 = ugp.Macro("    jmp {jmp_ref}", {'jmp_ref': jmp_param})
+    instr_op_macro = ugp.Macro("    {instr} {regS}, {regD}", {'instr': instr_param, 'regS': reg_param, 'regD': reg_param})
+    shift_op_macro = ugp.Macro("    {shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
+    join_registers = ugp.Macro("\n    add %ebx, %eax\n"
+                               "    add %ecx, %eax\n"
+                               "    add %edx, %eax\n")
+    # const_macro = ugp.Macro("{instr} %0x{bitstr}, {regD}",
+    #                         {'instr': instr_param, 'bitstr': bitstr_param, 'regD': reg_param})
+    # instr_op_macro = ugp.Macro("{instr} {reg}", {'instr': instr_param, 'reg': reg_param})
+    # branch_macro = ugp.Macro("{branch} {jmp}", {'branch': branch_param, 'jmp': jmp_param})
 
-    integer = ugp.make_parameter(ugp.parameter.Integer, min=-32768, max=32767)
 
-    prologue_macro = ugp.Macro(""".text
-	.globl	darwin
-	.def	darwin;	.scl	2;	.type	32;	.endef
-	.seh_proc	darwin
-darwin:
-	pushq	%rbp
-	.seh_pushreg	%rbp
-	movq	%rsp, %rbp
-	.seh_setframe	%rbp, 0
-	.seh_endprologue
-""")
+    # prologue_macro = ugp.Macro(".text\n" +
+    #                            "    .globl	darwin\n" +
+    #                            "    .def	darwin;	.scl	2;	.type	32;	.endef\n" +
+    #                            "    .seh_proc	darwin\n" +
+    #                            "darwin:\n" +
+    #                            "    pushq	%rbp\n" +
+    #                            "    .seh_pushreg	%rbp\n" +
+    #                            "    movq	%rsp, %rbp\n" +
+    #                            "    .seh_setframe	%rbp, 0\n" +
+    #                            "    .seh_endprologue\n")
 
-    init_macro = ugp.Macro("""
-    movl	${int_a}, %eax
-	movl	${int_b}, %ebx
-	movl	${int_c}, %ecx
-	movl	${int_d}, %edx
-""", {'int_a': integer, 'int_b': integer, 'int_c': integer, 'int_d': integer})
+    prologue_macro = ugp.Macro( '    .file   "solution.c"\n' +
+                                '    .text\n' +
+                                '    .globl  _darwin\n' +
+                                '    .def    _darwin;        .scl    2;      .type   32;     .endef\n' +
+                                '_darwin:\n' +
+                                'LFB17:\n' +
+                                '    .cfi_startproc\n' +
+                                '    pushl   %ebp\n' +
+                                '    .cfi_def_cfa_offset 8\n' +
+                                '    .cfi_offset 5, -8\n' +
+                                '    movl    %esp, %ebp\n' +
+                                '    .cfi_def_cfa_register 5\n')
 
-    epilogue_macro = ugp.Macro("""
-	popq	%rbp
-	ret
-	.seh_endproc
-""")
+    init_macro = ugp.Macro( "    movl	${int_a}, %eax\n" +
+                            "    movl	${int_b}, %ebx\n" +
+                            "    movl	${int_c}, %ecx\n" +
+                            "    movl	${int_d}, %edx\n",
+                            {'int_a': integer, 'int_b': integer, 'int_c': integer, 'int_d': integer})
 
-    library = ugp.Constraints()
-    library['main'] = [prologue_macro, init_macro, epilogue_macro]
+    # epilogue_macro = ugp.Macro("    popq	%eax\n" +
+    #                            "    ret\n" +
+    #                            "    .seh_endproc\n")
+    epilogue_macro = ugp.Macro(
+                            '    movl	%eax, -4(%ebp)\n' +
+                            '    movl	-4(%ebp), %eax\n' +
+                            '    leave\n' +
+                            '    .cfi_restore 5\n' +
+                            '    .cfi_def_cfa 4, 4\n' +
+                            '    ret\n' +
+                            '    .cfi_endproc\n' +
+                            'LFE17:\n' +
+                            '   .ident  "GCC: (MinGW.org GCC-8.2.0-5) 8.2.0"\n')
+
+
+    sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(3, 5))
+
+    library = ugp.Constraints(file_name="solution{id}.s")
+    # library['main'] = [prologue_macro, ""]
+    library['main'] = [prologue_macro, init_macro, [sec1, join_registers], epilogue_macro]
 
     # Define the evaluator and the fitness type_________________________________________________________________________
     if sys.platform != "win32":
-        script = "./evaluator_exp_02.sh"
+        exit(-1)
     else:
-        script = "./evaluator_exp_02.bat"
+        script = "eval.bat"
     library.evaluator = ugp.fitness.make_evaluator(evaluator=script, fitness_type=ugp.fitness.Lexicographic)
 
     # Create a list of operators with their arities_____________________________________________________________________
@@ -123,6 +154,8 @@ darwin:
     # Add mutation operators
     operators += ugp.GenOperator(ugp.hierarchical_mutation, 1)
     operators += ugp.GenOperator(ugp.flat_mutation, 1)
+    operators += ugp.GenOperator(ugp.add_node_mutation, 1)
+    operators += ugp.GenOperator(ugp.remove_node_mutation, 1)
     # Add crossover operators
     operators += ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
     operators += ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
@@ -134,30 +167,29 @@ darwin:
     lambda_ = 7
     max_age = 10
 
-    for _ in range(1):
-        darwin = ugp.Darwin(
-            constraints=library,
-            operators=operators,
-            mu=mu,
-            nu=nu,
-            lambda_=lambda_,
-            sigma=sigma,
-            max_age=max_age,
-        )
+    darwin = ugp.Darwin(
+        constraints=library,
+        operators=operators,
+        mu=mu,
+        nu=nu,
+        lambda_=lambda_,
+        sigma=sigma,
+        max_age=max_age,
+    )
 
-        # Evolve____________________________________________________________________________________________________________
-        darwin.evolve()
-        logging.bare("This is the final population:")
-        for individual in darwin.population:
-            ugp.print_individual(individual, plot=True)
-            ugp.logging.bare(individual.fitness)
-            ugp.logging.bare("")
+    # Evolve____________________________________________________________________________________________________________
+    darwin.evolve()
+    logging.bare("This is the final population:")
+    for individual in darwin.population:
+        ugp.print_individual(individual, plot=True)
+        ugp.logging.bare(individual.fitness)
+        ugp.logging.bare("")
 
-        # Print best individuals
-        logging.bare("These are the best ever individuals:")
-        ugp.print_individual(darwin.archive)
+    # Print best individuals
+    logging.bare("These are the best ever individuals:")
+    ugp.print_individual(darwin.archive)
 
-        ugp.delete_solutions()
+    ugp.delete_solutions()
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)
