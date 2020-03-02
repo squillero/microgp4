@@ -8,7 +8,7 @@ MicroGP4
 ![Codename: kiwi](https://img.shields.io/badge/codename-kiwi-orange.svg)
 ![](https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-28094298-5&cid=4f34399f-f437-4f67-9390-61c649f9b8b2&dp=1)
 
-> :warning: MicroGP v4 is currently [**Pre-alpha**](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha).
+> :warning: MicroGP v4 is currently [**PRE-ALPHA**](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha).
 
 MicroGP (µGP, `ugp`) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
 
@@ -23,7 +23,7 @@ pip install microgp
 
 #### Documentation
 
-* ~~The full documentation for MicroGP4 is on *Read The Docs* at [https://microgp4.readthedocs.io/en/latest/](https://microgp.readthedocs.com)~~ :rage:
+* ~~The full documentation for MicroGP4 is on *Read The Docs* at https://microgp4.readthedocs.io~~ :rage:
 * MicroGP v3 *"Bluebell"* is described in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
 * MicroGP v2 is described in the paper "MicroGP — An Evolutionary Assembly Program Generator", *Genetic Programming and Evolvable Machines*,  vol. 6, 247–263 (2005), [10.1007/s10710-005-2985-x](http://dx.doi.org/10.1007/s10710-005-2985-x)
 
