@@ -1,5 +1,5 @@
-MicroGP v4
-==========
+MicroGP4
+========
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://opensource.org/licenses/Apache-2.0) 
 [![Status: Actrive](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/squillero/microgp3)
@@ -18,4 +18,4 @@ MicroGP first creates a set of random solutions, then iteratively refines and en
 
 ### Licence
 Copyright © 2020 Giovanni Squillero and Alberto Tonda  
-MicroGP v4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2).
+MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2).
