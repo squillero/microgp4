@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0.a1 "Kiwi"  #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -9,7 +9,7 @@
 #                                                                           #
 #############################################################################
 
-# Copyright 2020 Giovanni Squillero and Alberto Tonda
+# Copyright 2019 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License.
@@ -24,16 +24,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Version History (see HISTORY.md)
-#
-# MicroGP v2: Copyright © 2002-2006 Giovanni Squillero
-#   Licensed under GPL2
-# MicroGP v3: Copyright © 2006-2016 Giovanni Squillero
-#   Licensed under GPL3
-# MicroGP v4: Copyright © 2019 Giovanni Squillero and Alberto Tonda
-#   Licensed under Apache-2.0
+from typing import Tuple, Callable
 
-from collections import namedtuple
+from .macro import Macro
 
-VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename'])
-version_info = VersionInfo(4, 1, 0, 'a', 4, 'Kiwi')
+
+def check_frame_size(size: Tuple[int, int]) -> Callable:
+    def check_size(nodes, sub_sections, **v):
+        assert isinstance(nodes, list), "nodes list is not a list but a '%s'" % (type(nodes),)
+        assert isinstance(sub_sections, list), "sub_sections list is not a list but a '%s'" % (type(sub_sections),)
+        assert not (nodes and
+                    sub_sections), "A section cannot hold both nodes and sub_sections: %s vs. %s" % (nodes,
+                                                                                                     sub_sections)
+        if len(nodes) + len(sub_sections) < size[0]:
+            return False
+        if len(nodes) + len(sub_sections) > size[1]:
+            return False
+        return True
+
+    return check_size
+
+
+def check_macro_count(macro: Macro, size: Tuple[int, int]):
+    pass

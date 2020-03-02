@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0.a1 "Kiwi"  #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -9,7 +9,7 @@
 #                                                                           #
 #############################################################################
 
-# Copyright 2020 Giovanni Squillero and Alberto Tonda
+# Copyright 2019 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License.
@@ -24,16 +24,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Version History (see HISTORY.md)
-#
-# MicroGP v2: Copyright © 2002-2006 Giovanni Squillero
-#   Licensed under GPL2
-# MicroGP v3: Copyright © 2006-2016 Giovanni Squillero
-#   Licensed under GPL3
-# MicroGP v4: Copyright © 2019 Giovanni Squillero and Alberto Tonda
-#   Licensed under Apache-2.0
 
-from collections import namedtuple
+class NodeID(int):
+    """A node in the directed MultiGraph describing the individual. It is, a
+    positive integer used as unique id in the MultiDiGraph.
+    """
+    _LAST_ID = 0  # global counter of nodes
 
-VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename'])
-version_info = VersionInfo(4, 1, 0, 'a', 4, 'Kiwi')
+    def __init__(self):
+        self._canonical = int(self)
+
+    def __new__(cls):
+        NodeID._LAST_ID += 1
+        return super(NodeID, cls).__new__(cls, NodeID._LAST_ID)
+
+    def __str__(self):
+        return "n%d" % (self._canonical,)
+
+    # Overriding __repr__ is necessary as we inherited from int but we do not
+    # want repr(Node()) to look like an int (eg. '42')...
+    def __repr__(self):
+        return str(self)
+
+    def run_paranoia_checks(self) -> bool:
+        assert self > 0, "Illegal node id: %d" % (self,)
+        return True

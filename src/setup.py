@@ -56,5 +56,6 @@ setuptools.setup(
     install_requires=[
         'coloredlogs>=9',
         'networkx>=2.4',
+        'psutil>=5.7.0'
     ],
 )

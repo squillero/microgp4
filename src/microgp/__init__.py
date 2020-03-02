@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""MicroGP 4!1.0α1 "Kiwi" <https://github.com/squillero/microgp4>
+"""MicroGP 4!1.0α "Kiwi" <https://github.com/squillero/microgp4>
 
 A versatile optimizer able to outperform both human experts and conventional
 heuristics in finding the optimal solution of difficult problems.
@@ -37,6 +37,19 @@ import sys
 import warnings
 
 from .version import version_info
+from .utils import logging, delete_solutions, rnd
+from .parameter import make_parameter
+from .macro import Macro
+from .constraints import make_section, Constraints, Section
+from .darwin import Darwin
+from .operators import Operators
+from .genoperator import GenOperator
+from .properties import Properties
+from .individual import Individual
+from .individual_operators import flat_mutation, hierarchical_mutation, add_node_mutation, remove_node_mutation, \
+    print_individual, macro_pool_uniform_crossover, macro_pool_one_cut_point_crossover, switch_proc_crossover, \
+    create_random_individual
+from . import fitness
 
 # Standard messages
 WARN_V27 = "The code is quite probably not compatible with Python v2"
