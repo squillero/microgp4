@@ -7,4 +7,4 @@ MicroGP v4 is the fourth release of the toolkit, rewritten from scratch in Pytho
 
 |
 | **Copyright © 2020 Giovanni Squillero and Alberto Tonda**
-| MicroGP v4 is `free and open-source software <https://en.wikipedia.org/wiki/Free_and_open-source_software>`__, and it is distributed under the permissive `Apache License 2.0 <https://www.tldrlegal.com/l/apache2>`__.
+| MicroGP4 is `free and open-source software <https://en.wikipedia.org/wiki/Free_and_open-source_software>`__, and it is distributed under the permissive `Apache Licence 2.0 license <https://www.tldrlegal.com/l/apache2>`__.
