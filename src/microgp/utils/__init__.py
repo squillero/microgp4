@@ -28,7 +28,7 @@ import os
 import random as rnd
 from . import logging
 
-rnd.seed(42)
+# rnd.seed(42)
 logging.bare("SEED SET ___________________________________________________________________")
 
 
