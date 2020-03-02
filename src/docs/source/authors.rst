@@ -1,5 +1,0 @@
-=======
-Authors
-=======
-
-Bla bla bla
