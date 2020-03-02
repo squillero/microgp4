@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""MicroGP 4!1.0α1 "Kiwi" <https://github.com/squillero/microgp4>
+"""MicroGP 4!1.0α "Kiwi" <https://github.com/squillero/microgp4>
 
 A versatile optimizer able to outperform both human experts and conventional
 heuristics in finding the optimal solution of difficult problems.
