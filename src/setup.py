@@ -25,7 +25,7 @@
 # limitations under the License.
 
 import setuptools
-from microgp4 import __version__ as ugp_version
+from microgp import __version__ as ugp_version
 
 with open("README.rst", "r") as fh:
     long_description = fh.read()
@@ -54,5 +54,6 @@ setuptools.setup(
     install_requires=[
         'colorlog>=4',
         'networkx>=2.3',
+        'psutil>=5.7.0'
     ],
 )
