@@ -54,7 +54,13 @@ setuptools.setup(
         "License :: OSI Approved :: Apache Software License"
     ],
     install_requires=[
+<<<<<<< HEAD
         'coloredlogs>=9',
         'networkx>=2.4',
+=======
+        'colorlog>=4',
+        'networkx>=2.3',
+        'psutil>=5.7.0'
+>>>>>>> origin/exp/luca
     ],
 )
