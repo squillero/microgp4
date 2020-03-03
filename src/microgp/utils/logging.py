@@ -9,7 +9,7 @@
 #                                                                           #
 #############################################################################
 
-# Copyright 2019 Giovanni Squillero and Alberto Tonda
+# Copyright 2020 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Logging facility for MicroGPv4, as colorful as possible
+"""Logging facility for MicroGP4, as colorful as possible
 
 Usage example:
 

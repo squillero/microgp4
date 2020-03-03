@@ -10,6 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
 import os
 import sys
 
@@ -17,8 +18,8 @@ sys.path.insert(0, os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'MicroGPv4'
-copyright = '2019, Giovanni Squillero'
+project = 'MicroGP4'
+copyright = '2020, Giovanni Squillero'
 author = 'Giovanni Squillero'
 
 # The full version, including alpha/beta/rc tags
