@@ -37,7 +37,7 @@ import sys
 import warnings
 
 from .version import version_info
-from .utils import logging
+from .utils import logging, rnd
 from .parameter import make_parameter
 from .macro import Macro
 from .constraints import make_section, Constraints, Section
