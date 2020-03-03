@@ -54,6 +54,7 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
         individuals = [individuals]
     logging.bare(msg)
     for individual in individuals:
+        logging.bare("-" * 70)
         for line in str(individual).splitlines():
             logging.bare(line)
         if plot:
@@ -199,13 +200,14 @@ def create_random_individual(constraints: Constraints, max_retries: Union[int, N
 # CROSSOVERS____________________________________________________________________________________________________________
 def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Union[Individual, None]]:
     """Let's consider a sequence of nodes connected through edges with label=
-    'next', we will call this sequence is a `next-chain`. This operator selects
+    'next', we will call this sequence `next-chain`. This operator selects
     the `next-chains` belonging to the common sections between the two parents
     (excluding the `main` section) and link a random node with
     ExternalReference parameter in it, to the selected `next-chain` after
     copying it from the source to the destination individual.
     The word 'proc' in method name refers to the `next-chains` that are not
-    'main' sections.
+    'main' sections. The destination individual is a copy of a parent chosen
+    randomly and then modified with the new cloned `next-chain`.
 
     Args:
         parentA (Individual): First individual
@@ -432,8 +434,6 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
       - parentA has a MacroPool with nodes: [A, B, C, D, E, F, G]
 
       - parentB has a MacroPool with nodes: [H, I, L]
-
-      - the chosen cut_node are F and H
 
       - individualC will have a MacroPool with nodes: [H, I, L]
 

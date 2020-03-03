@@ -25,9 +25,11 @@ from datetime import datetime
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 from typing import Callable, Type, Union, Tuple, Any
 import subprocess
 from datetime import datetime
+
 from .fitnesstuple import FitnessTuple
 from .simple import Simple
 from ..utils import logging
@@ -49,7 +51,7 @@ def _run_script(script: Union[str, callable], individual: 'Individual', num_elem
     assert isinstance(script, str) or hasattr(script, '__call__'), "script must be a string (name of the" \
                                                                     "script or a callable (script itself)"
     assert individual, "individual can't be None"
-    filename = '../solutions/' + individual.constraints.file_name.format(id=individual.id)
+    filename = individual.constraints.file_name.format(id=individual.id)
     # filename = individual.constraints.file_name.format(id=individual.id)
 
     with open(filename, 'w') as file:
@@ -66,6 +68,7 @@ def _run_script(script: Union[str, callable], individual: 'Individual', num_elem
         values = [eval(b) for b in raw_array[:num_elements]]
         comment = ' '.join(raw_array[num_elements:])
     logging.debug(comment)
+    os.remove(filename)
     return tuple(values), comment
 
 
