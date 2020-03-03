@@ -49,9 +49,13 @@ import logging
 import os
 import warnings
 
-import psutil
+microgp4_process = None
+try:
+    import psutil
+    microgp4_process = psutil.Process(os.getpid())
+except:
+    pass
 
-microgp4_process = psutil.Process(os.getpid())
 DefaultLogger = logging.getLogger('microgp4')
 
 # Propagate Log levels, and add a few ones

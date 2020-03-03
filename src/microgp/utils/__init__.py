@@ -28,15 +28,6 @@ import os
 import random as rnd
 from . import logging
 
-rnd.seed(42)
-logging.bare("SEED SET ___________________________________________________________________")
-
-
-def delete_solutions():
-    dir_name = "../solutions/"
-    # dir_name = "../src/"
-    test = os.listdir(dir_name)
-
-    for item in test:
-        if item.endswith(".ugp"):
-            os.remove(os.path.join(dir_name, item))
+# rnd.seed(42)
+# logging.bare("SEED SET ___________________________________________________________________")
+# TODO: lavora sulla random

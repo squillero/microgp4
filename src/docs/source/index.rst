@@ -68,8 +68,8 @@ can just clone here
    license
 
 | **Copyright 2019 Giovanni Squillero and Alberto Tonda**
-| MicroGP v4 is `free and open-source software`_, and it is distributed
-  under the permissive `Apache-2.0 license`_.
+| MicroGP v4 is `free and open-source software`_, and it is distributed under the permissive `Apache-2.0 license`_.
+
 .. _free and open-source software: https://en.wikipedia.org/wiki/Free_and_open-source_software
 .. _Apache-2.0 license: https://tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29
 

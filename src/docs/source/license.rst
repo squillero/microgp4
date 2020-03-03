@@ -147,7 +147,7 @@ by You to the Licensor shall be under the terms and conditions of
 this License, without any additional terms or conditions.
 Notwithstanding the above, nothing herein shall supersede or modify
 the terms of any separate license agreement you may have executed
-  with Licensor regarding such Contributions.
+with Licensor regarding such Contributions.
 
 6. Trademarks.
 **************

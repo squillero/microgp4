@@ -52,6 +52,7 @@ Fitness Tuple Multiobjective
 
 .. automodule:: microgp.fitness.fitnesstuplemultiobj
     :members:
+
 Sorting example considering an input of type List[Individual, FitnessTupleMultiobj].
 
     .. code:: python

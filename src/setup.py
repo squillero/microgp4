@@ -30,6 +30,10 @@ from microgp import __version__ as ugp_version
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
+with open("requirements.txt", "r") as fh:
+    requirements = fh.readlines()
+
+
 setuptools.setup(
     name="microgp",
     version=ugp_version,
@@ -53,9 +57,5 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "License :: OSI Approved :: Apache Software License"
     ],
-    install_requires=[
-        'coloredlogs>=9',
-        'networkx>=2.4',
-        'psutil>=5.7.0'
-    ],
+    install_requires=requirements,
 )

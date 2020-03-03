@@ -29,7 +29,7 @@ Create random individual
 
 .. automethod:: microgp.individual_operators.create_random_individual
 
-fgh jMutation operators
+Mutation operators
 ==================
 
 This kind of operator change one or more genes that describe an individual. The

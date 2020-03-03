@@ -55,16 +55,15 @@ if __name__ == "__main__":
     # Delete old solutions
     ugp.delete_solutions()
 
-    # Define a parameter of type ugp.parameter.Bitstring and length = 8
-    word8 = ugp.make_parameter(ugp.parameter.Bitstring, len_=8)
-    # Define a macro that contains a parameter of type ugp.parameter.Bitstring
-    word_macro = ugp.Macro("{word8}", {'word8': word8})
-    # Create a section containing a macro
-    word_section = ugp.make_section(word_macro, size=(1, 1), name='word_sec')
+    # Define a parameter of type ugp.parameter.Categorical that can take two values: 0 or 1
+    bit = ugp.make_parameter(ugp.parameter.Categorical, alternatives=[0, 1])
+    # Define a macro that contains a parameter of type ugp.parameter.Categorical
+    word_macro = ugp.Macro("{bit}", {'bit': bit})
+    # Create a section containing 8 macros
+    word_section = ugp.make_section(word_macro, size=(8, 8), name='word_sec')
 
     # Create a constraints library
     library = ugp.Constraints()
-    # Define the sections in the library
     library['main'] = ["Bitstring:", word_section]
 
     # Define the evaluator and the fitness type_________________________________________________________________________
@@ -81,6 +80,9 @@ if __name__ == "__main__":
     # Add mutation operators
     operators += ugp.GenOperator(ugp.hierarchical_mutation, 1)
     operators += ugp.GenOperator(ugp.flat_mutation, 1)
+    # Add crossover operators
+    operators += ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
+    operators += ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
 
     # Create the object that will manage the evolution__________________________________________________________________
     mu = 10
@@ -89,30 +91,29 @@ if __name__ == "__main__":
     lambda_ = 7
     max_age = 10
 
-    for _ in range(1):
-        darwin = ugp.Darwin(
-            constraints=library,
-            operators=operators,
-            mu=mu,
-            nu=nu,
-            lambda_=lambda_,
-            sigma=sigma,
-            max_age=max_age,
-        )
+    darwin = ugp.Darwin(
+        constraints=library,
+        operators=operators,
+        mu=mu,
+        nu=nu,
+        lambda_=lambda_,
+        sigma=sigma,
+        max_age=max_age,
+    )
 
-        # Evolve____________________________________________________________________________________________________________
-        darwin.evolve()
-        logging.bare("This is the final population:")
-        for individual in darwin.population:
-            msg = f"Solution {str(individual.id)} "
-            ugp.print_individual(individual, msg=msg, plot=True)
-            ugp.logging.bare(f"Fitness: {individual.fitness}")
-            ugp.logging.bare("")
+    # Evolve____________________________________________________________________________________________________________
+    darwin.evolve()
+    logging.bare("This is the final population:")
+    for individual in darwin.population:
+        msg = f"Solution {str(individual.id)} "
+        ugp.print_individual(individual, msg=msg, plot=True)
+        ugp.logging.bare(f"Fitness: {individual.fitness}")
+        ugp.logging.bare("")
 
-        # Print best individuals
-        ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
+    # Print best individuals
+    ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
 
-        ugp.delete_solutions()
+    ugp.delete_solutions()
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)
