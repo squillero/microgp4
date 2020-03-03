@@ -12,8 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
 
+sys.path.insert(0, os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 
@@ -23,7 +23,6 @@ author = 'Giovanni Squillero'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.0'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -43,7 +42,6 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -53,7 +51,7 @@ html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
     'canonical_url': '',
-    'analytics_id': 'UA-XXXXXXX-1',  #  Provided by Google in your dashboard
+    'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
     'logo_only': False,
     'display_version': True,
     'prev_next_buttons_location': 'bottom',
