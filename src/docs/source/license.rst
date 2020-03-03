@@ -1,8 +1,7 @@
 License
 =======
 
-| Copyright © 2020 Giovanni Squillero and Alberto Tonda
-| MicroGP4 is `free and open-source software <https://en.wikipedia.org/wiki/Free_and_open-source_software>`_, and it is distributed under the permissive `Apache License 2.0 <https://www.tldrlegal.com/l/apache2>`_.
+| MicroGP4 is distributed under the permissive `Apache License 2.0 <https://www.tldrlegal.com/l/apache2>`_.
 
 ::
 
