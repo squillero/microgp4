@@ -58,5 +58,6 @@ setuptools.setup(
         'networkx>=2.4',
         'psutil>=5.7.0',
         'scipy>=1.4.1',
+        'matplotlib>=3.1.3',
     ],
 )
