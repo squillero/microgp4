@@ -29,10 +29,10 @@ conda install --channel conda-forge --file src\requirements.txt
 
 #### Documentation
 
-* The full documentation for MicroGP4 is on https://microgp4.readthedocs.io/
-* MicroGP3 *"Bluebell"* is described in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
+* The documentation for MicroGP4 is on https://microgp4.readthedocs.io/
+* The documentation for MicroGP3 (v3.1 *"Bluebell"*) is in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
 * MicroGP2 is described in the paper "MicroGP — An Evolutionary Assembly Program Generator", *Genetic Programming and Evolvable Machines*,  vol. 6, 247–263 (2005), [10.1007/s10710-005-2985-x](http://dx.doi.org/10.1007/s10710-005-2985-x)
 
 ### Licence
 Copyright © 2020 Giovanni Squillero and Alberto Tonda  
-MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0 ](https://www.tldrlegal.com/l/apache2).
+MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2). We welcome contributions [in many forms](CONTRIBUTING.md).

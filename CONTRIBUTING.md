@@ -1,23 +1,35 @@
 Contributing to MicroGP
 =======================
 
-First off, thanks for taking the time to contribute! :+1:
-
-#### Table Of Contents
-
-* [How Can I Contribute?](#how-can-i-contribute)
-* [Coding style](#coding-style)
+First off all, thanks! :+1:
 
 ## How Can I Contribute?
 
-* [~~Donating money~~](#money-donations)
-* Join the team (looking for a Master/PhD Thesis?)
-* Use the tool and report a success story
-* Use the tool and submit a bug report
-* Fix a bug
-* Extend the tool (improve / add a functionality)
-* Extend / update / proofread the documentation
-* Draw a logo/icon
+* [Join the team](#join-the-team)
+* Use the tool and [report a success story](#report)
+* Fail to use the tool and [submit a bug report](#report)
+* [Fix a bug](#coding)
+* [Add a brand new functionality](#coding)
+* [Improve an existing functionality](#coding)
+* Extend/update/proofread the documentation
+* Draw logo/icons
+* [~~Donate money~~](#money-donations)
+
+### Join the team
+
+Welcome on board!  If you have a clear idea about an algorithmic improvement, but you are not able to hack it, just drop us an email.
+
+If you are looking for a master thesis, contact directly Alberto (INRA) or Giovanni (Politecnico di Torino). Even if there are no theses officially advertised, there is always space for further improvements. Whether you are interested in a shorter activity, such a bachelor thesis, or a much longer one, don't hesitate contacting us.
+
+### Reports
+
+Use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reporting bugs. 
+
+### Coding
+
+The source code is available on [GitHub](https://github.com/squillero/microgp4), feel free to fork and start implementing your sharp ideas --- we even prepared an oversimplified [stylesheet](#cding-style) to ease contributing to the code.
+
+If you think you need it, ask Alberto or Giovanni to get write access to the main repo.
 
 ## Coding Style
 
@@ -69,7 +81,7 @@ def run_paranoia_checks(self):
 
 Thanks for trying, but we do not accept money donations:
 
-* Giovanni and Alberto are working on MicroGP as an integral part of their research activities. Thus, they are already paid by their institutions, namely: *Politecnico di Torino* (Italy) and *French National Institute for Agricultural Research* (France).
+* Alberto and Giovanni are working on MicroGP as an integral part of their research activities. Thus, they are already paid by their institutions, namely: *Politecnico di Torino* (Italy) and *French National Institute for Agricultural Research* (France).
 * Students worked, are working, and will work on MicroGP for their academic curricula, either master theses or Ph.D. programs.
 * A few volunteers did a terrific job on specific topics, but, being volunteers, they did not ask for a wage.
 
