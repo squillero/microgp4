@@ -3,6 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. role::  raw-html(raw)
+    :format: html
+
 .. _MicroGP2: https://github.com/squillero/microgp2
 .. _MicroGP3: https://github.com/squillero/microgp3
 .. _MicroGP4: https://github.com/squillero/microgp4/tree/pre-alpha
@@ -14,7 +17,7 @@
 Overview of MicroGP4_
 =====================
 
-MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
+MicroGP (:raw-html:`&micro;GP`, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
 
 MicroGP first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information; `several different techniques <https://scholar.google.com/scholar?q=%28+squillero+OR+tonda+%29+AND+microgp>`__ --- some `inspired by the mechanisms of natural evolution <https://en.wikipedia.org/wiki/Evolutionary_computation>`__ --- are used to explore efficiently the search space, and eventually pinpoint the best solution.
 
@@ -45,18 +48,25 @@ contributors are listed in the :doc:`credits. <credits>`
 Documentation
 -------------
 
-.. only:: html
-
-    :Release: |version|
-    :Date: |today|
+ :Release: |version|
+ :Date: |today|
 
 .. toctree::
+
+   :caption: API reference
    :maxdepth: 1
 
    install
    tutorial
-   reference/index
-   developer/index
+
+   modules/microgp/individual
+   modules/microgp/constraints
+   modules/microgp/darwin
+   modules/microgp/individual_operators
+   modules/microgp/fitness/fitness
+   modules/microgp/parameter/parameters
+   modules/microgp/abstract
+
    news
    license
    credits
