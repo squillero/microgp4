@@ -85,4 +85,4 @@ Thanks for trying, but we do not accept money donations:
 * Students worked, are working, and will work on MicroGP for their academic curricula, either master theses or Ph.D. programs.
 * A few volunteers did a terrific job on specific topics, but, being volunteers, they did not ask for a wage.
 
-So, why not donating **time** instead of money? Please contact us and join the project. 
+So, why not donating [**time**](#join-the-team) instead of money?
