@@ -77,7 +77,6 @@ class Categorical(Parameter):
         self._value = new_value
 
 
-# TODO: Check correctness of categorical sorted
 class CategoricalSorted(Parameter):
     """CategoricalSorted parameter. It can take values in 'alternatives'. It
     behaves differently during the mutation phase.

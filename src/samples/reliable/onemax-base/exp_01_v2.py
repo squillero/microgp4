@@ -31,17 +31,11 @@ from microgp.utils import logging
 
 if __name__ == "__main__":
     ugp.banner()
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
-    parser.add_argument("-d",
-                        "--debug",
-                        action="store_const",
-                        dest="verbose",
-                        const=2,
+    parser.add_argument("-d", "--debug", action="store_const", dest="verbose", const=2,
                         help="log debug messages (same as -vv)")
     args = parser.parse_args()
-
     if args.verbose == 0:
         ugp.logging.DefaultLogger.setLevel(level=ugp.logging.INFO)
     elif args.verbose == 1:
@@ -49,16 +43,14 @@ if __name__ == "__main__":
     elif args.verbose > 1:
         ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
         ugp.logging.debug("Verbose level set to DEBUG")
-
     ugp.logging.cpu_info("Program started")
-
-    # Delete old solutions
-    ugp.delete_solutions()
 
     # Define a parameter of type ugp.parameter.Categorical that can take two values: 0 or 1
     bit = ugp.make_parameter(ugp.parameter.Categorical, alternatives=[0, 1])
+
     # Define a macro that contains a parameter of type ugp.parameter.Categorical
     word_macro = ugp.Macro("{bit}", {'bit': bit})
+
     # Create a section containing 8 macros
     word_section = ugp.make_section(word_macro, size=(8, 8), name='word_sec')
 
@@ -66,14 +58,13 @@ if __name__ == "__main__":
     library = ugp.Constraints()
     library['main'] = ["Bitstring:", word_section]
 
-    # Define the evaluator and the fitness type_________________________________________________________________________
+    # Define the evaluator method and the fitness type
     def my_script(data: str):
         count = data.count('1')
         return list(str(count))
-
     library.evaluator = ugp.fitness.make_evaluator(evaluator=my_script, fitness_type=ugp.fitness.Lexicographic)
 
-    # Create a list of operators with their arities_____________________________________________________________________
+    # Create a list of operators with their arity
     operators = ugp.Operators()
     # Add initialization operators
     operators += ugp.GenOperator(ugp.create_random_individual, 0)
@@ -84,7 +75,7 @@ if __name__ == "__main__":
     operators += ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
     operators += ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
 
-    # Create the object that will manage the evolution__________________________________________________________________
+    # Create the object that will manage the evolution
     mu = 10
     nu = 20
     sigma = 0.7
@@ -101,19 +92,15 @@ if __name__ == "__main__":
         max_age=max_age,
     )
 
-    # Evolve____________________________________________________________________________________________________________
+    # Evolve and print individuals in population
     darwin.evolve()
     logging.bare("This is the final population:")
     for individual in darwin.population:
         msg = f"Solution {str(individual.id)} "
-        ugp.print_individual(individual, msg=msg, plot=True)
-        ugp.logging.bare(f"Fitness: {individual.fitness}")
-        ugp.logging.bare("")
+        ugp.print_individual(individual, msg=msg, plot=True, score=True)
 
     # Print best individuals
     ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
-
-    ugp.delete_solutions()
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)
