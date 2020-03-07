@@ -16,16 +16,25 @@ MicroGP first creates a set of random solutions, then iteratively refines and en
 
 #### Installation
 
-MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using `pip`: 
+MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29) (called `pip3` in some installations): 
 ```shell script
 pip install microgp
 ```
 
-If you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies. For example, if you are using [`conda`](https://docs.conda.io/projects/conda/) under Windows, you probably want to try:
+If you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies:
 
-```cmd
-conda install --channel conda-forge --file src\requirements.txt 
-```
+- Under Windows, and if you are using [`conda`](https://docs.conda.io/projects/conda/), you should probably:
+
+  ```cmd
+  conda install --channel conda-forge --file src\requirements.txt 
+  ```
+
+- Under Ubuntu/Debian, you may need `Python.h` to install `psutil`:
+
+  ```cmd
+  sudo apt install python3-dev
+  pip3 install --requirement src/requirements.txt
+  ```
 
 #### Documentation
 
