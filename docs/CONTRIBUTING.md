@@ -17,13 +17,18 @@ First off all, thanks! :+1:
 
 ### Join the team
 
-Welcome on board!  If you have a clear idea about an algorithmic improvement, but you are not able to hack it, just drop us an email.
+Welcome on board! Please, contact directly [Alberto](https://www.researchgate.net/profile/Alberto_Tonda) <[alberto.tonda@inra.fr](alberto.tonda@inra.fr)> or [Giovanni](https://staff.polito.it/giovanni.squillero/) <[squillero@polito.it](giovanni.squillero@polito.it)>:
 
-If you are looking for a master thesis, contact directly Alberto (INRA) or Giovanni (Politecnico di Torino). Even if there are no theses officially advertised, there is always space for further improvements. Whether you are interested in a shorter activity, such a bachelor thesis, or a much longer one, don't hesitate contacting us.
+* If you want your code to be included in the next *official* release.
+* If you enjoy Python and Evolutionary Computation, and are looking for a 6-month master thesis. Note: We are **always** looking for valuable students, even if there are no theses *officially* advertised.
+* If you have a great idea about an improvement, but you are not sure how to hack it.
+* If you feel like doing it.
 
 ### Reports
 
-Use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reporting bugs. 
+We use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reporting bugs. 
+
+Feel free to write us an email describing
 
 ### Coding
 
