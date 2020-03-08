@@ -12,29 +12,14 @@ MicroGP4
 
 MicroGP (µGP, `ugp`) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
 
-MicroGP first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information; [several different techniques](https://scholar.google.com/scholar?q=%28+squillero+OR+tonda+%29+AND+microgp) — some [inspired by the mechanisms of natural evolution](https://en.wikipedia.org/wiki/Evolutionary_computation) — are used to explore efficiently the search space, and eventually pinpoint the best solution. The first prototype was created [around Y2K](HISTORY.md), a fully working version was [coded in C in 2002](https://github.com/squillero/microgp2) and then [re-engineered in C++ in 2006](https://github.com/squillero/microgp3). The fourth version is in Python, redesigned from scratch to take advantage of the peculiar features of the language and to exploit its huge standard library. MicroGP would not have been possible without the help and support of [several people](CONTRIBUTORS.md). 
+MicroGP first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information; [several different techniques](https://scholar.google.com/scholar?q=%28+squillero+OR+tonda+%29+AND+microgp) — some [inspired by the mechanisms of natural evolution](https://en.wikipedia.org/wiki/Evolutionary_computation) — are used to explore efficiently the search space, and eventually pinpoint the best solution. The first prototype was created [around Y2K](docs/HISTORY.md), a fully working version was [coded in C in 2002](https://github.com/squillero/microgp2) and then [re-engineered in C++ in 2006](https://github.com/squillero/microgp3). The fourth version is in Python, redesigned from scratch to take advantage of the peculiar features of the language and to exploit its huge standard library. MicroGP would not have been possible without the help and support of [several people](docs/CONTRIBUTORS.md). 
 
 #### Installation
 
-MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29) (called `pip3` in some installations): 
+MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29) (`pip3` in some systems): 
 ```shell script
 pip install microgp
 ```
-
-If you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies:
-
-- Under Windows, and if you are using [`conda`](https://docs.conda.io/projects/conda/), you should probably:
-
-  ```cmd
-  conda install --channel conda-forge --file src\requirements.txt 
-  ```
-
-- Under Ubuntu/Debian, you may need `Python.h` to install `psutil`:
-
-  ```cmd
-  sudo apt install python3-dev
-  pip3 install --requirement src/requirements.txt
-  ```
 
 #### Documentation
 
@@ -44,4 +29,4 @@ If you download the source from GitHub ([squillero/microgp4](https://github.com/
 
 ### Licence
 Copyright © 2020 Giovanni Squillero and Alberto Tonda  
-MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2). We welcome contributions [in many forms](CONTRIBUTING.md).
+MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2). We welcome contributions [in many forms](docs/CONTRIBUTING.md).

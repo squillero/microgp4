@@ -1,7 +1,7 @@
 µCredits
 ========
 
-The file [CONTRIBUTORS](./CONTRIBUTORS.md) give credits to people who contributed with code, ideas, drawings, music or other means to the MicroGP project. The file [AUTHORS](./AUTHORS) lists the copyright holders.
+The file [CONTRIBUTORS](CONTRIBUTORS.md) give credits to people who contributed with code, ideas, drawings, music or other means to the MicroGP project. The file [AUTHORS](../AUTHORS) lists the copyright holders.
 
 * Alessandro Aimo: Coding (µGP v3)
 * Luca Barillari: Coding (µGP v4)

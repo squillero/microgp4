@@ -29,6 +29,22 @@ Use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reportin
 
 The source code is available on [GitHub](https://github.com/squillero/microgp4), feel free to fork and start implementing your sharp ideas --- we even prepared an oversimplified [stylesheet](#cding-style) to ease contributing to the code.
 
+When you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies:
+
+- Under Windows, and if you are using [`conda`](https://docs.conda.io/projects/conda/), you should probably:
+
+  ```cmd
+  conda install --channel conda-forge --file src\requirements.txt 
+  ```
+
+- Under Ubuntu/Debian, you may need `Python.h` to install `psutil`:
+
+  ```cmd
+  sudo apt install python3-dev
+  pip3 install --requirement src/requirements.txt
+  ```
+
+
 If you think you need it, ask Alberto or Giovanni to get write access to the main repo.
 
 ## Coding Style
