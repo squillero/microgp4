@@ -16,7 +16,7 @@ MicroGP first creates a set of random solutions, then iteratively refines and en
 
 #### Installation
 
-MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29) (`pip3` in some systems): 
+MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29): 
 ```shell script
 pip install microgp
 ```
