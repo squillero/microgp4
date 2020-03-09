@@ -20,14 +20,14 @@ First off all, thanks! :+1:
 Please, contact directly Alberto or Giovanni:
 
 * If you enjoy playing with Python and Evolutionary Computation, and you are looking for a 6-month master thesis. Note: We are **always** looking for valuable students, even if there are no theses *officially* advertised.
-* If you have a great idea about an improvement, but you are not sure how to hack it.
+* If you have a great idea, but you are not sure how to hack it.
 * If you feel like doing it.
 
 ### Reports
 
-We use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reporting bugs. 
+We try to use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reporting bugs. 
 
-If you published a papers using any version of MicroGP, please let us know.
+If you published a papers using any version of MicroGP, please let us know the exact reference.
 
 Anyhow, feel free to write us an email describing your story. 
 
@@ -50,7 +50,7 @@ When you download the source from GitHub ([squillero/microgp4](https://github.co
   pip3 install --requirement src/requirements.txt
   ```
  
-Have fun! And contact us if you want your code to be included in the next *official* release.
+Have fun! And contact us if you want your own code to be included in the next *official* release.
 
 
 ### Coding Style
