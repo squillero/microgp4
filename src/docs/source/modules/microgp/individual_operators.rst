@@ -9,7 +9,7 @@ Individual Operators
 .. _`crossover operators`: https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)
 .. _`mutation operators`: https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)
 
-MicroGPv4 package offers some basic operators that can be found in
+MicroGP4 package offers some basic operators that can be found in
 :mod:`microgp.individual_operators`. Three of them are `crossover operators`_,
 four are `mutation operators`_ and one has the goal to create a random individual.
 As you can see in :doc:`darwin`, the methods that are listed in this module can be

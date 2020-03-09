@@ -30,7 +30,7 @@
 #   Licensed under GPL2
 # MicroGP v3: Copyright © 2006-2016 Giovanni Squillero
 #   Licensed under GPL3
-# MicroGP v4: Copyright © 2019 Giovanni Squillero and Alberto Tonda
+# MicroGP v4: Copyright © 2020 Giovanni Squillero and Alberto Tonda
 #   Licensed under Apache-2.0
 
 from collections import namedtuple

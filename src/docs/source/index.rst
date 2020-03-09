@@ -1,17 +1,16 @@
-.. MicroGPv4 documentation master file, created by
+.. MicroGP4 documentation master file, created by
    sphinx-quickstart on Thu Dec 12 15:32:24 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-""""""""""""""""""""
-Welcome to MicroGPv4
-""""""""""""""""""""
+"""""""""""""""""""
+Welcome to MicroGP4
+"""""""""""""""""""
 
 What is MicroGP v4?
 ===================
 
-**microGPv4** is a Python package implementing a Genetic Algorithm. MicroGP
-is an evolutionary optimizer able to outperform both human experts and
+**microGP** is an evolutionary optimizer able to outperform both human experts and
 conventional heuristics in finding the optimal solution of generic problems.
 It is extremely versatile, being able to tackle problem those solutions are
 fixed-length bit strings, as well as to optimize realistic assembly programs
@@ -67,7 +66,7 @@ can just clone here
    authors
    license
 
-| **Copyright 2019 Giovanni Squillero and Alberto Tonda**
+| **Copyright 2020 Giovanni Squillero and Alberto Tonda**
 | MicroGP v4 is `free and open-source software`_, and it is distributed under the permissive `Apache-2.0 license`_.
 
 .. _free and open-source software: https://en.wikipedia.org/wiki/Free_and_open-source_software

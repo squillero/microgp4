@@ -10,19 +10,22 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath('../../'))
 
+from microgp import __version__ as ugp_version
+
 # -- Project information -----------------------------------------------------
 
-project = 'MicroGPv4'
-copyright = '2019, Giovanni Squillero'
+project = 'MicroGP4'
+copyright = '2020 Giovanni Squillero and Alberto Tonda'
 author = 'Giovanni Squillero'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.0'
+release = ugp_version
 
 # -- General configuration ---------------------------------------------------
 

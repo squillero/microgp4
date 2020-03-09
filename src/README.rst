@@ -5,4 +5,4 @@ MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both huma
 
 |
 | **Copyright © 2020 Giovanni Squillero and Alberto Tonda**
-| MicroGP4 is `free and open-source software <https://en.wikipedia.org/wiki/Free_and_open-source_software>`__, and it is distributed under the permissive `Apache-2.0 license <https://tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29>`__.
+| MicroGP4 is `free and open-source software <https://en.wikipedia.org/wiki/Free_and_open-source_software>`__, and it is distributed under the permissive `Apache Licence 2.0 license <https://www.tldrlegal.com/l/apache2>`__.

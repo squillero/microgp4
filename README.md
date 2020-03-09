@@ -21,9 +21,15 @@ MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and yo
 pip install microgp
 ```
 
+If you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies. For example, if you are using [`conda`](https://docs.conda.io/projects/conda/) under Windows, you probably want to try:
+
+```cmd
+conda install --channel conda-forge --file src\requirements.txt 
+```
+
 #### Documentation
 
-* ~~The full documentation for MicroGP4 is on https://microgp4.readthedocs.io/~~ :rage:
+* The full documentation for MicroGP4 is on https://microgp4.readthedocs.io/
 * MicroGP3 *"Bluebell"* is described in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
 * MicroGP2 is described in the paper "MicroGP — An Evolutionary Assembly Program Generator", *Genetic Programming and Evolvable Machines*,  vol. 6, 247–263 (2005), [10.1007/s10710-005-2985-x](http://dx.doi.org/10.1007/s10710-005-2985-x)
 
