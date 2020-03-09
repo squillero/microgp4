@@ -30,7 +30,6 @@ from microgp import rnd
 import microgp as ugp
 
 
-# TODO: Rewrite Bitstring
 class Bitstring(Parameter):
     """Fixed-length bitstring parameter.
 

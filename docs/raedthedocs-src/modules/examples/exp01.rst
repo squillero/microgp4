@@ -38,17 +38,11 @@ that is the sum of `1` in the individual's phenotype.
 
    if __name__ == "__main__":
        ugp.banner()
-
        parser = argparse.ArgumentParser()
        parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
-       parser.add_argument("-d",
-                           "--debug",
-                           action="store_const",
-                           dest="verbose",
-                           const=2,
+       parser.add_argument("-d", "--debug", action="store_const", dest="verbose", const=2,
                            help="log debug messages (same as -vv)")
        args = parser.parse_args()
-
        if args.verbose == 0:
            ugp.logging.DefaultLogger.setLevel(level=ugp.logging.INFO)
        elif args.verbose == 1:
@@ -56,11 +50,8 @@ that is the sum of `1` in the individual's phenotype.
        elif args.verbose > 1:
            ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
            ugp.logging.debug("Verbose level set to DEBUG")
-
        ugp.logging.cpu_info("Program started")
 
-       # Delete old solutions
-       ugp.delete_solutions()
 
        # Define a parameter of type ugp.parameter.Bitstring and length = 8
        word8 = ugp.make_parameter(ugp.parameter.Bitstring, len_=8)
@@ -72,18 +63,16 @@ that is the sum of `1` in the individual's phenotype.
        # Create a constraints library
        library = ugp.Constraints()
        # Define the sections in the library
-       library['main'] = ["Here is the bitstring", word_section, ""]
+       library['main'] = ["Bitstring:", word_section]
 
-       # Define the evaluator and the fitness type
-       def my_script(filename: str):
-           with open(filename) as file:
-               data = file.read()
-               count = data.count('1')
+       # Define the evaluator method and the fitness type
+       def my_script(data: str):
+           count = data.count('1')
            return list(str(count))
 
        library.evaluator = ugp.fitness.make_evaluator(evaluator=my_script, fitness_type=ugp.fitness.Lexicographic)
 
-       # Create a list of operators with their arities
+       # Create a list of operators with their aritiy
        operators = ugp.Operators()
        # Add initialization operators
        operators += ugp.GenOperator(ugp.create_random_individual, 0)
@@ -98,33 +87,31 @@ that is the sum of `1` in the individual's phenotype.
        lambda_ = 7
        max_age = 10
 
-       for _ in range(1):
-           darwin = ugp.Darwin(
-               constraints=library,
-               operators=operators,
-               mu=mu,
-               nu=nu,
-               lambda_=lambda_,
-               sigma=sigma,
-               max_age=max_age,
-           )
+       darwin = ugp.Darwin(
+           constraints=library,
+           operators=operators,
+           mu=mu,
+           nu=nu,
+           lambda_=lambda_,
+           sigma=sigma,
+           max_age=max_age,
+       )
 
-           # Evolve
-           darwin.evolve()
-           logging.bare("This is the final population:")
-           for individual in darwin.population:
-               ugp.print_individual(individual, plot=False)
-               ugp.logging.bare(individual.fitness)
-               ugp.logging.bare("")
+       # Evolve and print individuals in population
+       darwin.evolve()
+       logging.bare("This is the final population:")
+       for individual in darwin.population:
+           msg = f"Solution {str(individual.id)} "
+           ugp.print_individual(individual, msg=msg, plot=True)
+           ugp.logging.bare(f"Fitness: {individual.fitness}")
+           ugp.logging.bare("")
 
-           # Print best individuals
-           logging.bare("These are the best ever individuals:")
-           ugp.print_individual(darwin.archive)
-
-           ugp.delete_solutions()
+       # Print best individuals
+       ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
 
        ugp.logging.cpu_info("Program completed")
        sys.exit(0)
+
 
 
 OneMax Base version 2
@@ -145,17 +132,11 @@ exactly 8 macros (``word_macro``) with a parameter (``bit``) of type
 
    if __name__ == "__main__":
        ugp.banner()
-
        parser = argparse.ArgumentParser()
        parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
-       parser.add_argument("-d",
-                           "--debug",
-                           action="store_const",
-                           dest="verbose",
-                           const=2,
+       parser.add_argument("-d", "--debug", action="store_const", dest="verbose", const=2,
                            help="log debug messages (same as -vv)")
        args = parser.parse_args()
-
        if args.verbose == 0:
            ugp.logging.DefaultLogger.setLevel(level=ugp.logging.INFO)
        elif args.verbose == 1:
@@ -163,33 +144,28 @@ exactly 8 macros (``word_macro``) with a parameter (``bit``) of type
        elif args.verbose > 1:
            ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
            ugp.logging.debug("Verbose level set to DEBUG")
-
        ugp.logging.cpu_info("Program started")
-
-       # Delete old solutions
-       ugp.delete_solutions()
 
        # Define a parameter of type ugp.parameter.Categorical that can take two values: 0 or 1
        bit = ugp.make_parameter(ugp.parameter.Categorical, alternatives=[0, 1])
+
        # Define a macro that contains a parameter of type ugp.parameter.Categorical
        word_macro = ugp.Macro("{bit}", {'bit': bit})
+
        # Create a section containing 8 macros
        word_section = ugp.make_section(word_macro, size=(8, 8), name='word_sec')
 
        # Create a constraints library
        library = ugp.Constraints()
-       library['main'] = ["Here is the bitstring", word_section, ""]
+       library['main'] = ["Bitstring:", word_section]
 
-       # Define the evaluator and the fitness type
-       def my_script(filename: str):
-           with open(filename) as file:
-               data = file.read()
-               count = data.count('1')
+       # Define the evaluator method and the fitness type
+       def my_script(data: str):
+           count = data.count('1')
            return list(str(count))
-
        library.evaluator = ugp.fitness.make_evaluator(evaluator=my_script, fitness_type=ugp.fitness.Lexicographic)
 
-       # Create a list of operators with their arities
+       # Create a list of operators with their arity
        operators = ugp.Operators()
        # Add initialization operators
        operators += ugp.GenOperator(ugp.create_random_individual, 0)
@@ -207,30 +183,25 @@ exactly 8 macros (``word_macro``) with a parameter (``bit``) of type
        lambda_ = 7
        max_age = 10
 
-       for _ in range(1):
-           darwin = ugp.Darwin(
-               constraints=library,
-               operators=operators,
-               mu=mu,
-               nu=nu,
-               lambda_=lambda_,
-               sigma=sigma,
-               max_age=max_age,
-           )
+       darwin = ugp.Darwin(
+           constraints=library,
+           operators=operators,
+           mu=mu,
+           nu=nu,
+           lambda_=lambda_,
+           sigma=sigma,
+           max_age=max_age,
+       )
 
-           # Evolve
-           darwin.evolve()
-           logging.bare("This is the final population:")
-           for individual in darwin.population:
-               ugp.print_individual(individual, plot=True)
-               ugp.logging.bare(individual.fitness)
-               ugp.logging.bare("")
+       # Evolve and print individuals in population
+       darwin.evolve()
+       logging.bare("This is the final population:")
+       for individual in darwin.population:
+           msg = f"Solution {str(individual.id)} "
+           ugp.print_individual(individual, msg=msg, plot=True, score=True)
 
-           # Print best individuals
-           logging.bare("These are the best ever individuals:")
-           ugp.print_individual(darwin.archive)
-
-           ugp.delete_solutions()
+       # Print best individuals
+       ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
 
        ugp.logging.cpu_info("Program completed")
        sys.exit(0)

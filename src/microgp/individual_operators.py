@@ -40,13 +40,14 @@ import microgp as ugp
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
 
-def print_individual(individuals: Union[Individual, List[Individual]], msg: str = '', plot=False):
+def print_individual(individuals: Union[Individual, List[Individual]], msg: str = '', plot=False, score=False):
     """Prints one or more individuals and plots their graphs
 
     Args:
-        individuals: individual/s to print/plot
-        msg: message to print in the first line
-        plot: if True -> plot the graph
+        individuals (Individual or List(Individual): individual/s to print/plot
+        msg (str): message to print in the first line
+        plot (bool): if True -> plot the graph
+        score (bool): if True -> Print fitness score after the printing phenotype
     """
     if isinstance(individuals, set):
         individuals = list(individuals)
@@ -54,12 +55,13 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
         individuals = [individuals]
     logging.bare(msg)
     for individual in individuals:
-        logging.bare("-" * 70)
         for line in str(individual).splitlines():
-            logging.bare(line)
+            logging.bare(str(line))
         if plot:
             individual.draw()
             plt.show()
+        if score:
+            ugp.logging.bare(f"Fitness score: {individual.fitness}\n")
 
 
 def unroll_macro_list(individual: Individual, section_name: str, frame_path: Sequence[Frame] = None) \

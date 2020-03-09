@@ -1,6 +1,6 @@
 @echo off
 
-rem commenti utili & inutili
+rem comment
 
 del a.exe
 gcc main.o %1
