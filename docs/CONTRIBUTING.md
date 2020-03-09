@@ -17,10 +17,9 @@ First off all, thanks! :+1:
 
 ### Join the team
 
-Welcome on board! Please, contact directly [Alberto](https://www.researchgate.net/profile/Alberto_Tonda) <[alberto.tonda@inra.fr](alberto.tonda@inra.fr)> or [Giovanni](https://staff.polito.it/giovanni.squillero/) <[squillero@polito.it](giovanni.squillero@polito.it)>:
+Please, contact directly Alberto or Giovanni:
 
-* If you want your code to be included in the next *official* release.
-* If you enjoy Python and Evolutionary Computation, and are looking for a 6-month master thesis. Note: We are **always** looking for valuable students, even if there are no theses *officially* advertised.
+* If you enjoy playing with Python and Evolutionary Computation, and you are looking for a 6-month master thesis. Note: We are **always** looking for valuable students, even if there are no theses *officially* advertised.
 * If you have a great idea about an improvement, but you are not sure how to hack it.
 * If you feel like doing it.
 
@@ -28,11 +27,13 @@ Welcome on board! Please, contact directly [Alberto](https://www.researchgate.ne
 
 We use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reporting bugs. 
 
-Feel free to write us an email describing
+If you published a papers using any version of MicroGP, please let us know.
+
+Anyhow, feel free to write us an email describing your story. 
 
 ### Coding
 
-The source code is available on [GitHub](https://github.com/squillero/microgp4), feel free to fork and start implementing your sharp ideas --- we even prepared an oversimplified [stylesheet](#cding-style) to ease contributing to the code.
+We prepared an oversimplified [stylesheet](#cding-style) to ease contributing to the code.
 
 When you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies:
 
@@ -48,11 +49,11 @@ When you download the source from GitHub ([squillero/microgp4](https://github.co
   sudo apt install python3-dev
   pip3 install --requirement src/requirements.txt
   ```
+ 
+Have fun! And contact us if you want your code to be included in the next *official* release.
 
 
-If you think you need it, ask Alberto or Giovanni to get write access to the main repo.
-
-## Coding Style
+### Coding Style
 
 > **Notez Bien**: All these rules are meant to be broken, **BUT** you need a very good reason **AND** you must explain it in a comment.
 
@@ -80,15 +81,15 @@ If you think you need it, ask Alberto or Giovanni to get write access to the mai
 
 * Follow the [Google's style guide](https://google.github.io/styleguide/pyguide.html) whenever in doubt. 
 
-## Conventions
+### Conventions
 
-### Paranoid classes
+#### Paranoid classes
 
 `Paranoid` classes implement `run_paranoia_checks()`.
 
 The functions named `run_paranoia_checks` perform sanity checks. They always return `True`, but stop the execution throwing an exception as soon as an inconsistency is detected. The functions are not supposed to be called in production environments (i.e., when `-O` is used). Hint: it is safe to use `assert some_object.run_paranoia_checks()`. 
 
-### Pedantic classes
+#### Pedantic classes
 
 `Pedantic`classes implement `is_valid(obj)`.
 
