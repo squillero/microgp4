@@ -57,7 +57,6 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
     for individual in individuals:
         for line in str(individual).splitlines():
             logging.bare(str(line))
-        logging.bare('\n')
         if plot:
             individual.draw()
             plt.show()

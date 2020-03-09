@@ -23,9 +23,9 @@ You can install microGPv4 along with all its dependencies from `PyPI`_
 
 .. code:: bash
 
-   $ pip install -i https://test.pypi.org/simple/ microgp-giovannisquillero
+   $ pip install microgp
 
-.. _PyPI: https://test.pypi.org/project/microgp-giovannisquillero/
+.. _PyPI: https://pypi.org/project/microgp/#description
 
 Source code
 ___________
@@ -35,9 +35,9 @@ can just clone here
 
 .. code:: bash
 
-    $ git clone https://github.com/squillero/microgp4-devel.git
+    $ git clone https://github.com/squillero/microgp4.git
 
-.. _GitHub: https://github.com/squillero/microgp4-devel
+.. _GitHub: https://github.com/squillero/microgp4
 
 
 .. toctree::
