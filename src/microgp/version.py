@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Version History (see HISTORY.md)
+# Version History (see history.rst)
 #
 # MicroGP v2: Copyright © 2002-2006 Giovanni Squillero
 #   Licensed under GPL2

@@ -52,8 +52,8 @@ from .individual_operators import flat_mutation, hierarchical_mutation, add_node
 from . import fitness
 
 # Standard messages
-WARN_V27 = "The code is quite probably not compatible with Python v2"
-WARN_V37 = "The code is only known to be compatible with Python v3.7+"
+WARN_V27 = "The code is quite probably not compatible with Python 2"
+WARN_V37 = "The code is only known to be compatible with Python 3.7+"
 WARN_DBG = "Paranoia checks are active: performances can be significantly impaired (consider using '-O')"
 
 if sys.version_info < (3,):

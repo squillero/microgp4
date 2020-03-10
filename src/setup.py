@@ -24,6 +24,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 import setuptools
 from microgp import __version__ as ugp_version
 
@@ -45,9 +47,13 @@ setuptools.setup(
     description="A multi-purpose extensible self-adaptive evolutionary algorithm",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    url="https://github.com/squillero/microgp4",
+    #url="https://github.com/squillero/microgp4",
+    project_urls = {
+        "Bug Tracker": "https://github.com/squillero/microgp4/issues",
+        "Documentation": "https://microgp4.readthedocs.io/en/pre-alpha/",
+        "Source Code": "https://github.com/squillero/microgp4/tree/pre-alpha",
+    },
     keywords='optimization evolutionary-algorithm computational-intelligence',
-
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
