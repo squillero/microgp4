@@ -36,4 +36,4 @@
 from collections import namedtuple
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename'])
-version_info = VersionInfo(4, 1, 0, 'a', 4, 'Kiwi')
+version_info = VersionInfo(4, 1, 0, 'a', 7, 'Kiwi')
