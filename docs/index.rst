@@ -14,8 +14,13 @@
 
 .. _contents:
 
+
 Overview of MicroGP4_
 =====================
+
+  *Truth emerges more readily from error than from confusion*
+
+  -- Francis Bacon
 
 MicroGP (:raw-html:`&micro;GP`, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
 
