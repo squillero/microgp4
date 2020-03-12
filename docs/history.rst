@@ -1,8 +1,5 @@
 .. MicroGP4 documentation
 
-.. role::  raw-html(raw)
-    :format: html
-
 THE STORY SO FAR
 ================
 
@@ -27,8 +24,8 @@ the parameters inside the nodes. The graph is eventually transformed
 into a valid assembly-language program in order to be evaluated, that
 is, assembled, linked and executed.
 
-MicroGP2 (:raw-html:`<code>ugp2</code>`)
-----------------------------------------
+MicroGP2 (`ugp2`)
+-----------------
 
    Copyright © 2002-2006 Giovanni Squillero; distributed under
    `GPL2 <https://www.tldrlegal.com/l/gpl2>`__; available on
@@ -65,8 +62,8 @@ mathematical functions represented as trees, integer and combinatorial
 optimization, real-value parameter optimization. Ultimately it was
 re-implemented from scratch in C++.
 
-MicroGP3 (:raw-html:`&micro;GP<sup>3</sup>`)
---------------------------------------------
+MicroGP3 (µGP³)
+---------------
 
    Copyright © 2006-2016 Giovanni Squillero; distributed under
    `GPL3 <https://www.tldrlegal.com/l/gpl-3.0>`__; available on both
