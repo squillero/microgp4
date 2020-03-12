@@ -1,13 +1,12 @@
-/*-**********************************************************************-*\
-*             * CLASS SAMPLE FOR "COMPUTER SCIENCES" (04JCJ**)             *
-*   #####     * (!) 2020, Giovanni Squillero <squillero@polito.it>         *
-*  ######     *                                                            *
-*  ###   \    * Copying and distributing this file, either with or without *
-*   ##G  c\   * modification, is permitted in any medium without royalty,  *
-*   #     _\  * provided that this 10-line comment is preserved.           *
-*   |  _/     *                                                            *
-*             * ===> THIS FILE IS OFFERED AS-IS, WITHOUT ANY WARRANTY <=== *
-\*-**********************************************************************-*/
+/***************************************************************************\
+*          __________                                                       *
+*   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     *
+*  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   *
+* / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         *
+* \__  /\____/_/   /__  __/                                                 *
+*   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!!" *
+*                                                                           *
+\***************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>

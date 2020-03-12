@@ -3,8 +3,8 @@
 THE STORY SO FAR
 ================
 
-MicroGP1
---------
+MicroGP1 (`unnamed`)
+--------------------
 
    Unreleased
 
@@ -24,8 +24,8 @@ the parameters inside the nodes. The graph is eventually transformed
 into a valid assembly-language program in order to be evaluated, that
 is, assembled, linked and executed.
 
-MicroGP2 (`ugp2`)
------------------
+MicroGP2 (``ugp2``)
+-------------------
 
    Copyright © 2002-2006 Giovanni Squillero; distributed under
    `GPL2 <https://www.tldrlegal.com/l/gpl2>`__; available on

@@ -19,7 +19,7 @@ First off all, thanks! :+1:
 
 Please, contact directly Alberto or Giovanni:
 
-* If you enjoy playing with Python and Evolutionary Computation, and you are looking for a 6-month master thesis. Note: We are **always** looking for valuable students, even if there are no theses *officially* advertised.
+* If you enjoy playing with Python and Evolutionary Computation, and you are looking for a 6-month master thesis. Note: We **always** welcome smart students, even when there are no theses officially advertised.
 * If you have a great idea, but you are not sure how to hack it.
 * If you feel like doing it.
 
@@ -27,7 +27,7 @@ Please, contact directly Alberto or Giovanni:
 
 We try to use [GitHub's issues](https://github.com/squillero/microgp4/issues) for reporting bugs. 
 
-If you published a papers using any version of MicroGP, please let us know the exact reference.
+If you published a papers using any version of MicroGP, please let us know the exact reference (i.e., the [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier)).
 
 Anyhow, feel free to write us an email describing your story. 
 
