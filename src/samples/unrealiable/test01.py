@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # let's get weird
     # also note that there is only a limited number of instances that can be ==
     # sec2a.properties.add_cumulative_builder(lambda num_nodes, **v: {'sec2a': num_nodes})
-    # sec2b.properties.add_cumulative_builder(lambda **v: {'sec2b': v['num_no des']})
+    # sec2b.properties.add_cumulative_builder(lambda **v: {'sec2b': v['num_nodes']})
     # library.global_properties.add_check(lambda sec2a, sec2b, **v: sec2a == sec2b)
 
     # Create a list of operators with their arities_____________________________________________________________________

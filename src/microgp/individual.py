@@ -178,7 +178,7 @@ class Individual(Paranoid, Pedantic):
     - `_operator` (callable): contains the pointer to the operator with which it was created
 
     - `_parents` (Set[Individual] or None): set of parent individuals from which the individual was created. None if it has no parents
-
+d
     - `_age` (int): count of how many epochs the individual lived
 
     - `_canonic_phenotype` (str): phenotype of the individual. It can be retrieved by printing the individual. It must be finalized

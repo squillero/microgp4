@@ -99,7 +99,7 @@ if __name__ == "__main__":
     # Define section
     sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
 
-    # Create a constraints library
+    # Create the instruction library
     library = ugp.Constraints(file_name="solution{id}.s")
     library['main'] = [prologue_macro, init_macro, sec1, epilogue_macro]
 
@@ -109,6 +109,24 @@ if __name__ == "__main__":
     else:
         script = "eval.bat"
     library.evaluator = ugp.fitness.make_evaluator(evaluator=script, fitness_type=ugp.fitness.Lexicographic)
+
+    # Define and set a property. It checks whether the section 'sec1' has or not the same number of 'shr' and 'shl'
+    def shift_count(individual, frame, **kk):
+        from microgp.individual import get_nodes_in_frame
+        shl_count = 0
+        shr_count = 0
+        nodes = get_nodes_in_frame(individual, frame)
+        for node in nodes:
+            parameters = individual.nodes[node]['parameters']
+            if 'shift' in parameters.keys():
+                if parameters['shift'].value == 'shr':
+                    shr_count += 1
+                elif parameters['shift'].value == 'shl':
+                    shl_count += 1
+        return {'shl_count': shl_count, 'shr_count': shr_count}
+
+    sec1.properties.add_base_builder(shift_count)
+    sec1.properties.add_checker(lambda shl_count, shr_count, **v: shl_count == shr_count)
 
     # Create a list of operators with their arity
     operators = ugp.Operators()
