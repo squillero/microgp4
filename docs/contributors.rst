@@ -43,14 +43,14 @@ This file give credits to people who contributed with code, ideas, drawings, mus
    DLX; MIPS2 & SPARC8)
 -  Ernesto Sanchez: Test & verification engineering; Case studies
    management
--  Massimiliano Schillaci: Evolutionary core design; Test & verification
+-  Massimiliano Schillaci: Evolutionary core; Test & verification
    engineering; Coding (MicroGP3); Case study (PowerPC) 750
 -  Matteo Sonza Reorda: Test & verification engineering
--  Giovanni Squillero: Evolutionary core design; Project management;
+-  Giovanni Squillero: Design; Project management;
    Coding (MicroGP2 & MicroGP4)
 -  Luca Sterpone: FPGA accelerator
 -  Antonio Tomasiello: Case study (i8051)
--  Alberto Tonda: Evolutionary core design; Coding (MicroGP3)
+-  Alberto Tonda: Design; Coding (MicroGP3)
 -  Giuseppe Trovato: Coding (Borg); Case studies (Core War & DLX)
 -  Gianluca Zaniolo: Case study (Pentium 4)
 -  Gianni Zizzi: Case study (malware)

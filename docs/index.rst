@@ -16,8 +16,8 @@
     -- Francis Bacon, c. 1610
 
 
-Overview of MicroGP4
-====================
+Overview
+========
 
 MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
 
@@ -30,11 +30,6 @@ Audience
 
 The audience for MicroGP includes ...
 
-Python
-------
-
-Python is a powerful programming language that allows simple and flexible representations of different problems.  Moreover, Python has a vibrant and growing ecosystem of packages that MicroGP4 uses to provide features such as graph operations and drawing.  In order to make the most out of MicroGP4 you will want to know how to write basic programs in Python.
-
 Free software
 -------------
 
@@ -43,13 +38,9 @@ MicroGP4 is `free and open-source software </FOSS>`_, and it is distributed unde
 History
 -------
 
-MicroGP was designed around y2k; the first fully working version was `coded in C in 2002 </MicroGP2/MicroGP2>`_, then `re-engineered in C++ in 2006 </MicroGP3>`_. MicroGP would not have been possible without the help and support of `several people <contributors>`__.
+MicroGP was designed around y2k; the first fully working version was `coded in C in 2002 </MicroGP2/MicroGP2>`_, then `re-engineered in C++ in 2006 </MicroGP3>`_. MicroGP4 has been re-designed in Python to simply its use and exploit the vibrant ecosystem of packages available.
 
-. The original version was designed and written by Aric Hagberg, Dan Schult, and Pieter Swart in 2002 and 2003. The first public release was in April 2005. Many people have contributed to the success of NetworkX. Some of the contributors are listed in the credits.
-
-The first prototype was created `around Y2K <HISTORY.md>`__; This fourth version has been redesigned from scratch.
-
-contributors are listed in the
+MicroGP would not have been possible without the help and support of `several people <contributors>`__.
 
 Documentation
 -------------
