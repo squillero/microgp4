@@ -58,8 +58,9 @@ class Archive:
             The archive just updated
         """
         if all(not is_dominated(e.fitness, candidate_individual.fitness) for e in self._individuals):
-            self._individuals = {candidate_individual} | {e for e in set(self._individuals) if
-                                                          not is_dominated(candidate_individual.fitness, e.fitness)}
+            self._individuals = {candidate_individual} | {
+                e for e in set(self._individuals) if not is_dominated(candidate_individual.fitness, e.fitness)
+            }
         return self
 
     def __str__(self) -> str:

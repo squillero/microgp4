@@ -33,7 +33,11 @@ if __name__ == "__main__":
     ugp.banner()
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
-    parser.add_argument("-d", "--debug", action="store_const", dest="verbose", const=2,
+    parser.add_argument("-d",
+                        "--debug",
+                        action="store_const",
+                        dest="verbose",
+                        const=2,
                         help="log debug messages (same as -vv)")
     args = parser.parse_args()
     if args.verbose == 0:
@@ -45,7 +49,6 @@ if __name__ == "__main__":
         ugp.logging.debug("Verbose level set to DEBUG")
     ugp.logging.cpu_info("Program started")
 
-
     # Define a parameter of type ugp.parameter.Bitstring and length = 8
     word8 = ugp.make_parameter(ugp.parameter.Bitstring, len_=8)
     # Define a macro that contains a parameter of type ugp.parameter.Bitstring
@@ -56,7 +59,7 @@ if __name__ == "__main__":
     # Create a constraints library
     library = ugp.Constraints()
     # Define the sections in the library
-    library['main'] = ["Bitstring:", word_section]
+    library['main'] = [word_macro]
 
     # Define the evaluator method and the fitness type
     def my_script(data: str):
@@ -92,16 +95,15 @@ if __name__ == "__main__":
 
     # Evolve and print individuals in population
     darwin.evolve()
-    logging.bare("This is the final population:")
+    logging.bare("Final population:")
     for individual in darwin.population:
         msg = f"Solution {str(individual.id)} "
-        ugp.print_individual(individual, msg=msg, plot=True)
+        ugp.print_individual(individual, msg=msg, plot=False)
         ugp.logging.bare(f"Fitness: {individual.fitness}")
         ugp.logging.bare("")
 
     # Print best individuals
-    ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True,
-                         score=True)
+    ugp.print_individual(darwin.archive.individuals, msg="Archive:", plot=True, score=True)
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)

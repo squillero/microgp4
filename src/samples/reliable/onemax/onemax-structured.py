@@ -33,7 +33,11 @@ if __name__ == "__main__":
     ugp.banner()
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
-    parser.add_argument("-d", "--debug", action="store_const", dest="verbose", const=2,
+    parser.add_argument("-d",
+                        "--debug",
+                        action="store_const",
+                        dest="verbose",
+                        const=2,
                         help="log debug messages (same as -vv)")
     args = parser.parse_args()
     if args.verbose == 0:
@@ -62,6 +66,7 @@ if __name__ == "__main__":
     def my_script(data: str):
         count = data.count('1')
         return list(str(count))
+
     library.evaluator = ugp.fitness.make_evaluator(evaluator=my_script, fitness_type=ugp.fitness.Lexicographic)
 
     # Create a list of operators with their arity

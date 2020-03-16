@@ -162,15 +162,13 @@ if __name__ == "__main__":
     lambda_ = 10
     max_age = 5
 
-    darwin = ugp.Darwin(
-        constraints=library,
-        operators=operators,
-        mu=mu,
-        nu=nu,
-        lambda_=lambda_,
-        sigma=sigma,
-        max_age=max_age
-    )
+    darwin = ugp.Darwin(constraints=library,
+                        operators=operators,
+                        mu=mu,
+                        nu=nu,
+                        lambda_=lambda_,
+                        sigma=sigma,
+                        max_age=max_age)
 
     # Evolve____________________________________________________________________________________________________________
     darwin.evolve()

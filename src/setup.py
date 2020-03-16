@@ -24,8 +24,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 import setuptools
 from microgp import __version__ as ugp_version
 
@@ -35,20 +33,17 @@ with open("README.rst", "r") as fh:
 with open("requirements.txt", "r") as fh:
     requirements = fh.readlines()
 
-
 setuptools.setup(
     name="microgp",
     version=ugp_version,
-
     author="Giovanni Squillero",
     author_email="squillero@polito.it",
     license='Apache-2.0',
-
     description="A multi-purpose extensible self-adaptive evolutionary algorithm",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     #url="https://github.com/squillero/microgp4",
-    project_urls = {
+    project_urls={
         "Bug Tracker": "https://github.com/squillero/microgp4/issues",
         "Documentation": "https://microgp4.readthedocs.io/en/pre-alpha/",
         "Source Code": "https://github.com/squillero/microgp4/tree/pre-alpha",
@@ -56,10 +51,8 @@ setuptools.setup(
     keywords='optimization evolutionary-algorithm computational-intelligence',
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "Operating System :: OS Independent",
-        "Development Status :: 2 - Pre-Alpha",
-        "Intended Audience :: Science/Research",
+        "Programming Language :: Python :: 3", "Operating System :: OS Independent",
+        "Development Status :: 2 - Pre-Alpha", "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "License :: OSI Approved :: Apache Software License"
     ],

@@ -27,7 +27,7 @@
 from .helpers import sigma_choice
 from ..utils import logging
 from .base import Parameter
-from microgp import rnd
+from microgp import random
 import microgp as ugp
 
 
@@ -70,7 +70,7 @@ class Integer(Parameter):
         if sigma == 0:
             logging.debug("sigma == 0")
         elif sigma == 1:
-            self._value = rnd.randint(self.min, self.max - 1)
+            self._value = random.randint(self.min, self.max - 1)
         else:
             new_value = sigma_choice(seq=range(self.min, self.max, 1), previous_index=self._value, sigma=sigma)
             # new_value = sigma_choice(sigma, self._value, self.max - self.min)

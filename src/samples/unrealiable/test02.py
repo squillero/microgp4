@@ -83,7 +83,6 @@ if __name__ == "__main__":
     jmp1 = ugp.Macro("    jmp {jmp_ref} \t\t; jump forward", {'jmp_ref': ref_fwd})
     jmp2 = ugp.Macro("    jmp {jmp_ref} \t\t; jump backward", {'jmp_ref': ref_bcw})
 
-
     # define sections
     generic_math = ugp.make_section({add, sub}, size=(2, 5), instances=(0, 10))
     # generic_math = ugp.make_section({add, sub}, size=(1, 2), instances=(0, 10))

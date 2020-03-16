@@ -49,12 +49,12 @@ import logging
 import os
 import warnings
 
-microgp4_process = None
 try:
     import psutil
-    microgp4_process = psutil.Process(os.getpid())
+    microgp4_process_time = lambda: str(psutil.Process(os.getpid()).cpu_times())
 except:
-    pass
+    import time
+    microgp4_process_time = lambda: "process(user+system=%.2g)" % (time.process_time(),)
 
 DefaultLogger = logging.getLogger('microgp4')
 
@@ -76,9 +76,9 @@ DefaultLogger.__doc__ = "Default MicroGP4 logger"
 
 def cpu_info(msg: str, log_level: int = DEBUG) -> None:
     if msg:
-        DefaultLogger.log(log_level, "%s: %s", msg, microgp4_process.cpu_times())
+        DefaultLogger.log(log_level, "%s: %s", msg, microgp4_process_time())
     else:
-        DefaultLogger.log(log_level, "%s", msg, microgp4_process.cpu_times())
+        DefaultLogger.log(log_level, "%s", msg, microgp4_process_time())
 
 
 def log_split(level: int, msg: str) -> None:
@@ -118,36 +118,37 @@ try:
     coloredlogs.install(level='DEBUG',
                         logger=DefaultLogger,
                         fmt="%(asctime)s%(levelname)s %(message)s",
-                        datefmt="%H:%M:%S",
+                        #datefmt="%H:%M:%S", # TODO! Restore datefmt
+                        datefmt="X",
                         field_styles={
-                            'asctime':   {
+                            'asctime': {
                                 'color': 'cyan'
                             },
                             'levelname': {
-                                'color':  'blue',
-                                'bold':   False,
+                                'color': 'blue',
+                                'bold': False,
                                 'bright': True
                             }
                         },
                         level_styles={
-                            logging.getLevelName(ERROR):    {
+                            logging.getLevelName(ERROR): {
                                 'color': 'red',
-                                'bold':  True
+                                'bold': True
                             },
                             logging.getLevelName(CRITICAL): {
                                 'color': 'red',
-                                'bold':  True
+                                'bold': True
                             },
-                            logging.getLevelName(WARNING):  {
+                            logging.getLevelName(WARNING): {
                                 'color': 'yellow',
-                                'bold':  True
+                                'bold': True
                             },
-                            logging.getLevelName(DEBUG):    {
-                                'color':  'black',
+                            logging.getLevelName(DEBUG): {
+                                'color': 'black',
                                 'bright': True
                             },
-                            logging.getLevelName(SPAM):     {
-                                'color':  'black',
+                            logging.getLevelName(SPAM): {
+                                'color': 'black',
                                 'bright': True
                             }
                         })

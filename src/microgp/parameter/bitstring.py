@@ -26,7 +26,7 @@
 
 from ..utils import logging
 from .base import Parameter
-from microgp import rnd
+from microgp import random
 import microgp as ugp
 
 
@@ -59,15 +59,15 @@ class Bitstring(Parameter):
         if sigma == 0:
             logging.debug("sigma == 0")
         elif sigma == 1:
-            bits_list = rnd.choices([0, 1], k=self.len_)
+            bits_list = random.choices([0, 1], k=self.len_)
             self._value = ''.join(map(str, bits_list))
         else:
-            i = rnd.randint(0, self.len_-1)
+            i = random.randint(0, self.len_ - 1)
             value = list(self._value.strip())
             value[i] = str(1 - int(value[i]))
             self.value = ''.join(map(str, value))
-            while rnd.random() < sigma:
-                i = rnd.randint(0, self.len_ - 1)
+            while random.random() < sigma:
+                i = random.randint(0, self.len_ - 1)
                 value[i] = str(1 - int(value[i]))
                 self.value = ''.join(map(str, value))
 
@@ -80,4 +80,3 @@ class Bitstring(Parameter):
     def value(self, new_value: str):
         """Set a new value for the parameter (type str)"""
         self._value = new_value
-

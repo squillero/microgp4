@@ -22,6 +22,7 @@
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import warnings
 from typing import Union, Set, List
 
@@ -31,7 +32,7 @@ from .individual import Individual
 from .individual_operators import order_by_fitness
 from .operators import Operators
 from .population import Population
-from .utils import logging
+from .utils import logging, random
 
 
 class Darwin:
@@ -129,6 +130,10 @@ class Darwin:
         else:
             self._stopping_conditions = stopping_conditions
 
+    @property
+    def mu(self):
+        return self._mu
+
     def evolve(self) -> None:
         """Evolve the population until at least one of the stopping conditions
          becomes True"""
@@ -138,7 +143,7 @@ class Darwin:
         # Continue until one or more of the stopping condition in the list is true
         # while all((not f(self) for f in self._stopping_conditions)):
         # i = 0
-        while self._generation < 20:
+        while self._generation < 5:
             self.do_generation()
             # i += 1
             # if i % 20 == 0:
@@ -148,7 +153,7 @@ class Darwin:
         """Perform a generation of the evolution. Pick lambda (or nu)
         operators, clean the resulting set of individuals given by the
         operators, join it to population and keep the best mu individuals"""
-        logging.debug(f"Starting generation number {self._generation}")
+        logging.debug(f"Starting generation number {self._generation} {random}")
 
         # Initialize the list of individuals that compose the offspring of the current generation
         whole_offspring = []
@@ -162,6 +167,7 @@ class Darwin:
 
         # Run operators
         for operator in selected_operators:
+            logging.debug(f"OPERATOR {operator} {random}")
             arity = operator.arity
 
             # Get the list of individuals to work with
@@ -177,7 +183,9 @@ class Darwin:
 
             # Filter the None individuals and manage the Allopatric Selection
             # [ ind1, ind2, [ ind11, ind12, ind13], [ ind21, [ ind211, ind212], ind23] ], ind4 ]
+            logging.debug(f"Filtering: {random}")
             final_offspring = self.filter_offspring(temporary_offspring)
+            logging.debug(f"Filtered: {random}")
 
             # if not final_offspring:
             #     logging.warning(f'Operator {operator.function} has not produced a valid individual')
@@ -255,12 +263,10 @@ class Darwin:
         """Keep in the population at most mu individuals removing the worst"""
         # If there are too many individuals in the population -> keep only the best mu individuals
         mu = len(self._population)
-        if len(self._population) >= self._mu:
-            mu = self._mu
-        else:
+        if len(self._population) < self.mu:
             warnings.warn(self._WARN_POP_SIZE, RuntimeWarning)
         ordered_individuals = order_by_fitness(self._population.individuals)
-        self._population._individuals = set(ordered_individuals[:mu])
+        self._population._individuals = set(ordered_individuals[:self.mu])
 
     def update_archive(self) -> None:
         """Insert in archive the best individuals (and remove the no more good enough individuals)"""

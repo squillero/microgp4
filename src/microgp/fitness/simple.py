@@ -30,7 +30,6 @@ from typing import Union, Sequence
 from .fitnesstuple import FitnessTuple
 from .lexicographic import Lexicographic
 
-
 # Base
 #     FitnessTuple
 #         Simple

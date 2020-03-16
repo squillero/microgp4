@@ -25,7 +25,7 @@
 # limitations under the License.
 
 from .fitnesstuplemultiobj import FitnessTupleMultiobj
-from microgp import rnd
+from microgp import random
 
 
 class Lexicase(FitnessTupleMultiobj):
@@ -44,5 +44,5 @@ class Lexicase(FitnessTupleMultiobj):
 
     def __gt__(self, other: "Lexicase") -> bool:
         order = list(range(len(self)))
-        rnd.shuffle(order)
+        random.shuffle(order)
         return tuple(self[i] for i in order) > tuple(other[i] for i in order)

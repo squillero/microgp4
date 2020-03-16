@@ -31,7 +31,7 @@ from .helpers import sigma_choice
 from ..individual_operators import unroll_macro_list, Individual
 from ..utils import logging
 from ..node import NodeID
-from microgp import rnd
+from microgp import random
 import microgp as ugp
 
 
@@ -222,7 +222,7 @@ class LocalReference(Reference):
             A new target NodeID
         """
         if sigma == 1:
-            new_target = rnd.choice(self._valid_targets())
+            new_target = random.choice(self._valid_targets())
         else:
             valid_targets = self._valid_targets()
             mean = valid_targets.index(old_target)
@@ -238,8 +238,9 @@ class LocalReference(Reference):
 
     @offset.setter
     def offset(self, new_offset: int):
-        assert isinstance(new_offset,
-                          int) or not new_offset, f"Passed offset must be and int or None object. Got {type(new_offset)} instead"
+        assert isinstance(
+            new_offset,
+            int) or not new_offset, f"Passed offset must be and int or None object. Got {type(new_offset)} instead"
         old_target = next((t for f, t, k in self.individual.graph.edges(self.node, keys=True) if k == self.name), None)
         if old_target:
             self.individual.graph.remove_edge(self.node, old_target, self.name)
@@ -295,7 +296,7 @@ class ExternalReference(Reference):
             potential_targets = self._valid_targets() + [None]
 
             # Choose the new target
-            new_target = rnd.choice(potential_targets)
+            new_target = random.choice(potential_targets)
 
             # Create a new procedure
             if new_target is None:

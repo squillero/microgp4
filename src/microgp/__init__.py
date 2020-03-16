@@ -36,8 +36,23 @@ Distributed under Apache-2.0.
 import sys
 import warnings
 
+# Standard messages
+WARN_V27 = "The code is quite probably not compatible with Python 2"
+WARN_V37 = "The code is only known to be compatible with Python 3.7+"
+WARN_DBG = "Paranoia checks are active: performances can be significantly impaired (consider using '-O')"
+
+# Warnings
+if sys.version_info < (3,):
+    warnings.warn(WARN_V27, Warning)
+elif sys.version_info < (3, 7):
+    warnings.warn(WARN_V37, Warning)
+
+if sys.flags.optimize == 0:
+    warnings.warn(WARN_DBG, UserWarning)
+
+# MicroGP stuff
 from .version import version_info
-from .utils import logging, rnd
+from .utils import logging, random
 from .parameter import make_parameter
 from .macro import Macro
 from .constraints import make_section, Constraints, Section
@@ -51,20 +66,6 @@ from .individual_operators import flat_mutation, hierarchical_mutation, add_node
     create_random_individual
 from . import fitness
 
-# Standard messages
-WARN_V27 = "The code is quite probably not compatible with Python 2"
-WARN_V37 = "The code is only known to be compatible with Python 3.7+"
-WARN_DBG = "Paranoia checks are active: performances can be significantly impaired (consider using '-O')"
-
-if sys.version_info < (3,):
-    warnings.warn(WARN_V27, Warning)
-elif sys.version_info < (3, 7):
-    warnings.warn(WARN_V37, Warning)
-
-if sys.flags.optimize == 0:
-    warnings.warn(WARN_DBG, UserWarning)
-
-
 def banner() -> None:
     """Shows the "official" MicroGP banner"""
     logging.bare(
@@ -72,7 +73,7 @@ def banner() -> None:
     )
     logging.bare(f"(c) 2020 by Giovanni Squillero and Alberto Tonda")
 
-
+# Version Info
 name = "microgp"
 __name__ = name
 __version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}"

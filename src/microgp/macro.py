@@ -67,7 +67,7 @@ class Macro(Paranoid):
         parameters_type['info'] = Information
         # sanity check
         assert all([p is None or p in parameters_type for _, p, _, _ in Formatter().parse(text)
-                    ]), "A parameter in macro's text is missing from the dictionary of parameters' types"
+                   ]), "A parameter in macro's text is missing from the dictionary of parameters' types"
 
         self._text = text
         self._parameters_type = parameters_type

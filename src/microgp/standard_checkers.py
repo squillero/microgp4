@@ -30,6 +30,7 @@ from .macro import Macro
 
 
 def check_frame_size(size: Tuple[int, int]) -> Callable:
+
     def check_size(nodes, sub_sections, **v):
         assert isinstance(nodes, list), "nodes list is not a list but a '%s'" % (type(nodes),)
         assert isinstance(sub_sections, list), "sub_sections list is not a list but a '%s'" % (type(sub_sections),)
