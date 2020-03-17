@@ -31,7 +31,7 @@ from .helpers import sigma_choice
 from ..individual_operators import unroll_macro_list, Individual
 from ..utils import logging
 from ..node import NodeID
-from microgp import random
+from microgp import random_generator
 import microgp as ugp
 
 
@@ -222,7 +222,7 @@ class LocalReference(Reference):
             A new target NodeID
         """
         if sigma == 1:
-            new_target = random.choice(self._valid_targets())
+            new_target = random_generator.choice(self._valid_targets())
         else:
             valid_targets = self._valid_targets()
             mean = valid_targets.index(old_target)
@@ -296,7 +296,7 @@ class ExternalReference(Reference):
             potential_targets = self._valid_targets() + [None]
 
             # Choose the new target
-            new_target = random.choice(potential_targets)
+            new_target = random_generator.choice(potential_targets)
 
             # Create a new procedure
             if new_target is None:

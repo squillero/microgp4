@@ -33,8 +33,12 @@ class MicroGP_Random():
     def __init__(self):
         self._py_random = py_random.Random()
         self._calls = 0
-        self._py_random.seed(42)
+        self.seed(42)
         logging.info("Initialized random generator")
+
+    def seed(self, *args, **kwargs):
+        self._calls = 0
+        return self._py_random.seed(*args, **kwargs)
 
     def randint(self, *args, **kwargs):
         old = f"{self}"
@@ -80,4 +84,4 @@ class MicroGP_Random():
         random_state = hex(abs(hash(self._py_random.getstate())))
         return f"{self._calls}:0x{random_state}"
 
-random = MicroGP_Random()
+random_generator = MicroGP_Random()

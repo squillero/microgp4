@@ -27,7 +27,7 @@ from typing import List
 
 from .genoperator import GenOperator
 from .utils import logging
-from microgp import random
+from microgp import random_generator
 
 
 class Operators:
@@ -112,7 +112,7 @@ class Operators:
         selected_operators = []
         for _ in range(k):
             # TODO: consider statistics in future implementations
-            operator = random.choice(valid_operators)
+            operator = random_generator.choice(valid_operators)
             selected_operators.append(operator)
 
         return selected_operators

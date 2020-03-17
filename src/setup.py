@@ -24,13 +24,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# MEMO
+# python .\setup.py sdist
+# twine upload dist/*
+
 import setuptools
 from microgp import __version__ as ugp_version
 
-with open("README.rst", "r") as fh:
+with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-with open("requirements.txt", "r") as fh:
+with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = fh.readlines()
 
 setuptools.setup(
@@ -50,6 +54,8 @@ setuptools.setup(
     },
     keywords='optimization evolutionary-algorithm computational-intelligence',
     packages=setuptools.find_packages(),
+    package_data={'': ['requirements.txt']},
+    data_files=[('.', ['requirements.txt'])],
     classifiers=[
         "Programming Language :: Python :: 3", "Operating System :: OS Independent",
         "Development Status :: 2 - Pre-Alpha", "Intended Audience :: Science/Research",

@@ -52,7 +52,7 @@ if sys.flags.optimize == 0:
 
 # MicroGP stuff
 from .version import version_info
-from .utils import logging, random
+from .utils import logging, random_generator
 from .parameter import make_parameter
 from .macro import Macro
 from .constraints import make_section, Constraints, Section
@@ -66,14 +66,23 @@ from .individual_operators import flat_mutation, hierarchical_mutation, add_node
     create_random_individual
 from . import fitness
 
-def banner() -> None:
-    """Shows the "official" MicroGP banner"""
-    logging.bare(
-        f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro} \"{version_info.codename}\""
-    )
-    logging.bare(f"(c) 2020 by Giovanni Squillero and Alberto Tonda")
-
 # Version Info
+
 name = "microgp"
 __name__ = name
-__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}"
+__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}_{version_info.dev}"
+
+def banner() -> None:
+    """Shows the "official" MicroGP banner"""
+    if version_info.tag == "a" and version_info.micro == 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}_{version_info.dev} pre-alpha \"{version_info.codename}\"")
+    elif version_info.tag == "a" and version_info.micro > 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}α{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+    elif version_info.tag == "b" and version_info.micro > 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}β{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+    elif version_info.tag == "rc" and version_info.micro > 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}rc{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+    elif version_info.tag == "":
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}.{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+
+    logging.bare("© 2020 by Giovanni Squillero and Alberto Tonda")

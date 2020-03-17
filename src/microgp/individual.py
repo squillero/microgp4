@@ -613,11 +613,13 @@ class Individual(Paranoid, Pedantic):
             uninitialized_nodes: set of nodes that contain the parameters to initialize
         """
         if not uninitialized_nodes:
-            uninitialized_nodes = set(self.nodes())
+            # Can't use a set [ie. uninitialized_nodes = set(self.nodes()) ]
+            uninitialized_nodes = list(self.nodes())
         assert len(uninitialized_nodes) > 0, "You have to pass at least one node in the set"
         for u_node in uninitialized_nodes:
             assert u_node in self.nodes(), "One or more nodes not in the graph"
-        for node in uninitialized_nodes:
+        # Nodes *need* to be processed in a fully prediuctable order!
+        for node in sorted(uninitialized_nodes):
             macro = self.nodes[node]['macro']
             self.initialize_macros(macro, node)
 

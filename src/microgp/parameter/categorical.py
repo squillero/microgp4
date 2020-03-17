@@ -28,7 +28,7 @@ from microgp import *
 from ..utils import logging
 from .base import Parameter
 from .helpers import sigma_choice
-from microgp import random
+from microgp import random_generator
 import microgp as ugp
 
 
@@ -58,13 +58,13 @@ class Categorical(Parameter):
             logging.debug("sigma == 0")
             return False
         elif sigma == 1:
-            new_value = random.choice(self.alternatives)
+            new_value = random_generator.choice(self.alternatives)
             self._value = new_value
         else:
-            new_value = random.choice(self.alternatives)
+            new_value = random_generator.choice(self.alternatives)
             self._value = new_value
-            while random.random() < sigma:
-                new_value = random.choice(self.alternatives)
+            while random_generator.random() < sigma:
+                new_value = random_generator.choice(self.alternatives)
                 self._value = new_value
 
     @property
@@ -103,7 +103,7 @@ class CategoricalSorted(Parameter):
             logging.debug("sigma == 0")
         # Mutate with strength: sigma
         elif sigma == 1:
-            self._value = random.choice(self.alternatives)
+            self._value = random_generator.choice(self.alternatives)
         else:
             actual_index = self.alternatives.index(self._value)
             new_value = sigma_choice(seq=self.alternatives, previous_index=actual_index, sigma=sigma)

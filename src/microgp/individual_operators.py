@@ -38,7 +38,7 @@ from .individual import *
 from .macro import Macro
 from .parameter import Information
 from .utils import logging
-from microgp import random
+from microgp import random_generator
 import microgp as ugp
 
 
@@ -97,10 +97,10 @@ def unroll_macro_list(individual: Individual, section_name: str, frame_path: Seq
         # else:
         #     x = range(rnd.randint(section.size[0], section.size[1]))
         # for _ in x:
-        for i in range(random.randint(*section.size)):
+        for i in range(random_generator.randint(*section.size)):
             # Create and append a node that contains of the macros in the list of macros
             #       (returned by section.macro_pool method)
-            chosen_macro = random.choice(section.macro_pool)
+            chosen_macro = random_generator.choice(section.macro_pool)
             # logging.bare(chosen_macro)
             nodes.append((chosen_macro, frame_path))
     elif isinstance(section, SubsectionsSequence):
@@ -108,7 +108,7 @@ def unroll_macro_list(individual: Individual, section_name: str, frame_path: Seq
         for seq in section.sub_sections:
             nodes += unroll_macro_list(individual, seq.name, frame_path)
     elif isinstance(section, SubsectionsAlternative):
-        seq = random.choice(section.sub_sections)
+        seq = random_generator.choice(section.sub_sections)
         nodes += unroll_macro_list(individual, seq.name, frame_path)
     else:
         raise TypeError("Unknown section type")
@@ -132,6 +132,7 @@ def order_by_fitness(individuals_pool: Union[Set[Individual], List[Individual]])
 
 
 # INITIALIZATION________________________________________________________________________________________________________
+# TODO: Separate the 'create_random_individual -> Individual' from an 'init_random_individual -> [Individual]'
 def create_random_individual(constraints: Constraints, max_retries: Union[int, None] = 100, **kwargs) -> \
         List[Union[Individual, None]]:
     """Creates a random individual.
@@ -228,7 +229,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     assert all([parentA, parentB]), f"Arity of switch_proc_crossover is 2"
 
     # Select the primary parent that will give to the son the greatest number of genes (nodes and their parameters)_____
-    primary_parent = random.choice([parentA, parentB])
+    primary_parent = random_generator.choice([parentA, parentB])
     source_individual = parentA if primary_parent == parentB else parentB
     # Copy all the genes from the primary parent and set internal creation characteristics______________________________
     individual = Individual(primary_parent.constraints, copy_from=primary_parent)
@@ -253,7 +254,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     if not candidates:
         return [None]
 
-    chosen_section, chosen_frame = random.choice(candidates)
+    chosen_section, chosen_frame = random_generator.choice(candidates)
 
     from .parameter import ExternalReference
     candidates = list()
@@ -263,7 +264,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
             if issubclass(type(parameter), ExternalReference):
                 candidates.append((node_id, parameter.name))
 
-    chosen_node_id, chosen_parameter_name = random.choice(candidates)
+    chosen_node_id, chosen_parameter_name = random_generator.choice(candidates)
     # Copy the structure of the selected frame and its parameters___________________________________________________
     nodes_to_copy_from = get_nodes_in_frame(source_individual, chosen_frame)
     assert len(nodes_to_copy_from) > 0, "No nodes to copy from"
@@ -366,7 +367,7 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
         return [None, None]
 
     # Chose the frames that will be swapped
-    chosen_frame_C, chosen_frame_D = random.choice(candidates)
+    chosen_frame_C, chosen_frame_D = random_generator.choice(candidates)
 
     nodes_in_frame_C = get_nodes_in_frame(individualC, chosen_frame_C)
     nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
@@ -378,11 +379,11 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     #   nodesD = [n7_d, n8_d, n9_d, n10_d, n11_d]
     #   nodesC will be = [n4_c, n5_c, n6_c, n10_d, n11_d]
     #   nodesD will be = [n7_d, n8_d, n9_d, n7_c, n8_c]
-    cut_node_C = random.choice(nodes_in_frame_C[:-1])
+    cut_node_C = random_generator.choice(nodes_in_frame_C[:-1])
     cut_index_C = nodes_in_frame_C.index(cut_node_C)
     # If the frames have different size -> pick a new random node from the nodes in D
     if len(nodes_in_frame_C) != len(nodes_in_frame_D):
-        cut_node_D = random.choice(nodes_in_frame_D[:-1])
+        cut_node_D = random_generator.choice(nodes_in_frame_D[:-1])
         cut_index_D = nodes_in_frame_D.index(cut_node_D)
     else:
         cut_index_D = cut_index_C
@@ -484,7 +485,7 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
         return [None]
 
     # Choose the frames that will be swapped
-    chosen_frame_C, chosen_frame_D = random.choice(candidates)
+    chosen_frame_C, chosen_frame_D = random_generator.choice(candidates)
 
     nodes_in_frame_C = get_nodes_in_frame(individualC, chosen_frame_C)
     nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
@@ -569,11 +570,11 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         # Otherwise -> removal of a node is always executed
 
         # Choice a valid frame
-        chosen_frame = random.choice(list(shrinkable_frames))
+        chosen_frame = random_generator.choice(list(shrinkable_frames))
 
         # Choose randomly the node that will be removed
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
-        node_to_remove = random.choice(candidate_nodes)
+        node_to_remove = random_generator.choice(candidate_nodes)
         chosen_root_frame = new_individual.nodes[node_to_remove]['frame_path'][1]
 
         # logging.debug(f"Removing node: {node_to_remove}")
@@ -590,7 +591,7 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
                 if isinstance(parameter, LocalReference) and parameter.value == node_to_remove:
                     parameter.mutate(1)
 
-        if sigma == 1.0 or not (random.random() < sigma):
+        if sigma == 1.0 or not (random_generator.random() < sigma):
             break
 
     assert len(original_individual.nodes()) > len(new_individual.nodes()), "Something wrong!"
@@ -634,15 +635,15 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
             return [None]
 
         # Choice a valid frame
-        chosen_frame = random.choice(list(expandable_frames))
+        chosen_frame = random_generator.choice(list(expandable_frames))
 
         # Choose randomly a node that will be the parent of the new node
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
-        chosen_parent_node = random.choice(candidate_nodes)
+        chosen_parent_node = random_generator.choice(candidate_nodes)
 
         frame_path = new_individual.nodes[chosen_parent_node]["frame_path"]
         candidate_macros = chosen_frame.section.macro_pool
-        chosen_macro = random.choice(candidate_macros)
+        chosen_macro = random_generator.choice(candidate_macros)
 
         # Add node to graph
         node_to_insert = new_individual.add_node(parent_node=chosen_parent_node,
@@ -654,7 +655,7 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
 
         assert node_to_insert in new_individual.nodes(), "Node has not been inserted"
 
-        if sigma == 1.0 or not (random.random() < sigma):
+        if sigma == 1.0 or not (random_generator.random() < sigma):
             break
 
     assert len(original_individual.nodes()) < len(new_individual.nodes()), "Something wrong!"
@@ -690,7 +691,7 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
         #   had no effect
         while True:
             # Choose a node that contains the parameter to mutate
-            chosen_node = random.choice(new_individual.nodes())
+            chosen_node = random_generator.choice(new_individual.nodes())
 
             # Create a list of parameters contained into the macro
             candidate_parameters = []
@@ -702,12 +703,12 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
             #   else -> mutate a random parameter
             if candidate_parameters:
                 # Choose only one parameter to mutate in the list of all parameters of the chosen macro
-                chosen_parameter = random.choice(candidate_parameters)
+                chosen_parameter = random_generator.choice(candidate_parameters)
                 chosen_parameter.mutate(sigma)
                 break
 
         # Stop condition
-        if sigma == 1.0 or not (random.random() < sigma):
+        if sigma == 1.0 or not (random_generator.random() < sigma):
             break
 
     new_individual.finalize()
@@ -752,11 +753,11 @@ def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> Li
             return [None]
 
         # Choose and mutate a parameter
-        chosen_parameter = random.choice(candidate_parameters)
+        chosen_parameter = random_generator.choice(candidate_parameters)
         chosen_parameter.mutate(sigma)
 
         # Stop condition
-        if sigma == 1.0 or not (random.random() < sigma):
+        if sigma == 1.0 or not (random_generator.random() < sigma):
             break
 
     new_individual.finalize()

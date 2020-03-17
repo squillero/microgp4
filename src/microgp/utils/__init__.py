@@ -25,4 +25,4 @@
 # limitations under the License.
 
 from . import logging
-from .random import random
+from .random import random_generator

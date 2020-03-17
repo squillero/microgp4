@@ -27,7 +27,7 @@
 import scipy.stats as stats
 from typing import Type, Any
 from .base import Parameter
-from microgp import random
+from microgp import random_generator
 import microgp as ugp
 
 
@@ -64,7 +64,7 @@ def sigma_choice(seq, previous_index=None, sigma=None):
     probs = probs / sum(probs)
     weights = probs
     weights[previous_index] = 0
-    return random.choices(seq, weights, k=1)[0]
+    return random_generator.choices(seq, weights, k=1)[0]
 
     # import matplotlib.pyplot as plt
     # fig = plt.figure()

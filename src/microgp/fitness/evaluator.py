@@ -92,7 +92,7 @@ def make_evaluator(evaluator: Union[str, callable],
     """
 
     if isinstance(evaluator, str):
-
+        assert os.path.isfile(evaluator), f"Can't use the script \"{evaluator}\" as evaluator"
         def r(i):
             f, c = _run_script(evaluator, i, num_elements, auto_delete=False)
             return fitness_type(f), c

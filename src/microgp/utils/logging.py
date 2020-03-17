@@ -118,8 +118,7 @@ try:
     coloredlogs.install(level='DEBUG',
                         logger=DefaultLogger,
                         fmt="%(asctime)s%(levelname)s %(message)s",
-                        #datefmt="%H:%M:%S", # TODO! Restore datefmt
-                        datefmt="X",
+                        datefmt="%H:%M:%S", # TODO! Restore datefmt
                         field_styles={
                             'asctime': {
                                 'color': 'cyan'
