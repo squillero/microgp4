@@ -45,7 +45,7 @@ def _run_script(script: Union[str, callable], individual: 'Individual', num_elem
          other values passed will be considered as comment.
 
     Returns:
-
+        A tuple containing fitness scores and a comment
     """
     assert script, "script can't be None"
     assert isinstance(script, str) or hasattr(script, '__call__'), "script must be a string (name of the" \

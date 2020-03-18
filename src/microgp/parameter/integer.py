@@ -39,7 +39,7 @@ class Integer(Parameter):
     >>> int256 = ugp.make_parameter(ugp.parameter.Integer, min=0, max=256)
 
     Args:
-        min (int): minimum value **included*.
+        min (int): minimum value **included**.
         max (int): maximum value **not included**.
     """
 
