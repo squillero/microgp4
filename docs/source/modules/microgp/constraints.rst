@@ -22,7 +22,7 @@ A section can be of several types:
 - a :mod:`microgp.constraints.SubsectionsAlternative` (sequence of sections that can be alternatively chosen)
 
 .. image:: images/section_class_uml.jpg
-  :width: 800
+  :width: 600
   :alt: Section class schema
 
 .. autoclass:: microgp.constraints.Section

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -396,8 +396,10 @@ d
                                 **kwargs)
 
     def next_chain_colors(self):
-        colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray',
-                  'tab:olive', 'tab:cyan']
+        colors = [
+            'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray',
+            'tab:olive', 'tab:cyan'
+        ]
         node_colors = [''] * len(self.graph.nodes)
         heads = self.check_entry_point()
         known_heads = set(heads)
@@ -517,7 +519,7 @@ d
         assert isinstance(node, NodeID), "Parameter must be of class 'Node' not %s" % (type(node),)
         assert node.run_paranoia_checks()
         assert len([to for _, to, key in self.graph.edges(node, keys=True) if key == 'next'
-                    ]) <= 1, "Found more than one next"
+                   ]) <= 1, "Found more than one next"
         # pretty weird use of a generator, but it could be efficient...
         return next((to for _, to, key in self.graph.edges(node, keys=True) if key == 'next'), None)
 
@@ -611,11 +613,13 @@ d
             uninitialized_nodes: set of nodes that contain the parameters to initialize
         """
         if not uninitialized_nodes:
-            uninitialized_nodes = set(self.nodes())
-        assert len(uninitialized_nodes) > 1, "You have to pass at least one node in the set"
+            # Can't use a set [ie. uninitialized_nodes = set(self.nodes()) ]
+            uninitialized_nodes = list(self.nodes())
+        assert len(uninitialized_nodes) > 0, "You have to pass at least one node in the set"
         for u_node in uninitialized_nodes:
             assert u_node in self.nodes(), "One or more nodes not in the graph"
-        for node in uninitialized_nodes:
+        # Nodes *need* to be processed in a fully prediuctable order!
+        for node in sorted(uninitialized_nodes):
             macro = self.nodes[node]['macro']
             self.initialize_macros(macro, node)
 
@@ -647,8 +651,9 @@ d
             return
         self.clean_graph()
         self._initialize_frames()
-        self.properties[self.root_frame].add_base_builder(lambda individual, **v: {'macro_list_global':
-                                         [(d['macro'], d['path']) for n, d in individual.nodes(data=True).items()]})
+        self.properties[self.root_frame].add_base_builder(
+            lambda individual, **v:
+            {'macro_list_global': [(d['macro'], d['path']) for n, d in individual.nodes(data=True).items()]})
         self.set_canonical()
         self._finalized = True
 
@@ -873,8 +878,9 @@ d
                 node_translation[source_node_id] = destination_node_id
                 parent = destination_node_id
                 # Pick the next node
-                successors = [(label, target) for _, target, label in
-                              source_individual.graph.edges(source_node_id, keys=True)]
+                successors = [
+                    (label, target) for _, target, label in source_individual.graph.edges(source_node_id, keys=True)
+                ]
                 source_node_id = None
                 for label, target in successors:
                     if label == 'next':
@@ -947,7 +953,9 @@ d
             parameters[parameter_name] = new_parameter
         return parameters
 
-    def create_movable_nodes(self, source_individual: 'Individual', nodes_to_copy_from: List[NodeID],
+    def create_movable_nodes(self,
+                             source_individual: 'Individual',
+                             nodes_to_copy_from: List[NodeID],
                              is_new_proc: bool = False) -> NodeID:
         first_node_id = None
         parent = None
@@ -958,7 +966,8 @@ d
             if not first_node_id:
                 first_node_id = new_node_id
                 if is_new_proc == True:
-                    assert first_node_id not in self._imported_procs.values(), "Node already in self._imported_procs.values()"
+                    assert first_node_id not in self._imported_procs.values(
+                    ), "Node already in self._imported_procs.values()"
                     source_proc_frame = source_individual.nodes[source_node_id]['frame_path'][1]
                     self._imported_procs[source_proc_frame] = first_node_id
             parent = new_node_id
@@ -993,7 +1002,8 @@ d
                         nodes_to_copy_from = get_nodes_in_frame(source_individual, chosen_frame)
 
                         # Create movable nodes of the selected proc
-                        first_movable_node = self.create_movable_nodes(source_individual, nodes_to_copy_from,
+                        first_movable_node = self.create_movable_nodes(source_individual,
+                                                                       nodes_to_copy_from,
                                                                        is_new_proc=True)
                         assert first_movable_node, "Ops, something went wrong in creation of movable nodes"
 
@@ -1051,7 +1061,9 @@ def get_nodes_in_frame(individual: Individual, frame: Frame, frame_path_limit: i
     return node_list
 
 
-def get_nodes_in_section(individual: Individual, section: Section, frame_path_limit: int = None,
+def get_nodes_in_section(individual: Individual,
+                         section: Section,
+                         frame_path_limit: int = None,
                          head: bool = False) -> List[NodeID]:
     """Gets all nodes of an individual inside a given frame
 

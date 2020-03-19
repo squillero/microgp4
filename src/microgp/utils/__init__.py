@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -23,11 +23,6 @@
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
-# import numpy.random as rnd
-import random as rnd
-from . import logging
 
-# rnd.seed(42)
-# logging.bare("SEED SET ___________________________________________________________________")
-# TODO: lavora sulla random
+from . import logging
+from .random import random_generator

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -27,7 +27,7 @@
 import scipy.stats as stats
 from typing import Type, Any
 from .base import Parameter
-from microgp import rnd
+from microgp import random_generator
 import microgp as ugp
 
 
@@ -57,14 +57,14 @@ def sigma_choice(seq, previous_index=None, sigma=None):
     # original_sigma = sigma
     mean = previous_index
     # sigma = - math.log(sigma, 1.4)
-    sigma = (10 ** (sigma ** 2))
+    sigma = (10**(sigma**2))
     x = range(len(seq))
     probs = stats.norm.pdf(x, mean, sigma)
     probs += probs[previous_index]
     probs = probs / sum(probs)
     weights = probs
     weights[previous_index] = 0
-    return rnd.choices(seq, weights, k=1)[0]
+    return random_generator.choices(seq, weights, k=1)[0]
 
     # import matplotlib.pyplot as plt
     # fig = plt.figure()

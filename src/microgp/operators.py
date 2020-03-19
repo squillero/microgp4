@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -27,7 +27,7 @@ from typing import List
 
 from .genoperator import GenOperator
 from .utils import logging
-from microgp import rnd
+from microgp import random_generator
 
 
 class Operators:
@@ -112,7 +112,7 @@ class Operators:
         selected_operators = []
         for _ in range(k):
             # TODO: consider statistics in future implementations
-            operator = rnd.choice(valid_operators)
+            operator = random_generator.choice(valid_operators)
             selected_operators.append(operator)
 
         return selected_operators

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -27,7 +27,7 @@
 from .helpers import sigma_choice
 from ..utils import logging
 from .base import Parameter
-from microgp import rnd
+from microgp import random_generator
 import microgp as ugp
 
 
@@ -70,7 +70,7 @@ class Integer(Parameter):
         if sigma == 0:
             logging.debug("sigma == 0")
         elif sigma == 1:
-            self._value = rnd.randint(self.min, self.max - 1)
+            self._value = random_generator.randint(self.min, self.max - 1)
         else:
             new_value = sigma_choice(seq=range(self.min, self.max, 1), previous_index=self._value, sigma=sigma)
             # new_value = sigma_choice(sigma, self._value, self.max - self.min)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -25,7 +25,7 @@
 # limitations under the License.
 
 from .fitnesstuplemultiobj import FitnessTupleMultiobj
-from microgp import rnd
+from microgp import random_generator
 
 
 class Lexicase(FitnessTupleMultiobj):
@@ -44,5 +44,5 @@ class Lexicase(FitnessTupleMultiobj):
 
     def __gt__(self, other: "Lexicase") -> bool:
         order = list(range(len(self)))
-        rnd.shuffle(order)
+        random_generator.shuffle(order)
         return tuple(self[i] for i in order) > tuple(other[i] for i in order)

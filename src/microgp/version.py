@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Version History (see HISTORY.md)
+# Version History (see history.rst)
 #
 # MicroGP v2: Copyright © 2002-2006 Giovanni Squillero
 #   Licensed under GPL2
@@ -35,5 +35,5 @@
 
 from collections import namedtuple
 
-VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename'])
-version_info = VersionInfo(4, 1, 0, 'a', 4, 'Kiwi')
+VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 1)

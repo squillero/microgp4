@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -23,6 +23,7 @@
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import argparse
 import sys
 
@@ -82,7 +83,6 @@ if __name__ == "__main__":
     call2 = ugp.Macro("    call {reference} and then call {reference2}", {'reference': proc2, 'reference2': proc3})
     jmp1 = ugp.Macro("    jmp {jmp_ref} \t\t; jump forward", {'jmp_ref': ref_fwd})
     jmp2 = ugp.Macro("    jmp {jmp_ref} \t\t; jump backward", {'jmp_ref': ref_bcw})
-
 
     # define sections
     generic_math = ugp.make_section({add, sub}, size=(2, 5), instances=(0, 10))

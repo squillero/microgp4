@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -35,7 +35,10 @@ from .simple import Simple
 from ..utils import logging
 
 
-def _run_script(script: Union[str, callable], individual: 'Individual', num_elements: int = None) -> Tuple[Tuple[Any], str]:
+def _run_script(script: Union[str, callable],
+                individual: 'Individual',
+                num_elements: int = None,
+                auto_delete: bool = True) -> Tuple[Tuple[Any], str]:
     """Run an external scripts and parse the result
 
     Args:
@@ -68,12 +71,14 @@ def _run_script(script: Union[str, callable], individual: 'Individual', num_elem
         values = [eval(b) for b in raw_array[:num_elements]]
         comment = ' '.join(raw_array[num_elements:])
     logging.debug(comment)
-    os.remove(filename)
+    if auto_delete:
+        os.remove(filename)
     return tuple(values), comment
 
 
-def make_evaluator(evaluator: Union[str, callable], fitness_type: Type[FitnessTuple] = Simple, num_elements: int = None
-                   ) -> Callable:
+def make_evaluator(evaluator: Union[str, callable],
+                   fitness_type: Type[FitnessTuple] = Simple,
+                   num_elements: int = None) -> Callable:
     """Build a fitness evaluator that calls a script.
 
     Args:
@@ -87,10 +92,12 @@ def make_evaluator(evaluator: Union[str, callable], fitness_type: Type[FitnessTu
     """
 
     if isinstance(evaluator, str):
+        assert os.path.isfile(evaluator), f"Can't use the script \"{evaluator}\" as evaluator"
         def r(i):
-            f, c = _run_script(evaluator, i, num_elements)
+            f, c = _run_script(evaluator, i, num_elements, auto_delete=False)
             return fitness_type(f), c
     elif callable(evaluator):
+
         def r(i):
             f = evaluator(str(i))
             c = "%s -> %s" % (evaluator.__name__, f)

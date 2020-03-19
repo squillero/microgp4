@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -27,7 +27,7 @@ from typing import Union, Set
 from .individual import Individual
 from .individual_operators import order_by_fitness
 from .utils import logging
-from microgp import rnd
+from microgp import random_generator
 
 
 class Population:
@@ -104,9 +104,9 @@ class Population:
         """Run several tournaments among a few (floor(tau) or ceil(tau))
         individuals and return the best one based on the fitness"""
         assert self._individuals, 'There are not individuals in the population'
-        individuals = rnd.choices(list(self._individuals), k=int(tau))
-        if rnd.random() < (tau - int(tau)):
-            individuals.append(rnd.choice(self._individuals))
+        individuals = random_generator.choices(list(self._individuals), k=int(tau))
+        if random_generator.random() < (tau - int(tau)):
+            individuals.append(random_generator.choice(self._individuals))
         best = order_by_fitness(individuals)[0]
         return best
 

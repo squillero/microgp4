@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -58,8 +58,9 @@ class Archive:
             The archive just updated
         """
         if all(not is_dominated(e.fitness, candidate_individual.fitness) for e in self._individuals):
-            self._individuals = {candidate_individual} | {e for e in set(self._individuals) if
-                                                          not is_dominated(candidate_individual.fitness, e.fitness)}
+            self._individuals = {candidate_individual} | {
+                e for e in set(self._individuals) if not is_dominated(candidate_individual.fitness, e.fitness)
+            }
         return self
 
     def __str__(self) -> str:

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -36,8 +36,23 @@ Distributed under Apache-2.0.
 import sys
 import warnings
 
+# Standard messages
+WARN_V27 = "The code is quite probably not compatible with Python 2"
+WARN_V37 = "The code is only known to be compatible with Python 3.7+"
+WARN_DBG = "Paranoia checks are active: performances can be significantly impaired (consider using '-O')"
+
+# Warnings
+if sys.version_info < (3,):
+    warnings.warn(WARN_V27, Warning)
+elif sys.version_info < (3, 7):
+    warnings.warn(WARN_V37, Warning)
+
+if sys.flags.optimize == 0:
+    warnings.warn(WARN_DBG, UserWarning)
+
+# MicroGP stuff
 from .version import version_info
-from .utils import logging, rnd
+from .utils import logging, random_generator
 from .parameter import make_parameter
 from .macro import Macro
 from .constraints import make_section, Constraints, Section
@@ -51,28 +66,23 @@ from .individual_operators import flat_mutation, hierarchical_mutation, add_node
     create_random_individual
 from . import fitness
 
-# Standard messages
-WARN_V27 = "The code is quite probably not compatible with Python v2"
-WARN_V37 = "The code is only known to be compatible with Python v3.7+"
-WARN_DBG = "Paranoia checks are active: performances can be significantly impaired (consider using '-O')"
-
-if sys.version_info < (3,):
-    warnings.warn(WARN_V27, Warning)
-elif sys.version_info < (3, 7):
-    warnings.warn(WARN_V37, Warning)
-
-if sys.flags.optimize == 0:
-    warnings.warn(WARN_DBG, UserWarning)
-
-
-def banner() -> None:
-    """Shows the "official" MicroGP banner"""
-    logging.bare(
-        f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro} \"{version_info.codename}\""
-    )
-    logging.bare(f"(c) 2020 by Giovanni Squillero and Alberto Tonda")
-
+# Version Info
 
 name = "microgp"
 __name__ = name
-__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}"
+__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}_{version_info.dev}"
+
+def banner() -> None:
+    """Shows the "official" MicroGP banner"""
+    if version_info.tag == "a" and version_info.micro == 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}_{version_info.dev} pre-alpha \"{version_info.codename}\"")
+    elif version_info.tag == "a" and version_info.micro > 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}α{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+    elif version_info.tag == "b" and version_info.micro > 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}β{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+    elif version_info.tag == "rc" and version_info.micro > 0:
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}rc{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+    elif version_info.tag == "":
+        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}.{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
+
+    logging.bare("© 2020 by Giovanni Squillero and Alberto Tonda")

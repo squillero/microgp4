@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -67,7 +67,7 @@ class Macro(Paranoid):
         parameters_type['info'] = Information
         # sanity check
         assert all([p is None or p in parameters_type for _, p, _, _ in Formatter().parse(text)
-                    ]), "A parameter in macro's text is missing from the dictionary of parameters' types"
+                   ]), "A parameter in macro's text is missing from the dictionary of parameters' types"
 
         self._text = text
         self._parameters_type = parameters_type

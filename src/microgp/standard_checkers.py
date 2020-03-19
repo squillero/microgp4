@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -30,6 +30,7 @@ from .macro import Macro
 
 
 def check_frame_size(size: Tuple[int, int]) -> Callable:
+
     def check_size(nodes, sub_sections, **v):
         assert isinstance(nodes, list), "nodes list is not a list but a '%s'" % (type(nodes),)
         assert isinstance(sub_sections, list), "sub_sections list is not a list but a '%s'" % (type(sub_sections),)

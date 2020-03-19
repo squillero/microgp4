@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -158,15 +158,13 @@ if __name__ == "__main__":
     lambda_ = 10
     max_age = 5
 
-    darwin = ugp.Darwin(
-        constraints=library,
-        operators=operators,
-        mu=mu,
-        nu=nu,
-        lambda_=lambda_,
-        sigma=sigma,
-        max_age=max_age
-    )
+    darwin = ugp.Darwin(constraints=library,
+                        operators=operators,
+                        mu=mu,
+                        nu=nu,
+                        lambda_=lambda_,
+                        sigma=sigma,
+                        max_age=max_age)
 
     # Evolve____________________________________________________________________________________________________________
     darwin.evolve()

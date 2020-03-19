@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
 #  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
@@ -151,7 +151,7 @@ class SubsectionsSequence(Section):
     def run_paranoia_checks(self) -> bool:
         super().run_paranoia_checks()
         assert not self._sub_sections or all([isinstance(s, Section) for s in self._sub_sections
-                                              ]), "Section content should be a sequence of Sections"
+                                             ]), "Section content should be a sequence of Sections"
         return True
 
     def __add__(self, other):
@@ -196,7 +196,7 @@ class SubsectionsAlternative(Section):
     def run_paranoia_checks(self) -> bool:
         super().run_paranoia_checks()
         assert not self._sub_sections or all([isinstance(s, Section) for s in self._sub_sections
-                                              ]), "Section content should be a sequence of Sections"
+                                             ]), "Section content should be a sequence of Sections"
         return True
 
     def __or__(self, other):
@@ -218,7 +218,10 @@ class SubsectionsAlternative(Section):
 class MacroPool(Section):
     """A pool of macros."""
 
-    def __init__(self, macro_pool: Collection[Macro] = None, name: str = None, size: Tuple[int, int] = (1, 1),
+    def __init__(self,
+                 macro_pool: Collection[Macro] = None,
+                 name: str = None,
+                 size: Tuple[int, int] = (1, 1),
                  **kwargs) -> None:
         if not name:
             name = Section.anonymous('mp')
@@ -250,7 +253,7 @@ class MacroPool(Section):
     def run_paranoia_checks(self) -> bool:
         super().run_paranoia_checks()
         assert not self._macro_pool or all([isinstance(s, Macro) for s in self._macro_pool
-                                            ]), "Macro pool should be a sequence of macros"
+                                           ]), "Macro pool should be a sequence of macros"
         return True
 
     def __or__(self, other):
