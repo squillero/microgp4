@@ -199,7 +199,7 @@ if __name__ == "__main__":
     # Print best individuals
     logging.bare("These are the best ever individuals:")
     best_individuals = darwin.archive.individuals
-    ugp.print_individual(best_individuals, plot=True, score=True)
+    ugp.print_individual(best_individuals, plot=False, score=True)
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)

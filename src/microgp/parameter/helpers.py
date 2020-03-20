@@ -54,6 +54,7 @@ def make_parameter(base_class: Type[Parameter], **attributes: Any) -> Type:
 def sigma_choice(seq, previous_index=None, sigma=None):
     assert previous_index < len(seq), 'Previous index out of range'
     assert 0 < sigma < 1, 'Sigma must be 0 < sigma < 1'
+
     # original_sigma = sigma
     mean = previous_index
     # sigma = - math.log(sigma, 1.4)
@@ -61,6 +62,7 @@ def sigma_choice(seq, previous_index=None, sigma=None):
     x = range(len(seq))
     probs = stats.norm.pdf(x, mean, sigma)
     probs += probs[previous_index]
+    assert sum(probs) > 0, 'A least some probabilities must be non-zero'
     probs = probs / sum(probs)
     weights = probs
     weights[previous_index] = 0

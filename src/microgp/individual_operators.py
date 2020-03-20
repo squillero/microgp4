@@ -26,9 +26,8 @@ import warnings
 from itertools import permutations
 
 try:
-    AAA
     import matplotlib.cbook
-    warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+    #warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
     import matplotlib.pyplot as plt
 except:
     plt = None
@@ -586,15 +585,15 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         # Example: If the removed NodeID_2 was a destination of a Reference in NodeID_1 and NodeID_6 -> change the value
         #  in parameter of the NodeID_1 and NodeID_6 with a new possible target (mutate(1))
         from .parameter.reference import LocalReference
-        for node in new_individual.nodes(frame=chosen_root_frame):
-            for parameter_name, parameter in new_individual.nodes[node]["parameters"].items():
+        for node in new_individual.graph.nodes(frame=chosen_root_frame):
+            for parameter_name, parameter in new_individual.graph.raw_nodes[node]["parameters"].items():
                 if isinstance(parameter, LocalReference) and parameter.value == node_to_remove:
                     parameter.mutate(1)
 
         if sigma == 1.0 or not (random_generator.random() < sigma):
             break
 
-    assert len(original_individual.nodes()) > len(new_individual.nodes()), "Something wrong!"
+    assert len(original_individual.graph.nodes()) > len(new_individual.graph.nodes()), "Something wrong!"
     new_individual.finalize()
     if new_individual.is_valid() == False:
         return [None]

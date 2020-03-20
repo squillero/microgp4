@@ -27,7 +27,7 @@
 import copy
 from string import Formatter
 from typing import Type, Dict
-from warnings import warn
+import warnings
 
 from .abstract import Paranoid
 from .parameter import Structural
@@ -92,7 +92,8 @@ class Macro(Paranoid):
             name: name of the parameter
             parameter_type: type of the parameter
         """
-        warn("add_parameter is deprecated. Parametrs should be set on creation.", DeprecationWarning)
+
+        warnings.warn("add_parameter is deprecated. Parametrs should be set on creation.", DeprecationWarning)
         assert isinstance(name, str), "Name must be a string"
         assert isinstance(parameter_type, type), "Parameter type should be a 'type' (d'ho!?)"
         assert isinstance(parameter_type(), Parameter), "Parameter type must be of type 'Parameter' (d'ho!?)"
