@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fitness &mdash; MicroGP4 4!1.0a4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> MicroGP4
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MicroGP4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Fitness</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/modules/microgp/fitness/fitness.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fitness">
+<h1>Fitness<a class="headerlink" href="#fitness" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>The library allows the use two main types of fitnesses (FitnessTuple,
+FitnessTupleMultiobj), both inherit from the Base class.</p>
+<div class="section" id="base-fitness-class">
+<h2>Base fitness class<a class="headerlink" href="#base-fitness-class" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#module-microgp.fitness.base" title="microgp.fitness.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.base</span></code></a></p>
+<span class="target" id="module-microgp.fitness.base"></span><dl class="class">
+<dt id="microgp.fitness.base.Base">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.base.</code><code class="sig-name descname">Base</code><a class="headerlink" href="#microgp.fitness.base.Base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for storing fitness.</p>
+<p>The different selection schemes are implemented simply by overriding the &gt;
+(greater than) operator. See the other fitness.Classes for details.</p>
+<p>Please note that, according to Spencer’s ‘Survival of the Fittest’,
+the bigger the better. Thus we are <em>maximizing</em> the fitness and not
+minimizing a mathematical function.</p>
+</dd></dl>
+
+<p>The method calling the correspondent <code class="docutils literal notranslate"><span class="pre">Base.sort()</span></code> is:</p>
+<dl class="class">
+<dt id="microgp.individual_operators.order_by_fitness">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.individual_operators.</code><code class="sig-name descname">order_by_fitness</code><a class="headerlink" href="#microgp.individual_operators.order_by_fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort individuals based on the fitness.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>individuals_pool</strong> (<em>Set</em><em>(</em><a class="reference internal" href="../individual.html#microgp.individual.Individual" title="microgp.individual.Individual"><em>Individual</em></a><em>) or </em><em>List</em><em>(</em><a class="reference internal" href="../individual.html#microgp.individual.Individual" title="microgp.individual.Individual"><em>Individual</em></a>) – individuals to order by fitness.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Ordered list of individuals.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="fitness-tuple">
+<h2>Fitness Tuple<a class="headerlink" href="#fitness-tuple" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../../../_images/fitnesstuple_class_schema.jpg"><img alt="Class schema" src="../../../_images/fitnesstuple_class_schema.jpg" style="width: 800px;" /></a>
+<p><a class="reference internal" href="#module-microgp.fitness.fitnesstuple" title="microgp.fitness.fitnesstuple"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.fitnesstuple</span></code></a></p>
+<span class="target" id="module-microgp.fitness.fitnesstuple"></span><dl class="class">
+<dt id="microgp.fitness.fitnesstuple.FitnessTuple">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.fitnesstuple.</code><code class="sig-name descname">FitnessTuple</code><a class="headerlink" href="#microgp.fitness.fitnesstuple.FitnessTuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitness used for single objective purposes.</p>
+<dl class="method">
+<dt id="microgp.fitness.fitnesstuple.FitnessTuple.sort">
+<em class="property">static </em><code class="sig-name descname">sort</code><span class="sig-paren">(</span><em class="sig-param">fmap: List[Tuple[Any, Type[FitnessTuple]]]</em><span class="sig-paren">)</span> &#x2192; List[Tuple[Any, Type[microgp.fitness.fitnesstuple.FitnessTuple]]]<a class="headerlink" href="#microgp.fitness.fitnesstuple.FitnessTuple.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort a list of tuple (Any, FitnessTuple)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fmap</strong> – list of tuple (Any, FitnessTuple)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an ordered list of tuples (Any, FitnessTuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p><a class="reference internal" href="#module-microgp.fitness.simple" title="microgp.fitness.simple"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.simple</span></code></a></p>
+<span class="target" id="module-microgp.fitness.simple"></span><dl class="class">
+<dt id="microgp.fitness.simple.Simple">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.simple.</code><code class="sig-name descname">Simple</code><a class="headerlink" href="#microgp.fitness.simple.Simple" title="Permalink to this definition">¶</a></dt>
+<dd><p>The simplest possible fitness: a single value</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-microgp.fitness.lexicographic" title="microgp.fitness.lexicographic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.lexicographic</span></code></a></p>
+<span class="target" id="module-microgp.fitness.lexicographic"></span><dl class="class">
+<dt id="microgp.fitness.lexicographic.Lexicographic">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.lexicographic.</code><code class="sig-name descname">Lexicographic</code><a class="headerlink" href="#microgp.fitness.lexicographic.Lexicographic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuples able to smoothly handle single- and multi-value fitnesses</p>
+</dd></dl>
+
+</div>
+<div class="section" id="fitness-tuple-multiobjective">
+<h2>Fitness Tuple Multiobjective<a class="headerlink" href="#fitness-tuple-multiobjective" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../../../_images/fitnesstuplemultiobj_class_schema.jpg"><img alt="Class schema" src="../../../_images/fitnesstuplemultiobj_class_schema.jpg" style="width: 800px;" /></a>
+<p><a class="reference internal" href="#module-microgp.fitness.fitnesstuplemultiobj" title="microgp.fitness.fitnesstuplemultiobj"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.fitnesstuplemultiobj</span></code></a></p>
+<span class="target" id="module-microgp.fitness.fitnesstuplemultiobj"></span><dl class="class">
+<dt id="microgp.fitness.fitnesstuplemultiobj.FitnessTupleMultiobj">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.fitnesstuplemultiobj.</code><code class="sig-name descname">FitnessTupleMultiobj</code><a class="headerlink" href="#microgp.fitness.fitnesstuplemultiobj.FitnessTupleMultiobj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitness used for multiple objective purposes.</p>
+<dl class="method">
+<dt id="microgp.fitness.fitnesstuplemultiobj.FitnessTupleMultiobj.sort">
+<em class="property">static </em><code class="sig-name descname">sort</code><span class="sig-paren">(</span><em class="sig-param">fmap: List[Tuple[Any, Type[FitnessTupleMultiobj]]]</em><span class="sig-paren">)</span> &#x2192; List[Tuple[Any, Type[microgp.fitness.fitnesstuplemultiobj.FitnessTupleMultiobj]]]<a class="headerlink" href="#microgp.fitness.fitnesstuplemultiobj.FitnessTupleMultiobj.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort a list of tuple (Any, FitnessTupleMultiobj) using Pareto front</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fmap</strong> – list of tuple (Any, FitnessTupleMultiobj)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an ordered list of tuples (Any, FitnessTupleMultiobj)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p>Sorting example considering an input of type List[Individual, FitnessTupleMultiobj].</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">real_order</span><span class="p">[</span>
+    <span class="p">{</span><span class="n">ind3</span><span class="p">,</span> <span class="n">ind2</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">ind5</span><span class="p">,</span> <span class="n">ind1</span><span class="p">,</span> <span class="n">ind7</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">ind4</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">ind6</span><span class="p">,</span> <span class="n">ind8</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">ind9</span><span class="p">}</span>
+<span class="p">]</span>
+<span class="n">ranking</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">ind1</span><span class="p">,</span> <span class="n">ind1</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind2</span><span class="p">,</span> <span class="n">ind2</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind3</span><span class="p">,</span> <span class="n">ind3</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind4</span><span class="p">,</span> <span class="n">ind4</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind5</span><span class="p">,</span> <span class="n">ind5</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind6</span><span class="p">,</span> <span class="n">ind6</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind7</span><span class="p">,</span> <span class="n">ind7</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind8</span><span class="p">,</span> <span class="n">ind8</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">ind9</span><span class="p">,</span> <span class="n">ind9</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span> <span class="mi">5</span>
+<span class="p">}</span>
+<span class="n">returned_value</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">ind2</span><span class="p">,</span> <span class="n">ind2</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind3</span><span class="p">,</span> <span class="n">ind3</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind1</span><span class="p">,</span> <span class="n">ind1</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind5</span><span class="p">,</span> <span class="n">ind5</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind7</span><span class="p">,</span> <span class="n">ind7</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind4</span><span class="p">,</span> <span class="n">ind4</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind6</span><span class="p">,</span> <span class="n">ind6</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind8</span><span class="p">,</span> <span class="n">ind8</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ind9</span><span class="p">,</span> <span class="n">ind9</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><a class="reference internal" href="#module-microgp.fitness.lexicase" title="microgp.fitness.lexicase"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.lexicase</span></code></a></p>
+<span class="target" id="module-microgp.fitness.lexicase"></span><dl class="class">
+<dt id="microgp.fitness.lexicase.Lexicase">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.lexicase.</code><code class="sig-name descname">Lexicase</code><a class="headerlink" href="#microgp.fitness.lexicase.Lexicase" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fitness for using Lexicase Selection.</p>
+<p><em>Lexicase Selection</em> is a technique supposedly able to handle
+multi-objective problems where solutions must perform optimally on each
+of many test cases.</p>
+<p>See ‘Solving Uncompromising Problems With Lexicase Selection’, by
+T. Helmuth, L. Spector, and J. Matheson
+&lt;<a class="reference external" href="https://dx.doi.org/10.1109/TEVC.2014.2362729">https://dx.doi.org/10.1109/TEVC.2014.2362729</a>&gt;</p>
+<p>Note: as an alternative, consider using <em>Chromatic Selection</em>.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-microgp.fitness.aggregate" title="microgp.fitness.aggregate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.aggregate</span></code></a></p>
+<span class="target" id="module-microgp.fitness.aggregate"></span><dl class="class">
+<dt id="microgp.fitness.aggregate.Aggregate">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.aggregate.</code><code class="sig-name descname">Aggregate</code><a class="headerlink" href="#microgp.fitness.aggregate.Aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuples able to smoothly handle single- and multi-value fitnesses</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-microgp.fitness.chromatic" title="microgp.fitness.chromatic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.chromatic</span></code></a></p>
+<span class="target" id="module-microgp.fitness.chromatic"></span><dl class="class">
+<dt id="microgp.fitness.chromatic.Chromatic">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.fitness.chromatic.</code><code class="sig-name descname">Chromatic</code><a class="headerlink" href="#microgp.fitness.chromatic.Chromatic" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fitness for using Chromatic Selection.</p>
+<p><em>Chromatic Selection</em> is a fast, simple and grossly approximate technique
+for tackling multi-value optimization. See: ‘Chromatic Selection – An
+Oversimplified Approach to Multi-objective Optimization’, by G. Squillero
+&lt;<a class="reference external" href="https://dx.doi.org/10.1007/978-3-319-16549-3_55">https://dx.doi.org/10.1007/978-3-319-16549-3_55</a>&gt;</p>
+<p>Note: as an alternative, consider using <em>Lexicase Selection</em>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="evaluator">
+<h2>Evaluator<a class="headerlink" href="#evaluator" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#module-microgp.fitness.evaluator" title="microgp.fitness.evaluator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.fitness.evaluator</span></code></a></p>
+<span class="target" id="module-microgp.fitness.evaluator"></span><dl class="function">
+<dt id="microgp.fitness.evaluator.make_evaluator">
+<code class="sig-prename descclassname">microgp.fitness.evaluator.</code><code class="sig-name descname">make_evaluator</code><span class="sig-paren">(</span><em class="sig-param">evaluator: Union[str, callable], fitness_type: Type[microgp.fitness.fitnesstuple.FitnessTuple] = &lt;class 'microgp.fitness.simple.Simple'&gt;, num_elements: int = None</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#microgp.fitness.evaluator.make_evaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a fitness evaluator that calls a script.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>evaluator</strong> (<em>str</em><em> or </em><em>callable</em>) – name of the script. The result is taken from stdout.</p></li>
+<li><p><strong>fitness_type</strong> – kind of fitness, ie. type of comparison.</p></li>
+<li><p><strong>num_elements</strong> (<em>int</em>) – number of relevant element in the script output,
+the remaining are considered “comment”. If None, the all output
+is part of the fitness.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A function that can be stored into Constraints.evaluator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Giovanni Squillero and Alberto Tonda
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

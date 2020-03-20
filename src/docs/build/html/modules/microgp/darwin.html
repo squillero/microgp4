@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Darwin &mdash; MicroGP4 4!1.0a4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> MicroGP4
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MicroGP4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Darwin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/microgp/darwin.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="darwin">
+<h1>Darwin<a class="headerlink" href="#darwin" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>The <a class="reference internal" href="#microgp.darwin.Darwin" title="microgp.darwin.Darwin"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.darwin.Darwin</span></code></a> class is in charge of handling the whole
+evolutionprocess. It contains:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="constraints.html"><span class="doc">Constraints</span></a> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.constraints.Constraints</span></code>) that must be the same for each individual managed by Darwin;</p></li>
+<li><p><a class="reference internal" href="#population">Population</a> (<a class="reference internal" href="#microgp.population.Population" title="microgp.population.Population"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.population.Population</span></code></a>) that manages the set of individuals present in the current generation;</p></li>
+<li><p><a class="reference internal" href="#archive">Archive</a> (<a class="reference internal" href="#microgp.archive.Archive" title="microgp.archive.Archive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.archive.Archive</span></code></a>) that manages the best individuals ever contained in the population;</p></li>
+<li><p><a class="reference internal" href="#operators">Operators</a> (<a class="reference internal" href="#microgp.operators.Operators" title="microgp.operators.Operators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.operators.Operators</span></code></a>) that wraps all the <a class="reference internal" href="#genoperator">GenOperator</a> (<a class="reference internal" href="#microgp.genoperator.GenOperator" title="microgp.genoperator.GenOperator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.genoperator.GenOperator</span></code></a>), manages statistics, and operator selection;</p></li>
+<li><p>other evolution parameters such as selection pressure, population size, number of operators to use for the first generation, maximum age of an individual, etc;</p></li>
+</ul>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.darwin</span></code></p>
+<dl class="class">
+<dt id="microgp.darwin.Darwin">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.darwin.</code><code class="sig-name descname">Darwin</code><span class="sig-paren">(</span><em class="sig-param">constraints: microgp.constraints.Constraints</em>, <em class="sig-param">operators: microgp.operators.Operators</em>, <em class="sig-param">mu: int</em>, <em class="sig-param">lambda_: int</em>, <em class="sig-param">nu: int = None</em>, <em class="sig-param">tau: float = 2.0</em>, <em class="sig-param">sigma: float = 0.5</em>, <em class="sig-param">max_age: int = None</em>, <em class="sig-param">stopping_conditions: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.darwin.Darwin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class manages the evolution, stores the genetic operators, the
+population, and the archive. You can set some evolution parameters
+(<cite>lambda, tau, nu, sigma, mu</cite>) and a list of stopping conditions.
+A <cite>microgp.population.Population</cite> and a <cite>microgp.population.Archive</cite>
+objects are also initialized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>constraints</strong> (<em>Constraints</em>) – Constraints object that each individual managed by Darwin must have.</p></li>
+<li><p><strong>operators</strong> (<a class="reference internal" href="#microgp.operators.Operators" title="microgp.operators.Operators"><em>Operators</em></a>) – operators object that contains the set of GenOperators that will manipulate the individuals.</p></li>
+<li><p><strong>mu</strong> (<em>int</em>) – Population size.</p></li>
+<li><p><strong>lambda_</strong> (<em>int</em>) – Number of operators to pick at each generation (except when the population is empty).</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Number of initialization operators to pick when the population is empty. None if you want mu individuals.</p></li>
+<li><p><strong>tau</strong> (<em>float</em>) – Selection pressure. Default value: 2.0</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Probability and strength of the mutation (to be passed to the mutation GenOperators).</p></li>
+<li><p><strong>max_age</strong> (<em>int</em>) – Maximum age that an individual in the population can have. None if you don’t want to filter individuals by age.</p></li>
+<li><p><strong>stopping_conditions</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><p>Initialize a <a class="reference internal" href="#darwin">Darwin</a> object:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nu</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lambda_</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_age</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">darwin</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Darwin</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">constraints</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">operators</span><span class="o">=</span><span class="n">operators</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">lambda_</span><span class="o">=</span><span class="n">lambda_</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">max_age</span><span class="o">=</span><span class="n">max_age</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Evolve, print results (<a class="reference internal" href="#population">Population</a>):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">darwin</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logging</span><span class="o">.</span><span class="n">bare</span><span class="p">(</span><span class="s2">&quot;This is the population:&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">individual</span> <span class="ow">in</span> <span class="n">darwin</span><span class="o">.</span><span class="n">population</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Printing individual &#39;</span> <span class="o">+</span> <span class="n">individual</span><span class="o">.</span><span class="n">id</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">ugp</span><span class="o">.</span><span class="n">print_individual</span><span class="p">(</span><span class="n">individual</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">bare</span><span class="p">(</span><span class="n">individual</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Print the <a class="reference internal" href="#archive">Archive</a> that contains the best eve individuals</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">logging</span><span class="o">.</span><span class="n">bare</span><span class="p">(</span><span class="s2">&quot;These are the best ever individuals:&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ugp</span><span class="o">.</span><span class="n">print_individual</span><span class="p">(</span><span class="n">darwin</span><span class="o">.</span><span class="n">archive</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<dl class="method">
+<dt id="microgp.darwin.Darwin.do_generation">
+<code class="sig-name descname">do_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#microgp.darwin.Darwin.do_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a generation of the evolution. Pick lambda (or nu)
+operators, clean the resulting set of individuals given by the
+operators, join it to population and keep the best mu individuals</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.darwin.Darwin.evolve">
+<code class="sig-name descname">evolve</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#microgp.darwin.Darwin.evolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolve the population until at least one of the stopping conditions
+becomes True</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.darwin.Darwin.filter_offspring">
+<code class="sig-name descname">filter_offspring</code><span class="sig-paren">(</span><em class="sig-param">temporary_offspring: Union[None, List[Optional[microgp.individual.Individual]]]</em><span class="sig-paren">)</span> &#x2192; Optional[List[Optional[microgp.individual.Individual]]]<a class="headerlink" href="#microgp.darwin.Darwin.filter_offspring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove “None” elements and choose the best element in sublist recursively</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temporary_offspring</strong> – the list of individuals to just generated by the operator</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of valid individuals</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.darwin.Darwin.get_best_unpacking">
+<code class="sig-name descname">get_best_unpacking</code><span class="sig-paren">(</span><em class="sig-param">individuals: list</em><span class="sig-paren">)</span> &#x2192; Optional[microgp.individual.Individual]<a class="headerlink" href="#microgp.darwin.Darwin.get_best_unpacking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the best value in the given list (recursive)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.darwin.Darwin.keep_at_most_mu">
+<code class="sig-name descname">keep_at_most_mu</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#microgp.darwin.Darwin.keep_at_most_mu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep in the population at most mu individuals removing the worst</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.darwin.Darwin.update_archive">
+<code class="sig-name descname">update_archive</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#microgp.darwin.Darwin.update_archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert in archive the best individuals (and remove the no more good enough individuals)</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="population">
+<h2>Population<a class="headerlink" href="#population" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.population</span></code></p>
+<dl class="class">
+<dt id="microgp.population.Population">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.population.</code><code class="sig-name descname">Population</code><a class="headerlink" href="#microgp.population.Population" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains the set of individuals composing the population and
+manages the selection, insertion, removal of the individuals based on the
+age or whether their phenotype is already in the population. A non-valid
+individual can’t be inserted.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p>Add a set of individuals in the population</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">darwin</span><span class="o">.</span><span class="n">population</span> <span class="o">+=</span> <span class="nb">set</span><span class="p">(</span><span class="n">list_of_individuals</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Add a single individual in the population</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">darwin</span><span class="o">.</span><span class="n">population</span> <span class="o">+=</span> <span class="nb">set</span><span class="p">(</span><span class="n">individual_A</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">darwin</span><span class="o">.</span><span class="n">population</span> <span class="o">+=</span> <span class="nb">set</span><span class="p">(</span><span class="n">individual_B</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Remove a single individual from the population</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">darwin</span><span class="o">.</span><span class="n">population</span> <span class="o">-=</span> <span class="nb">set</span><span class="p">(</span><span class="n">individual_A</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Remove multiple individuals (set) from the population</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">darwin</span><span class="o">.</span><span class="n">population</span> <span class="o">=</span> <span class="n">darwin</span><span class="o">.</span><span class="n">population</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">individual_A</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Retrieve from population an individual using tournament selection <a class="reference external" href="https://en.wikipedia.org/wiki/Tournament_selection">Tournament selection</a></p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">selected_individual</span> <span class="o">=</span> <span class="n">darwin</span><span class="o">.</span><span class="n">tournament_selection</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Retrieve the entire set of individual contained in the population</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">population</span> <span class="o">=</span> <span class="n">darwin</span><span class="o">.</span><span class="n">population</span><span class="o">.</span><span class="n">individuals</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="microgp.population.Population.filter_by_age">
+<code class="sig-name descname">filter_by_age</code><span class="sig-paren">(</span><em class="sig-param">max_age: int = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#microgp.population.Population.filter_by_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove from the population the individuals that are too old
+(individual.age &gt;= max_age)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.population.Population.filter_clones">
+<em class="property">static </em><code class="sig-name descname">filter_clones</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#microgp.population.Population.filter_clones" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether or not there are individuals with the same
+(canonical) phenotype and then remove them</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.population.Population.grow_old">
+<em class="property">static </em><code class="sig-name descname">grow_old</code><span class="sig-paren">(</span><em class="sig-param">individuals: Set[microgp.individual.Individual]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#microgp.population.Population.grow_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment the age of a set of individuals. Typically the set is
+{Population - Archive}</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.population.Population.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param">tau: float = 2</em><span class="sig-paren">)</span> &#x2192; microgp.individual.Individual<a class="headerlink" href="#microgp.population.Population.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select an individual from the population calling the
+tournament_selection(tau) method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.population.Population.tournament_selection">
+<code class="sig-name descname">tournament_selection</code><span class="sig-paren">(</span><em class="sig-param">tau: float = 2</em><span class="sig-paren">)</span> &#x2192; microgp.individual.Individual<a class="headerlink" href="#microgp.population.Population.tournament_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run several tournaments among a few (floor(tau) or ceil(tau))
+individuals and return the best one based on the fitness</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="archive">
+<h2>Archive<a class="headerlink" href="#archive" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.archive</span></code></p>
+<dl class="class">
+<dt id="microgp.archive.Archive">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.archive.</code><code class="sig-name descname">Archive</code><a class="headerlink" href="#microgp.archive.Archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class manages the set of individuals not dominated by all other
+individuals currently or previously contained in the
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.darwin.Darwin._population</span></code>.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p>Try to insert an individual in the archive:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="bp">self</span><span class="o">.</span><span class="n">_archive</span> <span class="o">+=</span> <span class="n">individual</span>
+</pre></div>
+</div>
+<p>The individual will be inserted only if it is not dominated by all
+individual already inside the archive. If it is not dominated then the
+individuals that just became dominated are removed from the archive.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="operators">
+<h2>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#module-microgp.operators" title="microgp.operators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.operators</span></code></a></p>
+<span class="target" id="module-microgp.operators"></span><dl class="class">
+<dt id="microgp.operators.Operators">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.operators.</code><code class="sig-name descname">Operators</code><a class="headerlink" href="#microgp.operators.Operators" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class wraps all operators, manages statistics, and GenOperator
+selection. The selection is made on the basis of the arity and the
+success and failure statistics of the operator.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p>Create and fill an Operators object to be passed to a Darwin object</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">operators</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Operators</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">init_op1</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">create_random_individual</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">operators</span> <span class="o">+=</span> <span class="n">init_op1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutation_op1</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">remove_node_mutation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">operators</span> <span class="o">+=</span> <span class="n">mutation_op1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crossover_op1</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">switch_proc_crossover</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">operators</span> <span class="o">+=</span> <span class="n">crossover_op1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crossover_op2</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">five_individuals_crossover</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">operators</span> <span class="o">+=</span> <span class="n">crossover_op2</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Select k operators that has arity in the given range</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">selected_operators</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">max_arity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selected_operators</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">min_arity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_arity</span><span class="o">=</span><span class="mi">2</span> <span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="microgp.operators.Operators.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param">min_arity: int = 0</em>, <em class="sig-param">max_arity: int = None</em>, <em class="sig-param">k: int = 1</em><span class="sig-paren">)</span> &#x2192; List[microgp.genoperator.GenOperator]<a class="headerlink" href="#microgp.operators.Operators.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select a set of operators with arity in [min_arity, max_arity]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_arity</strong> (<em>int</em>) – minimum arity of the operators that will be returned</p></li>
+<li><p><strong>max_arity</strong> (<em>int</em>) – maximum arity of the operators that will be returned</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – number of genetic operators to return</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of valid genetic operators</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="genoperator">
+<h3>GenOperator<a class="headerlink" href="#genoperator" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#module-microgp.genoperator" title="microgp.genoperator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.genoperator</span></code></a></p>
+<span class="target" id="module-microgp.genoperator"></span><dl class="class">
+<dt id="microgp.genoperator.GenOperator">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.genoperator.</code><code class="sig-name descname">GenOperator</code><span class="sig-paren">(</span><em class="sig-param">function: collections.abc.Callable</em>, <em class="sig-param">arity: int</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.genoperator.GenOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper of a method that implements the algorithm manipulating or
+building one or more individuals. This class will also manage (in the
+future versions) the statistics applied to the assigned method. The method
+wrapped in the GenOperator must have <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs in its parameters.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p>Build three genetic operators passing the method and the arity</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">init_op1</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">create_random_individual</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutation_op1</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">remove_node_mutation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crossover_op1</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">switch_proc_crossover</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crossover_op2</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">five_individuals_crossover</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Call the method inside the genetic operator</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">selected_crossover_genoperator</span><span class="p">(</span><span class="n">individual1</span><span class="p">,</span> <span class="n">individual2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selected_mutation_genoperator</span><span class="p">(</span><span class="n">individual</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">individuals</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">,</span> <span class="n">ind3</span><span class="p">,</span> <span class="n">ind4</span><span class="p">,</span> <span class="n">ind5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;param1&#39;</span><span class="p">:</span> <span class="n">var1</span><span class="p">,</span> <span class="s1">&#39;param2&#39;</span><span class="p">:</span> <span class="n">var2</span><span class="p">,</span> <span class="s1">&#39;param3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selected_crossover_5_individuals</span><span class="p">(</span><span class="o">*</span><span class="n">individuals</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Giovanni Squillero and Alberto Tonda
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

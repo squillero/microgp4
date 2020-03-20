@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OneMax Assembly &mdash; MicroGP4 4!1.0a4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> MicroGP4
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MicroGP4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>OneMax Assembly</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/examples/exp02.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="onemax-assembly">
+<h1>OneMax Assembly<a class="headerlink" href="#onemax-assembly" title="Permalink to this headline">¶</a></h1>
+<p>See <a class="reference internal" href="exp01.html"><span class="doc">OneMax Base</span></a>.</p>
+<p>The following code produces assembly code that can be run on x86 processors.
+The goal is to generate an assembly function that writes 0xFFFFFFFF (32 1’s
+bit) to register eax. The secondary goal is to minimize the size of the
+function.</p>
+<p>The evaluator…………………….</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">microgp</span> <span class="k">as</span> <span class="nn">ugp</span>
+<span class="kn">from</span> <span class="nn">microgp.utils</span> <span class="kn">import</span> <span class="n">logging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">ugp</span><span class="o">.</span><span class="n">banner</span><span class="p">()</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase log verbosity&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;--debug&quot;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_const&quot;</span><span class="p">,</span>
+                        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
+                        <span class="n">const</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;log debug messages (same as -vv)&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">DefaultLogger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">DefaultLogger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">DefaultLogger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Verbose level set to DEBUG&quot;</span><span class="p">)</span>
+
+    <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">cpu_info</span><span class="p">(</span><span class="s2">&quot;Program started&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Delete old solutions</span>
+    <span class="n">ugp</span><span class="o">.</span><span class="n">delete_solutions</span><span class="p">()</span>
+
+    <span class="c1"># Define parameters</span>
+    <span class="n">reg_alternatives</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%e</span><span class="s1">ax&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%e</span><span class="s1">bx&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%e</span><span class="s1">cx&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%e</span><span class="s1">dx&#39;</span><span class="p">]</span>
+    <span class="n">instr_alternatives</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="s1">&#39;sub&#39;</span><span class="p">,</span> <span class="s1">&#39;mov&#39;</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="s1">&#39;xor&#39;</span><span class="p">,</span> <span class="s1">&#39;cmp&#39;</span><span class="p">]</span>
+    <span class="n">instr_op_alternatives</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;incl&#39;</span><span class="p">,</span> <span class="s1">&#39;decl&#39;</span><span class="p">,</span> <span class="s1">&#39;notl&#39;</span><span class="p">]</span>
+    <span class="n">branch_alternatives</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ja&#39;</span><span class="p">,</span> <span class="s1">&#39;jz&#39;</span><span class="p">,</span> <span class="s1">&#39;jnz&#39;</span><span class="p">,</span> <span class="s1">&#39;je&#39;</span><span class="p">,</span> <span class="s1">&#39;jne&#39;</span><span class="p">,</span> <span class="s1">&#39;jc&#39;</span><span class="p">,</span> <span class="s1">&#39;jnc&#39;</span><span class="p">,</span> <span class="s1">&#39;jo&#39;</span><span class="p">,</span> <span class="s1">&#39;jno&#39;</span><span class="p">]</span>
+    <span class="n">reg_param</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="n">reg_alternatives</span><span class="p">)</span>
+    <span class="n">instr_param</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="n">instr_alternatives</span><span class="p">)</span>
+    <span class="n">bitstr_param</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Bitstring</span><span class="p">,</span> <span class="n">len_</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>  <span class="c1"># {bitstr:02X}</span>
+    <span class="n">branch_param</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="n">branch_alternatives</span><span class="p">)</span>
+    <span class="n">jmp_param</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">LocalReference</span><span class="p">,</span>
+                                   <span class="n">allow_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">allow_forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">allow_backward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">frames_up</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">instr_op_param</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="n">instr_op_alternatives</span><span class="p">)</span>
+
+    <span class="c1"># Define the macros</span>
+    <span class="n">direct_macro</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{instr}</span><span class="s2"> </span><span class="si">{regS}</span><span class="s2">, </span><span class="si">{regD}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;instr&#39;</span><span class="p">:</span> <span class="n">instr_param</span><span class="p">,</span> <span class="s1">&#39;regS&#39;</span><span class="p">:</span> <span class="n">reg_param</span><span class="p">,</span> <span class="s1">&#39;regD&#39;</span><span class="p">:</span> <span class="n">reg_param</span><span class="p">})</span>
+    <span class="n">const_macro</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{instr}</span><span class="s2"> </span><span class="si">%0x{bitstr}</span><span class="s2">, </span><span class="si">{regD}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="p">{</span><span class="s1">&#39;instr&#39;</span><span class="p">:</span> <span class="n">instr_param</span><span class="p">,</span> <span class="s1">&#39;bitstr&#39;</span><span class="p">:</span> <span class="n">bitstr_param</span><span class="p">,</span> <span class="s1">&#39;regD&#39;</span><span class="p">:</span> <span class="n">reg_param</span><span class="p">})</span>
+    <span class="n">instr_op_macro</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{instr}</span><span class="s2"> </span><span class="si">{reg}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;instr&#39;</span><span class="p">:</span> <span class="n">instr_param</span><span class="p">,</span> <span class="s1">&#39;reg&#39;</span><span class="p">:</span> <span class="n">reg_param</span><span class="p">})</span>
+    <span class="n">branch_macro</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{branch}</span><span class="s2"> </span><span class="si">{jmp}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;branch&#39;</span><span class="p">:</span> <span class="n">branch_param</span><span class="p">,</span> <span class="s1">&#39;jmp&#39;</span><span class="p">:</span> <span class="n">jmp_param</span><span class="p">})</span>
+
+    <span class="n">prologue_macro</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;     .text</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    .globl   evolved_function</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    .type    evolved_function, @function</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot; evolved_function:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot; .LFB0:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    .cfi_startproc</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    pushq </span><span class="si">%r</span><span class="s2">bx</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    pushq </span><span class="si">%r</span><span class="s2">cx</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    pushq </span><span class="si">%r</span><span class="s2">dx</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    movl $0x00000505, </span><span class="si">%e</span><span class="s2">ax</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    movl $0x00050500, </span><span class="si">%e</span><span class="s2">bx</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    movl $0x00050500, </span><span class="si">%e</span><span class="s2">cx</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    movl $0x05050000, </span><span class="si">%e</span><span class="s2">dx&quot;</span><span class="p">)</span>
+
+    <span class="n">epilogue_macro</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;    popq </span><span class="si">%r</span><span class="s2">dx &quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    popq </span><span class="si">%r</span><span class="s2">cx</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    popq </span><span class="si">%r</span><span class="s2">bx</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    ret</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    .cfi_endproc</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;.LFE0:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;    .size    evolved_function, .-evolved_function</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;.ident       </span><span class="se">\&quot;</span><span class="s2">MicroGP</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                               <span class="s2">&quot;.section     .note.GNU-stack,&quot;&quot;,@progbits</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># sec1 = ugp.make_section([direct_macro, ], size=(1, 1), name=&#39;sec1&#39;)</span>
+    <span class="n">prologue_sec</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_section</span><span class="p">(</span><span class="n">prologue_macro</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pro_sec&#39;</span><span class="p">)</span>
+    <span class="n">epilogue_sec</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_section</span><span class="p">(</span><span class="n">epilogue_macro</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;epi_sec&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Create a constraints library</span>
+    <span class="n">library</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Constraints</span><span class="p">()</span>
+    <span class="n">library</span><span class="p">[</span><span class="s1">&#39;main&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">prologue_sec</span><span class="p">,</span> <span class="p">[</span><span class="n">direct_macro</span><span class="p">,</span> <span class="n">const_macro</span><span class="p">,</span> <span class="n">instr_op_macro</span><span class="p">,</span> <span class="n">branch_macro</span><span class="p">],</span> <span class="n">epilogue_sec</span><span class="p">]</span>
+
+    <span class="c1"># Define the evaluator and the fitness type</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;./evaluator_exp_02.sh&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;./evaluator_exp_02.bat&quot;</span>
+    <span class="n">library</span><span class="o">.</span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">make_evaluator</span><span class="p">(</span><span class="n">evaluator</span><span class="o">=</span><span class="n">script</span><span class="p">,</span> <span class="n">fitness_type</span><span class="o">=</span><span class="n">ugp</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">Lexicographic</span><span class="p">)</span>
+
+    <span class="c1"># Create a list of operators with their arities</span>
+    <span class="n">operators</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Operators</span><span class="p">()</span>
+    <span class="c1"># Add initialization operators</span>
+    <span class="n">operators</span> <span class="o">+=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">create_random_individual</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Add mutation operators</span>
+    <span class="n">operators</span> <span class="o">+=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">hierarchical_mutation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">operators</span> <span class="o">+=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">flat_mutation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Add crossover operators</span>
+    <span class="n">operators</span> <span class="o">+=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">macro_pool_one_cut_point_crossover</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">operators</span> <span class="o">+=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">GenOperator</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">macro_pool_uniform_crossover</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Create the object that will manage the evolution</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">nu</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.7</span>
+    <span class="n">lambda_</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">max_age</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">darwin</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Darwin</span><span class="p">(</span>
+            <span class="n">constraints</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+            <span class="n">operators</span><span class="o">=</span><span class="n">operators</span><span class="p">,</span>
+            <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+            <span class="n">lambda_</span><span class="o">=</span><span class="n">lambda_</span><span class="p">,</span>
+            <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span>
+            <span class="n">max_age</span><span class="o">=</span><span class="n">max_age</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Evolve</span>
+        <span class="n">darwin</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">bare</span><span class="p">(</span><span class="s2">&quot;This is the final population:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">individual</span> <span class="ow">in</span> <span class="n">darwin</span><span class="o">.</span><span class="n">population</span><span class="p">:</span>
+            <span class="n">ugp</span><span class="o">.</span><span class="n">print_individual</span><span class="p">(</span><span class="n">individual</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">bare</span><span class="p">(</span><span class="n">individual</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+            <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">bare</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Print best individuals</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">bare</span><span class="p">(</span><span class="s2">&quot;These are the best ever individuals:&quot;</span><span class="p">)</span>
+        <span class="n">ugp</span><span class="o">.</span><span class="n">print_individual</span><span class="p">(</span><span class="n">darwin</span><span class="o">.</span><span class="n">archive</span><span class="p">)</span>
+
+        <span class="n">ugp</span><span class="o">.</span><span class="n">delete_solutions</span><span class="p">()</span>
+
+    <span class="n">ugp</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">cpu_info</span><span class="p">(</span><span class="s2">&quot;Program completed&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Giovanni Squillero and Alberto Tonda
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

@@ -152,7 +152,7 @@ if __name__ == "__main__":
         shr_count = 0
         nodes = get_nodes_in_frame(individual, frame)
         for node in nodes:
-            parameters = individual.nodes[node]['parameters']
+            parameters = individual.graph.raw_nodes[node]['parameters']
             if 'shift' in parameters.keys():
                 if parameters['shift'].value == 'shr':
                     shr_count += 1

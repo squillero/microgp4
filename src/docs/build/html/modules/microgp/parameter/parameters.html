@@ -1,0 +1,517 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Parameters &mdash; MicroGP4 4!1.0a4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> MicroGP4
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MicroGP4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Parameters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/modules/microgp/parameter/parameters.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="parameters">
+<h1>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>The parameters are used to make the macros dynamic. For example you can build
+a parameter of type <a class="reference internal" href="#microgp.parameter.categorical.Categorical" title="microgp.parameter.categorical.Categorical"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.categorical.Categorical</span></code></a> passing
+some values (<cite>alternatives</cite>); the macro that contains this kind of parameter
+will take the given values and the resulting text of the macro will depend on
+the values taken by the parameters assigned. The method
+<a class="reference internal" href="#microgp.parameter.helpers.make_parameter" title="microgp.parameter.helpers.make_parameter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.helpers.make_parameter</span></code></a> allows to build a parameter
+providing the parameter class type and the needed attributes.</p>
+<p><strong>Examples:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">registers</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span> <span class="s1">&#39;bx&#39;</span><span class="p">,</span> <span class="s1">&#39;cx&#39;</span><span class="p">,</span> <span class="s1">&#39;dx&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">int256</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;    add </span><span class="si">{reg}</span><span class="s2">, 0</span><span class="si">{num:x}</span><span class="s2">h ; ie. </span><span class="si">{reg}</span><span class="s2"> += </span><span class="si">{num}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;reg&#39;</span><span class="p">:</span> <span class="n">registers</span><span class="p">,</span> <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="n">int256</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>There are several types of parameters:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#integer">Integer</a> (<a class="reference internal" href="#microgp.parameter.integer.Integer" title="microgp.parameter.integer.Integer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.integer.Integer</span></code></a>);</p></li>
+<li><p><a class="reference internal" href="#bitstring">Bitstring</a> (<a class="reference internal" href="#microgp.parameter.bitstring.Bitstring" title="microgp.parameter.bitstring.Bitstring"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.bitstring.Bitstring</span></code></a>);</p></li>
+<li><p><a class="reference internal" href="#categorical-categoricalsorted">Categorical, CategoricalSorted</a> (<a class="reference internal" href="#module-microgp.parameter.categorical" title="microgp.parameter.categorical"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.categorical</span></code></a>);</p></li>
+<li><p><a class="reference internal" href="#localreference-externalreference">LocalReference, ExternalReference</a> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.reference</span></code>);</p></li>
+<li><p><a class="reference internal" href="#information">Information</a> (<a class="reference internal" href="#microgp.parameter.special.Information" title="microgp.parameter.special.Information"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.special.Information</span></code></a>).</p></li>
+</ul>
+<div class="section" id="parameter">
+<h2>Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h2>
+<p>Parameters inheritance hierarchies:</p>
+<a class="reference internal image-reference" href="../../../_images/parameter_class_uml.jpg"><img alt="Structure of a node" src="../../../_images/parameter_class_uml.jpg" style="width: 800px;" /></a>
+<p><a class="reference internal" href="#microgp.parameter.Parameter" title="microgp.parameter.Parameter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.Parameter</span></code></a></p>
+<dl class="class">
+<dt id="microgp.parameter.Parameter">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for Macros’ parameters (a Paranoid, Pedantic class)</p>
+<p>Base parameters cannot be used directly and provide a blueprint for all
+parameter sub classes. Please note that attributes of the subclasses must
+be bound to specific values to finally get usable parameters.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#microgp.parameter.Structural" title="microgp.parameter.Structural"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.Structural</span></code></a></p>
+<dl class="class">
+<dt id="microgp.parameter.Structural">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.</code><code class="sig-name descname">Structural</code><span class="sig-paren">(</span><em class="sig-param">individual: Individual</em>, <em class="sig-param">node: NodeID</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.Structural" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for Macros’ structural parameters, ie. parameters requiring
+references to their name, the Individual and the NodeID they are in. This
+class inherits from Parameter.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#microgp.parameter.Special" title="microgp.parameter.Special"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.Special</span></code></a></p>
+<dl class="class">
+<dt id="microgp.parameter.Special">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.</code><code class="sig-name descname">Special</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.Special" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for special Macros’ pseudo-parameters. Special parameters do
+require a reference to the Individual, thus they inherits from Structural.</p>
+</dd></dl>
+
+<div class="section" id="integer">
+<h3>Integer<a class="headerlink" href="#integer" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#module-microgp.parameter.integer" title="microgp.parameter.integer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.integer</span></code></a></p>
+<span class="target" id="module-microgp.parameter.integer"></span><dl class="class">
+<dt id="microgp.parameter.integer.Integer">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.integer.</code><code class="sig-name descname">Integer</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.integer.Integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer parameter in a given range.</p>
+<p><strong>Example</strong>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">int256</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min</strong> (<em>int</em>) – minimum value <a href="#id1"><span class="problematic" id="id2">**</span></a>included*.</p></li>
+<li><p><strong>max</strong> (<em>int</em>) – maximum value <strong>not included</strong>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="microgp.parameter.integer.Integer.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.integer.Integer.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the passed value is in range min, max.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – value to be checked.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if it is valid. False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.integer.Integer.mutate">
+<code class="sig-name descname">mutate</code><span class="sig-paren">(</span><em class="sig-param">sigma: float = 0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.integer.Integer.mutate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutate current value according to sigma (ie. strength).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.integer.Integer.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#microgp.parameter.integer.Integer.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current value of the parameter</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="bitstring">
+<h3>Bitstring<a class="headerlink" href="#bitstring" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#module-microgp.parameter.bitstring" title="microgp.parameter.bitstring"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.bitstring</span></code></a></p>
+<span class="target" id="module-microgp.parameter.bitstring"></span><dl class="class">
+<dt id="microgp.parameter.bitstring.Bitstring">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.bitstring.</code><code class="sig-name descname">Bitstring</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.bitstring.Bitstring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fixed-length bitstring parameter.</p>
+<p><strong>Example:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word8</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Bitstring</span><span class="p">,</span> <span class="n">len_</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>len\_</strong> (<em>int &gt; 0</em>) – length of the bit string</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="microgp.parameter.bitstring.Bitstring.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.bitstring.Bitstring.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given value is valid for the parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.bitstring.Bitstring.mutate">
+<code class="sig-name descname">mutate</code><span class="sig-paren">(</span><em class="sig-param">sigma: float = 0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.bitstring.Bitstring.mutate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutate current value according to sigma (ie. strength).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.bitstring.Bitstring.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#microgp.parameter.bitstring.Bitstring.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current value of the parameter (type str)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="categorical-categoricalsorted">
+<h3>Categorical, CategoricalSorted<a class="headerlink" href="#categorical-categoricalsorted" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#module-microgp.parameter.categorical" title="microgp.parameter.categorical"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.categorical</span></code></a></p>
+<span class="target" id="module-microgp.parameter.categorical"></span><dl class="class">
+<dt id="microgp.parameter.categorical.Categorical">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.categorical.</code><code class="sig-name descname">Categorical</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.categorical.Categorical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Categorical parameter. It can take values in ‘alternatives’.</p>
+<p><strong>Example:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">registers</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span> <span class="s1">&#39;bx&#39;</span><span class="p">,</span> <span class="s1">&#39;cx&#39;</span><span class="p">,</span> <span class="s1">&#39;dx&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alternatives</strong> (<em>list</em>) – list of possible values</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="microgp.parameter.categorical.Categorical.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.categorical.Categorical.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given value is valid for the parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.categorical.Categorical.mutate">
+<code class="sig-name descname">mutate</code><span class="sig-paren">(</span><em class="sig-param">sigma: float = 0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.categorical.Categorical.mutate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutate current value according to sigma (ie. strength).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.categorical.Categorical.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#microgp.parameter.categorical.Categorical.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current value of the parameter</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="microgp.parameter.categorical.CategoricalSorted">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.categorical.</code><code class="sig-name descname">CategoricalSorted</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.categorical.CategoricalSorted" title="Permalink to this definition">¶</a></dt>
+<dd><p>CategoricalSorted parameter. It can take values in ‘alternatives’. It
+behaves differently during the mutation phase.</p>
+<p><strong>Example:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cat_sor</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">CategoricalSorted</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alternatives</strong> (<em>list</em>) – sorted list of possible values</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="microgp.parameter.categorical.CategoricalSorted.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.categorical.CategoricalSorted.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given value is valid for the parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.categorical.CategoricalSorted.mutate">
+<code class="sig-name descname">mutate</code><span class="sig-paren">(</span><em class="sig-param">sigma=1</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.categorical.CategoricalSorted.mutate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutate current value according to sigma (ie. strength).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="microgp.parameter.categorical.CategoricalSorted.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#microgp.parameter.categorical.CategoricalSorted.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current value of the parameter</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="localreference-externalreference">
+<h3>LocalReference, ExternalReference<a class="headerlink" href="#localreference-externalreference" title="Permalink to this headline">¶</a></h3>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.reference</span></code></p>
+<dl class="class">
+<dt id="microgp.parameter.reference.Reference">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.reference.</code><code class="sig-name descname">Reference</code><span class="sig-paren">(</span><em class="sig-param">individual: Individual</em>, <em class="sig-param">node: NodeID</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.reference.Reference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for references. Inherits from Structural</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="microgp.parameter.reference.LocalReference">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.reference.</code><code class="sig-name descname">LocalReference</code><span class="sig-paren">(</span><em class="sig-param">individual: microgp.individual.Individual</em>, <em class="sig-param">offset: int = None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.reference.LocalReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>A reference to a Node connected through (undirected) “next” edges</p>
+<p><strong>Examples:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ref_fwd</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">LocalReference</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">allow_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">allow_forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">allow_backward</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">frames_up</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ref_bcw</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">LocalReference</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">allow_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">allow_forward</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">allow_backward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                             <span class="n">frames_up</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>allow_self</strong> (<em>bool</em>) – The referenced node may be the node itself;</p></li>
+<li><p><strong>allow_forward</strong> (<em>bool</em>) – The referenced node may be a successors;</p></li>
+<li><p><strong>allow_backward</strong> (<em>bool</em>) – The referenced node may be a predecessors;</p></li>
+<li><p><strong>frames_up</strong> (<em>int</em>) – How many frame up the reference must be within (optional, default: 0, i.e., only the current frame)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="microgp.parameter.reference.ExternalReference">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.reference.</code><code class="sig-name descname">ExternalReference</code><span class="sig-paren">(</span><em class="sig-param">individual: microgp.individual.Individual</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.reference.ExternalReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>A reference to a NodeID non connected through (undirected) “next” edges.</p>
+<p><strong>Examples:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">proc1</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">ExternalReference</span><span class="p">,</span> <span class="n">section_name</span><span class="o">=</span><span class="s1">&#39;proc1&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>section_name</strong> (<em>str</em>) – name of the new target section.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="information">
+<h3>Information<a class="headerlink" href="#information" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#microgp.parameter.special.Information" title="microgp.parameter.special.Information"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.special.Information</span></code></a></p>
+<dl class="class">
+<dt id="microgp.parameter.special.Information">
+<em class="property">class </em><code class="sig-prename descclassname">microgp.parameter.special.</code><code class="sig-name descname">Information</code><span class="sig-paren">(</span><em class="sig-param">node: microgp.node.NodeID</em>, <em class="sig-param">individual: Individual</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#microgp.parameter.special.Information" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a dummy Parameter whose purpose is to insert information about
+the state of the system into the individual. The available information are
+provided through the <code class="docutils literal notranslate"><span class="pre">__format__</span></code> method:</p>
+<ul class="simple">
+<li><p><strong>ugp4</strong>: provides textual information about MicroGP version number and version name;</p></li>
+<li><p><strong>version</strong>: provides information about the package version number;</p></li>
+<li><p><strong>node</strong>: provides the NodeID of the node that contains the Information Parameter;</p></li>
+<li><p><strong>time</strong> or <strong>now</strong>: provides date and time;</p></li>
+<li><p><strong>cpu_time</strong>: provides the time spent running;</p></li>
+<li><p><strong>pid</strong>: provides the Process ID (PID);</p></li>
+<li><p><strong>path</strong>: provides the path in the frame tree of the node that contains the Information Parameter;</p></li>
+<li><p><strong>cwd</strong>: provides the current working directory.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="helpers">
+<h2>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#module-microgp.parameter.helpers" title="microgp.parameter.helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">microgp.parameter.helpers</span></code></a></p>
+<span class="target" id="module-microgp.parameter.helpers"></span><dl class="function">
+<dt id="microgp.parameter.helpers.make_parameter">
+<code class="sig-prename descclassname">microgp.parameter.helpers.</code><code class="sig-name descname">make_parameter</code><span class="sig-paren">(</span><em class="sig-param">base_class: Type[microgp.parameter.base.Parameter], **attributes: Any</em><span class="sig-paren">)</span> &#x2192; Type<a class="headerlink" href="#microgp.parameter.helpers.make_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binds a Base parameter class, fixing some of its internal attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_class</strong> (<a class="reference internal" href="#microgp.parameter.Parameter" title="microgp.parameter.Parameter"><em>Parameter</em></a>) – Base class for binding parameter.</p></li>
+<li><p><strong>**attributes</strong> (<em>dict</em>) – Attributes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Bound parameter.</p>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">register</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">alternatives</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span> <span class="s1">&#39;bx&#39;</span><span class="p">,</span> <span class="s1">&#39;cx&#39;</span><span class="p">,</span> <span class="s1">&#39;dx&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">int8</span> <span class="o">=</span> <span class="n">ugp</span><span class="o">.</span><span class="n">make_parameter</span><span class="p">(</span><span class="n">ugp</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">min_</span><span class="o">=-</span><span class="mi">128</span><span class="p">,</span> <span class="n">max_</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">register</span><span class="p">(),</span> <span class="n">int8</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Giovanni Squillero and Alberto Tonda
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>
