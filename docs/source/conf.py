@@ -14,17 +14,16 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../../src'))
 
-from microgp import __version__ as ugp_version
+from microgp import name as ugp_name
+from microgp import version as ugp_version
 
 # -- Project information -----------------------------------------------------
 
-project = 'MicroGP4'
+project = ugp_name
 copyright = '2020 Giovanni Squillero and Alberto Tonda'
 author = 'Giovanni Squillero'
-
-# The full version, including alpha/beta/rc tags
 release = ugp_version
 
 # -- General configuration ---------------------------------------------------

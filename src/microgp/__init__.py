@@ -47,11 +47,25 @@ from collections import namedtuple
 #   Licensed under Apache-2.0
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 1)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 3)
 
-name = "microgp"
-__name__ = name
-__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}_{version_info.dev}"
+# hard code
+__name__ = "microgp"
+__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}.dev{version_info.dev}"
+# human-readable
+name = f"MicroGP{version_info.epoch}"
+if version_info.tag == "a" and version_info.micro == 0:
+    version = f"v{version_info.major}.{version_info.minor}_{version_info.dev} pre-alpha \"{version_info.codename}\""
+elif version_info.tag == "a" and version_info.micro > 0:
+    version = f"v{version_info.major}.{version_info.minor}α{version_info.micro}_{version_info.dev} \"{version_info.codename}\""
+elif version_info.tag == "b" and version_info.micro > 0:
+    version = f"v{version_info.major}.{version_info.minor}β{version_info.micro}_{version_info.dev} \"{version_info.codename}\""
+elif version_info.tag == "rc" and version_info.micro > 0:
+    version = f"v{version_info.major}.{version_info.minor}rc{version_info.micro}_{version_info.dev} \"{version_info.codename}\""
+elif version_info.tag == "":
+    version = f"v{version_info.major}.{version_info.minor}.{version_info.micro}_{version_info.dev} \"{version_info.codename}\""
+else:
+    version = "unknown"
 
 # Standard warnings
 WARN_V27 = "The code is quite probably not compatible with Python 2"
@@ -88,15 +102,5 @@ from . import fitness
 
 def banner() -> None:
     """Shows the "official" MicroGP banner"""
-    if version_info.tag == "a" and version_info.micro == 0:
-        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}_{version_info.dev} pre-alpha \"{version_info.codename}\"")
-    elif version_info.tag == "a" and version_info.micro > 0:
-        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}α{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
-    elif version_info.tag == "b" and version_info.micro > 0:
-        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}β{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
-    elif version_info.tag == "rc" and version_info.micro > 0:
-        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}rc{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
-    elif version_info.tag == "":
-        logging.bare(f"This is MicroGP{version_info.epoch} v{version_info.major}.{version_info.minor}.{version_info.micro}_{version_info.dev} \"{version_info.codename}\"")
-
+    logging.bare(f"This is {name} {version}")
     logging.bare("© 2020 by Giovanni Squillero and Alberto Tonda")
