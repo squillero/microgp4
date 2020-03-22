@@ -30,9 +30,8 @@ pip install microgp
 
 ### Contacts
 
-* [Alberto Tonda](https://www.researchgate.net/profile/Alberto_Tonda) <[alberto.tonda@inra.fr](alberto.tonda@inra.fr)>
-* [Giovanni Squillero](https://staff.polito.it/giovanni.squillero/) <[squillero@polito.it](squillero@polito.it)>
-
+* [Giovanni Squillero](https://github.com/squillero) [:email:](squillero@polito.it) [:house:](https://staff.polito.it/giovanni.squillero/)
+* [Alberto Tonda](https://github.com/albertotonda/)  [:email:](alberto.tonda@inra.fr) [:home:](https://www.researchgate.net/profile/Alberto_Tonda)
 
 ### Licence
 MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2). We welcome contributions [in many forms](docs/CONTRIBUTING.md).
