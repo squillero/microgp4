@@ -46,15 +46,8 @@ Usage example:
 """
 
 import logging
-import os
 import warnings
-
-try:
-    import psutil
-    microgp4_process_time = lambda: str(psutil.Process(os.getpid()).cpu_times())
-except:
-    import time
-    microgp4_process_time = lambda: "process(user+system=%.2g)" % (time.process_time(),)
+from .cpu_time import microgp4_process_time
 
 DefaultLogger = logging.getLogger('microgp4')
 

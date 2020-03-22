@@ -26,11 +26,11 @@
 
 import os
 from datetime import datetime
-import psutil
 
 from .. import version_info
 from ..node import NodeID
 from .base import Parameter, Structural, Special
+from ..utils import microgp4_process_time
 
 
 class Information(Special):
@@ -79,7 +79,7 @@ class Information(Special):
         elif format_spec == 'time' or format_spec == 'now':
             return str(datetime.now())
         elif format_spec == 'cpu_time':
-            return str(psutil.Process(os.getpid()).cpu_times())
+            return str(microgp4_process_time)
         elif format_spec == 'pid':
             return str(os.getpid())
         elif format_spec == 'path':

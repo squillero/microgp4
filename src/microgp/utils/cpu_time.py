@@ -24,6 +24,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import logging
-from .random import random_generator
-from .cpu_time import microgp4_process_time
+try:
+    import psutil
+    microgp4_process_time = lambda: str(psutil.Process(os.getpid()).cpu_times())
+except:
+    import time
+    microgp4_process_time = lambda: "process(user+system=%.2g)" % (time.process_time(),)
