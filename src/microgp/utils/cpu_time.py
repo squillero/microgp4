@@ -25,6 +25,7 @@
 # limitations under the License.
 
 try:
+    import os
     import psutil
     microgp4_process_time = lambda: str(psutil.Process(os.getpid()).cpu_times())
 except:

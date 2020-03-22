@@ -53,7 +53,7 @@ html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
     'canonical_url': '',
-    'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
+    'analytics_id': 'UA-28094298-6',  # Provided by Google in your dashboard
     'logo_only': False,
     'display_version': True,
     'prev_next_buttons_location': 'bottom',
@@ -70,6 +70,6 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = []
 
 master_doc = 'index'

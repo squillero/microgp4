@@ -45,6 +45,7 @@ can just clone here
    :caption: User Guide
    :maxdepth: 4
 
+   summary.rst
    modules/examples/exp01.rst
    modules/examples/exp02.rst
 

@@ -35,7 +35,7 @@ value.
 
 A possible solution could be:
 
-.. code:: python
+.. code:: asm
 
        .file   "solution.c"
        .text
