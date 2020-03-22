@@ -8,6 +8,7 @@
 #   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!!" #
 #                                                                           #
 #############################################################################
+
 # Copyright 2020 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -22,6 +23,7 @@
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from .fitness.base import is_dominated
 from .individual import Individual
 

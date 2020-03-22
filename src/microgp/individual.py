@@ -8,6 +8,7 @@
 #   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!!" #
 #                                                                           #
 #############################################################################
+
 # Copyright 2020 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -22,9 +23,11 @@
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import copy
-from collections import Counter, defaultdict
+
 from typing import List, Tuple, Set, Dict, Union, Sequence
+from collections import Counter, defaultdict
+import warnings
+import copy
 
 import networkx as nx
 
@@ -56,14 +59,14 @@ class GraphWrapper:
         self._individual = individual
 
     def __getitem__(self, node: NodeID):
-        return self.graph.nodes[node]
+        return self.graph.node_view[node]
 
-    def __call__(self,
-                 section: Union[Frame, str] = None,
-                 frame: Union[Frame, str] = None,
-                 frame_path_limit: int = None,
-                 only_heads: bool = False,
-                 data: bool = False) -> Sequence[NodeID]:
+    def nodes(self,
+              section: Union[Frame, str] = None,
+              frame: Union[Frame, str] = None,
+              frame_path_limit: int = None,
+              only_heads: bool = False,
+              data: bool = False) -> Sequence[NodeID]:
         """Get a list of node composing an individual.
 
         Gets the list of all nodes composing an individual. If section_name is
@@ -92,24 +95,49 @@ class GraphWrapper:
                 frame = next(f for f in self._individual.frame_tree.node_dict if f.name == frame)
             node_list = get_nodes_in_frame(self._individual, frame, frame_path_limit=frame_path_limit)
         else:
-            node_list = list(self.graph.nodes)
+            node_list = list(self._graph.nodes)
 
         if only_heads:
-            internal_nodes = set(t for f, t, k in self.graph.edges(node_list, keys=True) if k == 'next')
+            internal_nodes = set(t for f, t, k in self._graph.edges(node_list, keys=True) if k == 'next')
             node_list = [n for n in node_list if n not in internal_nodes]
             pass
 
+        # Both the dict and the list are must be *sorted* in a predictable order!
         if data:
             node_dict = dict()
-            node_list.sort()
-            for n, d in self.graph.nodes(data=True):
+            for n, d in self._graph.nodes(data=True):
                 if n in node_list:
                     d['path'] = self.get_fullpath(n)
                     node_dict[n] = d
-            return node_dict
+            return {k: node_dict[k] for k in sorted(node_dict.keys())}
         else:
-            node_list.sort()
-            return node_list
+            return sorted(node_list)
+
+    def edges(self, *args, **kwargs):
+        return sorted(self._graph.edges(*args, **kwargs))
+
+    @property
+    def node_view(self):
+        warnings.warn("Direct access to the NetworkX NodeView class inside the individual is deprecated", DeprecationWarning, stacklevel=2)
+        return self._graph.nodes
+
+    @property
+    def edge_view(self):
+        warnings.warn("Direct access to the NetworkX EdgeView class inside the individual is deprecated", DeprecationWarning, stacklevel=2)
+        return self._graph.edges
+
+    def add_node(self, *args, **kwargs):
+        self._graph.add_node(*args, **kwargs)
+
+    def remove_node(self, *args, **kwargs):
+        self._graph.remove_node(*args, **kwargs)
+
+    def add_edge(self, *args, **kwargs):
+        self._graph.add_edge(*args, **kwargs)
+
+    def remove_edge(self, *args, **kwargs):
+        self._graph.remove_edge(*args, **kwargs)
+
 
     def get_section(self, node: NodeID) -> Section:
         """Returns the Section a node is in
@@ -120,7 +148,7 @@ class GraphWrapper:
         Returns:
             Section to which the known belongs
         """
-        return self.graph.nodes[node]['frame_path'][-1].section
+        return self._graph.nodes[node]['frame_path'][-1].section
 
     def get_fullpath(self, node: NodeID) -> str:
         """Returns the full path of a node as a string
@@ -131,7 +159,7 @@ class GraphWrapper:
         Returns:
             String of the path of the node
         """
-        path = [f.name for f in self.graph.nodes[node]['frame_path']]
+        path = [f.name for f in self._graph.nodes[node]['frame_path']]
         assert path[0] == '', "Internal error: <ROOT> frame is not '' but '%s'" % (path[0],)
         return "/".join([''] + path[1:])
 
@@ -144,12 +172,8 @@ class GraphWrapper:
         Returns:
             True if it is head, False otherwise
         """
-        incoming_keys = {k for _, _, k in self.graph.in_edges(node, keys=True)}
+        incoming_keys = {k for _, _, k in self._graph.in_edges(node, keys=True)}
         return 'next' not in incoming_keys
-
-    @property
-    def graph(self):
-        return self._graph
 
 
 class Individual(Paranoid, Pedantic):
@@ -218,7 +242,7 @@ class Individual(Paranoid, Pedantic):
         self._canonic_phenotype = None
         if not copy_from:
             self._constraints = constraints
-            self._graph_wrapper = GraphWrapper(graph=nx.MultiDiGraph(), individual=self)
+            self._graph = GraphWrapper(graph=nx.MultiDiGraph(), individual=self)
             self._section_counter = Counter()
             self.properties = defaultdict(Properties)
             self._parents = None
@@ -231,7 +255,7 @@ class Individual(Paranoid, Pedantic):
             # Copy constraints from the original individual
             self._constraints = copy_from._constraints
             # Build an empty graph wrapper
-            self._graph_wrapper = GraphWrapper(graph=nx.MultiDiGraph(), individual=self)
+            self._graph = GraphWrapper(graph=nx.MultiDiGraph(), individual=self)
 
             self.properties = copy.deepcopy(copy_from.properties)
 
@@ -241,24 +265,24 @@ class Individual(Paranoid, Pedantic):
             self._section_counter = copy.deepcopy(
                 copy_from._section_counter)  # This line must be placed after the copy of the node structure
 
-            destination_nodes = set(self.nodes())
+            destination_nodes = set(self.graph.nodes())
             self.fill_nodes_with_parameters(copy_from, node_translation, destination_nodes)
 
             self._parents = {copy_from}
-            assert len(self.nodes()) == len(copy_from.nodes()), "Something went wrong"
+            assert len(self.graph.nodes()) == len(copy_from.graph.nodes()), "Something went wrong"
 
     @property
     def id(self) -> int:
         return self._id
 
     @property
-    def nodes(self) -> GraphWrapper:
-        return self.graph_wrapper
+    def graph(self) -> GraphWrapper:
+        return self._graph
 
-    @property
-    def graph(self) -> nx.DiGraph:
-        """Last resort, direct access to Individual's graph."""
-        return self.graph_wrapper.graph
+    #@property
+    #def graph(self) -> nx.DiGraph:
+    #    """Last resort, direct access to Individual's graph."""
+    #    return self.graph_wrapper.graph
 
     @property
     def constraints(self) -> Constraints:
@@ -306,7 +330,7 @@ class Individual(Paranoid, Pedantic):
 
     @property
     def graph_wrapper(self) -> GraphWrapper:
-        return self._graph_wrapper
+        return self._graph
 
     @property
     def entry_point(self) -> NodeID:
@@ -316,7 +340,7 @@ class Individual(Paranoid, Pedantic):
     def entry_point(self, new_entry_point: NodeID):
         """Set the entry point of the main section (first node of the node structure)"""
         assert isinstance(new_entry_point, NodeID), "New entry point must be a NodeID"
-        assert self.nodes[new_entry_point], "New entry point is not in the individual"
+        assert self.graph.node_view[new_entry_point], "New entry point is not in the individual"
         self._entry_point = new_entry_point
 
     @property
@@ -404,7 +428,7 @@ class Individual(Paranoid, Pedantic):
         heads = self.check_entry_point()
         known_heads = set(heads)
         index = 0
-        real_pos = [k for k in self.graph.nodes()._nodes.keys()]
+        real_pos = [k for k in self.graph.graph.nodes()._nodes.keys()]
         while heads:
             node = heads.pop(0)
             while node:
@@ -416,7 +440,7 @@ class Individual(Paranoid, Pedantic):
                     if label == 'next':
                         assert node is None, "Multiple next edges"
                         node = target
-                    elif self.nodes.is_head(target) and target not in known_heads:
+                    elif self.graph.is_head(target) and target not in known_heads:
                         heads.append(target)
                         known_heads.add(target)
             index = (index + 1) % len(colors)
@@ -446,11 +470,11 @@ class Individual(Paranoid, Pedantic):
             self.graph.add_edge(parent_node, new_node, 'next', color='black')
 
         # add frame path information
-        self.graph.nodes[new_node]['frame_path'] = frame_path
+        self.graph.node_view[new_node]['frame_path'] = frame_path
 
         # add macro information
-        self.graph.nodes[new_node]['macro'] = macro
-        self.graph.nodes[new_node]['parameters'] = None
+        self.graph.node_view[new_node]['macro'] = macro
+        self.graph.node_view[new_node]['parameters'] = None
         # that's all
         return new_node
 
@@ -461,7 +485,7 @@ class Individual(Paranoid, Pedantic):
         Args:
             node_to_delete (NodeID): Node to delete
         """
-        assert self.nodes[node_to_delete], "This node is not in the graph"
+        assert self.graph.node_view[node_to_delete], "This node is not in the graph"
         assert isinstance(node_to_delete, NodeID), "The node to delete must be a NodeID"
 
         prev = self.get_predecessors(node_to_delete)
@@ -482,11 +506,11 @@ class Individual(Paranoid, Pedantic):
             self.graph.remove_edge(node_to_delete, next, 'next')
 
         self.graph.remove_node(node_to_delete)
-        assert node_to_delete not in self.nodes(), "The selected node can't be removed"
+        assert node_to_delete not in self.graph.nodes(), "The selected node can't be removed"
 
     def get_section_heads(self) -> Dict[Section, NodeID]:
         internal_nodes = set(t for f, t, k in self.graph.edges(keys=True) if k == 'next')
-        return {d[1].section: n for n, d in self.graph.nodes("frame_path") if n not in internal_nodes}
+        return {d[1].section: n for n, d in self.graph.graph.nodes("frame_path") if n not in internal_nodes}
 
     def convert_node_to_string(self, node: NodeID) -> str:
         """Generates the string with the node's current parameters
@@ -498,14 +522,14 @@ class Individual(Paranoid, Pedantic):
             The string that describes the macro and its parameters of the selected node
         """
         vars_ = dict()
-        for parameter_name, parameter in self.graph.nodes[node]['parameters'].items():
+        for parameter_name, parameter in self.graph.node_view[node]['parameters'].items():
             vars_[parameter_name] = parameter.value
             pass
-        if self.nodes.in_degree(node) > 1 and not self.nodes.is_head(node):
-            label = self.nodes.get_section(node).label_format.format(node=node)
+        if self.graph.in_degree(node) > 1 and not self.graph.is_head(node):
+            label = self.graph.get_section(node).label_format.format(node=node)
         else:
             label = ''
-        return label + self.graph.nodes[node]['macro'].text.format(**vars_)
+        return label + self.graph.node_view[node]['macro'].text.format(**vars_)
 
     def get_next(self, node: NodeID) -> NodeID:
         """Get the successor of node (ie. the next block in the dump)
@@ -518,10 +542,10 @@ class Individual(Paranoid, Pedantic):
         """
         assert isinstance(node, NodeID), "Parameter must be of class 'Node' not %s" % (type(node),)
         assert node.run_paranoia_checks()
-        assert len([to for _, to, key in self.graph.edges(node, keys=True) if key == 'next'
-                   ]) <= 1, "Found more than one next"
+        assert len([to for _, to, key in self.graph.edge_view(node, keys=True) if key == 'next'
+                    ]) <= 1, "Found more than one next"
         # pretty weird use of a generator, but it could be efficient...
-        return next((to for _, to, key in self.graph.edges(node, keys=True) if key == 'next'), None)
+        return next((to for _, to, key in self.graph.edge_view(node, keys=True) if key == 'next'), None)
 
     def get_successors(self, node: NodeID) -> List[NodeID]:
         """Get the list of al successors of a given node (following next's)
@@ -579,9 +603,9 @@ class Individual(Paranoid, Pedantic):
 
     def _initialize_frames(self) -> None:
         """Initialize the frame tree using the frame paths of the nodes"""
-        assert all([p for n, p in self.graph.nodes(data='frame_path')]), "One or more nodes have frame_path == None"
+        assert all([p for n, p in self.graph.node_view(data='frame_path')]), "One or more nodes have frame_path == None"
         # Calculate paths
-        for p in [p for n, p in self.graph.nodes(data='frame_path')]:
+        for p in [p for n, p in self.graph.node_view(data='frame_path')]:
             self._frame_tree.add_path(p)
 
         # Add properties for frames
@@ -613,14 +637,15 @@ class Individual(Paranoid, Pedantic):
             uninitialized_nodes: set of nodes that contain the parameters to initialize
         """
         if not uninitialized_nodes:
-            # Can't use a set [ie. uninitialized_nodes = set(self.nodes()) ]
-            uninitialized_nodes = list(self.nodes())
+            # Can't use a set [ie. uninitialized_nodes = set(self.graph.nodes()) ]
+            uninitialized_nodes = list(self.graph.nodes())
         assert len(uninitialized_nodes) > 0, "You have to pass at least one node in the set"
         for u_node in uninitialized_nodes:
-            assert u_node in self.nodes(), "One or more nodes not in the graph"
-        # Nodes *need* to be processed in a fully prediuctable order!
-        for node in sorted(uninitialized_nodes):
-            macro = self.nodes[node]['macro']
+            assert u_node in self.graph.nodes(), "One or more nodes not in the graph"
+        # Nodes *need* to be processed in a fully predictable order!
+        # TODO: sorted(.)
+        for node in uninitialized_nodes:
+            macro = self.graph.node_view[node]['macro']
             self.initialize_macros(macro, node)
 
     def initialize_macros(self, macro: Macro, node: NodeID) -> None:
@@ -639,7 +664,7 @@ class Individual(Paranoid, Pedantic):
             parameters[parameter_name] = parameter_type(name=parameter_name, **kwargs)
             if parameter_name == 'reference':
                 assert parameters[parameter_name].value, "aaa"
-        self.nodes[node]['parameters'] = parameters
+        self.graph.node_view[node]['parameters'] = parameters
 
     def finalize(self) -> None:
         """Final setup of an individual: manage the pending movable nodes, remove non-visitable nodes from the graph,
@@ -653,7 +678,7 @@ class Individual(Paranoid, Pedantic):
         self._initialize_frames()
         self.properties[self.root_frame].add_base_builder(
             lambda individual, **v:
-            {'macro_list_global': [(d['macro'], d['path']) for n, d in individual.nodes(data=True).items()]})
+            {'macro_list_global': [(d['macro'], d['path']) for n, d in individual.graph.nodes(data=True).items()]})
         self.set_canonical()
         self._finalized = True
 
@@ -670,7 +695,7 @@ class Individual(Paranoid, Pedantic):
             A list with one NodeID or None (the first node of the main)
         """
         assert self._entry_point, "self._entry_point can't be None"
-        heads = self.nodes(section='main', only_heads=True)
+        heads = self.graph.nodes(section='main', only_heads=True)
         assert len(heads) == 1, "Found more than one entry point in Section 'main'"
         assert heads[0] == self._entry_point, \
             f"Entry point doesn't correspond to self._entry_point: {heads[0]} != {self._entry_point}"
@@ -692,7 +717,7 @@ class Individual(Paranoid, Pedantic):
                     if label == 'next':
                         assert node is None, "Multiple next edges"
                         node = target
-                    elif self.nodes.is_head(target) and target not in known_heads:
+                    elif self.graph.is_head(target) and target not in known_heads:
                         heads.append(target)
                         known_heads.add(target)
                 node_counter += 1
@@ -704,16 +729,16 @@ class Individual(Paranoid, Pedantic):
             while node:
                 macros.append(self.convert_node_to_string(node))
                 # from .parameter.reference import ExternalReference
-                # for parameter in self.nodes[node]['parameters'].values():
+                # for parameter in self.graph.raw_nodes[node]['parameters'].values():
                 #     if isinstance(parameter, ExternalReference):
-                #         self.nodes[parameter.value]
+                #         self.graph.raw_nodes[parameter.value]
                 successors = [(label, target) for _, target, label in self.graph.edges(node, keys=True)]
                 node = None
                 for label, target in successors:
                     if label == 'next':
                         assert node is None, "Multiple next edges"
                         node = target
-                    elif self.nodes.is_head(target) and target not in known_heads:
+                    elif self.graph.is_head(target) and target not in known_heads:
                         heads.append(target)
                         known_heads.add(target)
         self._canonic_phenotype = "\n".join(macros)
@@ -737,7 +762,7 @@ class Individual(Paranoid, Pedantic):
                 node_id_to_delete = self.get_next(parent)
             else:
                 # Check if the structure to delete is the first part of the main
-                if self.nodes[self._entry_point]["frame_path"] == frame_path:
+                if self.graph.node_view[self._entry_point]["frame_path"] == frame_path:
                     node_id_to_delete = self._entry_point
                     was_entry_point = True
                 else:
@@ -758,8 +783,8 @@ class Individual(Paranoid, Pedantic):
             # Convert into offsets the LocalReferences that have as destination the nodes to delete
             # Save in node_id_with_params_to_change the list of NodeIDs that have parameters to be changed
             from microgp.parameter import LocalReference
-            for node in self.nodes(frame=frame_path[1]):
-                for parameter_name, parameter in self.nodes[node]["parameters"].items():
+            for node in self.graph.nodes(frame=frame_path[1]):
+                for parameter_name, parameter in self.graph.node_view[node]["parameters"].items():
                     if isinstance(parameter, LocalReference):  # and parameter.value in nodes_to_delete:
                         parameter.offset = parameter.value_to_offset()
 
@@ -779,12 +804,12 @@ class Individual(Paranoid, Pedantic):
             # Set the frame path for the movable nodes [[and link the local references if there are any]]
             movable_node_id = head
             while movable_node_id and movable_node_id != first_outside:
-                self.nodes[movable_node_id]["frame_path"] = frame_path
+                self.graph.node_view[movable_node_id]["frame_path"] = frame_path
                 movable_node_id = self.get_next(movable_node_id)
 
             # Change the destinations of the local references that have been changed after the deletion of the nodes
-            for node in self.nodes(frame=frame_path[1]):
-                for parameter_name, parameter in self.nodes[node]["parameters"].items():
+            for node in self.graph.nodes(frame=frame_path[1]):
+                for parameter_name, parameter in self.graph.node_view[node]["parameters"].items():
                     if isinstance(parameter, LocalReference) and parameter.offset:
                         parameter.value = parameter.offset_to_value(parameter.offset)
                         if not parameter.value:
@@ -817,7 +842,7 @@ class Individual(Paranoid, Pedantic):
                     new_frame = Frame(self.get_unique_frame_name(section), section)
                     frame_translation[frame] = new_frame
                 frame_path = tuple(frame_path) + tuple([frame_translation[frame]])
-            self.nodes[node]['frame_path'] = frame_path
+            self.graph.node_view[node]['frame_path'] = frame_path
             node = self.get_next(node)
             nodes_count += 1
 
@@ -836,10 +861,10 @@ class Individual(Paranoid, Pedantic):
                     if label == 'next':
                         assert node is None, "Multiple next edges"
                         node = target
-                    elif self.nodes.is_head(target) and target not in known_heads:
+                    elif self.graph.is_head(target) and target not in known_heads:
                         heads.append(target)
                         known_heads.add(target)
-        nodes_to_delete = set(self.graph.nodes) - set(visited)
+        nodes_to_delete = set(self.graph.node_view) - set(visited)
         for node in nodes_to_delete:
             self.delete_node(node)
             # logging.warning(f"Node {node} has been deleted because it is not connected to the graph")
@@ -871,7 +896,7 @@ class Individual(Paranoid, Pedantic):
             source_node_id = heads.pop(0)
             parent = None
             while source_node_id:
-                source_node = source_individual.nodes[source_node_id]
+                source_node = source_individual.graph.node_view[source_node_id]
                 frame_path = source_node['frame_path']
                 # Create the node and add it in the graph
                 destination_node_id = self.add_node(parent, source_node['macro'], frame_path)
@@ -886,7 +911,7 @@ class Individual(Paranoid, Pedantic):
                     if label == 'next':
                         assert source_node_id is None, "Multiple next edges"
                         source_node_id = target
-                    elif source_individual.nodes.is_head(target) and target not in known_heads:
+                    elif source_individual.graph.is_head(target) and target not in known_heads:
                         heads.append(target)
                         known_heads.add(target)
         if source_head == source_individual._entry_point or not source_head:
@@ -901,11 +926,11 @@ class Individual(Paranoid, Pedantic):
         while uninitialized_nodes:
             for destination_node_id in uninitialized_nodes:
                 # Create parameters and copy their values
-                l = len(self.nodes())
+                l = len(self.graph.nodes())
                 parameters = self.copy_parameters(source_individual, node_translation, destination_node_id)
-                assert len(self.nodes()) == l, f'Parameters: {parameters}, DestNodeID: {destination_node_id}, ' \
+                assert len(self.graph.nodes()) == l, f'Parameters: {parameters}, DestNodeID: {destination_node_id}, ' \
                                                f'SrcNodeID: {[k for k, v in node_translation.items() if v == destination_node_id][0]}'
-                self.nodes[destination_node_id]['parameters'] = parameters
+                self.graph.node_view[destination_node_id]['parameters'] = parameters
             uninitialized_nodes = destination_nodes - nodes_tot
             nodes_tot = destination_nodes
 
@@ -925,7 +950,7 @@ class Individual(Paranoid, Pedantic):
         parameters = dict()
         # Get the node to be copied
         source_node_id = [k for k, v in node_translation.items() if v == destination_node_id][0]
-        source_node = source_individual.nodes[source_node_id]
+        source_node = source_individual.graph.node_view[source_node_id]
         from microgp.parameter import ExternalReference
         # Iterate for each node parameter in the original individual node
         for parameter_name, parameter in source_node['parameters'].items():
@@ -960,7 +985,7 @@ class Individual(Paranoid, Pedantic):
         first_node_id = None
         parent = None
         for source_node_id in nodes_to_copy_from:
-            source_node = source_individual.nodes[source_node_id]
+            source_node = source_individual.graph.node_view[source_node_id]
             new_node_id = self.add_node(parent, source_node["macro"], None)
             self.copy_parameters_movable(source_individual, new_node_id, source_node_id)
             if not first_node_id:
@@ -975,7 +1000,7 @@ class Individual(Paranoid, Pedantic):
 
     def copy_parameters_movable(self, source_individual: 'Individual', new_node_id: NodeID, source_node_id: NodeID):
         from .parameter.reference import ExternalReference, LocalReference
-        source_node = source_individual.nodes[source_node_id]
+        source_node = source_individual.graph.node_view[source_node_id]
         parameters = dict()
         for parameter_name, parameter in source_node['parameters'].items():
             data = dict()
@@ -1030,7 +1055,7 @@ class Individual(Paranoid, Pedantic):
                 parameter = type(parameter)(**data)
                 parameter.value = new_value
             parameters[parameter_name] = parameter
-        self.nodes[new_node_id]["parameters"] = parameters
+        self.graph.node_view[new_node_id]["parameters"] = parameters
 
     def __eq__(self, other: 'Individual'):
         assert self._finalized and other._finalized, "One or more individuals are not finalized"
@@ -1049,7 +1074,7 @@ def get_nodes_in_frame(individual: Individual, frame: Frame, frame_path_limit: i
         A list of of Nodes
     """
     node_list = list()
-    for node, data in individual.graph.nodes("frame_path"):
+    for node, data in individual.graph.node_view("frame_path"):
         if data:
             if frame_path_limit:
                 if frame_path_limit > 0:
@@ -1082,7 +1107,7 @@ def get_nodes_in_section(individual: Individual,
     """
 
     node_list = list()
-    for node, data in individual.graph.nodes("frame_path"):
+    for node, data in individual.graph.node_view("frame_path"):
         if frame_path_limit:
             if frame_path_limit > 0:
                 data = data[0:frame_path_limit]
@@ -1111,7 +1136,7 @@ def get_frames(individual: Individual, section: Section = None, section_name: st
         section = individual.sections[section]
 
     frames = set()
-    for path in (p for k, p in individual.graph.nodes('frame_path')):
+    for path in (p for k, p in individual.graph.node_view('frame_path')):
         if path:
             for frame in path:
                 if section_name and frame.section.name == section_name:
@@ -1136,7 +1161,7 @@ def get_macro_pool_nodes_count(individual: Individual, frames: Set[Frame] = None
     :meta private:
     """
     frame_count = dict()
-    for node_id, value in individual.graph.nodes().items():
+    for node_id, value in individual.graph.node_view().items():
         # Get the last frame (it is always a MacroPool)
         macro_pool = value["frame_path"][len(value["frame_path"]) - 1]
         # Save the number of nodes in that frame
@@ -1162,7 +1187,7 @@ def check_individual_validity(individual: Individual) -> bool:
     """
     # examine all frames in the individual
     values = dict()
-    for node, data in individual.graph.nodes(data=True):
+    for node, data in individual.graph.node_view(data=True):
         if not all(p.is_valid(p.value) for p in data['parameters'].values()):
             return False
     # logging.debug("*** Checking individual %r" % (individual,))

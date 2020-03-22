@@ -26,9 +26,8 @@ import warnings
 from itertools import permutations
 
 try:
-    AAA
     import matplotlib.cbook
-    warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+    #warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
     import matplotlib.pyplot as plt
 except:
     plt = None
@@ -399,8 +398,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     #   outside the chosen frame and the frame path of the nodes in frame (they will be used in individualC.finalize())
     first_outside_C = individualC.get_next(nodes_in_frame_C[-1])
     first_outside_D = individualD.get_next(nodes_in_frame_D[-1])
-    frame_path_C = individualC.nodes[cut_node_C]["frame_path"]
-    frame_path_D = individualD.nodes[cut_node_D]["frame_path"]
+    frame_path_C = individualC.graph.node_view[cut_node_C]["frame_path"]
+    frame_path_D = individualD.graph.node_view[cut_node_D]["frame_path"]
     individualC._unlinked_nodes[first_movable_node_C] = (cut_node_C, first_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (cut_node_D, first_outside_D, frame_path_D)
 
@@ -506,8 +505,8 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     pred_D = individualD.get_predecessors(first_node_id_D)
     pred_C = pred_C[0] if pred_C else None
     pred_D = pred_D[0] if pred_D else None
-    frame_path_C = individualC.nodes[first_node_id_C]["frame_path"]
-    frame_path_D = individualD.nodes[first_node_id_D]["frame_path"]
+    frame_path_C = individualC.graph.node_view[first_node_id_C]["frame_path"]
+    frame_path_D = individualD.graph.node_view[first_node_id_D]["frame_path"]
     individualC._unlinked_nodes[first_movable_node_C] = (pred_C, first_node_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (pred_D, first_node_outside_D, frame_path_D)
 
@@ -554,7 +553,7 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
     new_individual.operator = remove_node_mutation
 
     while True:
-        if len(new_individual.nodes()) <= 2:
+        if len(new_individual.graph.nodes()) <= 2:
             logging.debug("Individual should have at least two nodes")
             return [None]
 
@@ -575,26 +574,26 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         # Choose randomly the node that will be removed
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
         node_to_remove = random_generator.choice(candidate_nodes)
-        chosen_root_frame = new_individual.nodes[node_to_remove]['frame_path'][1]
+        chosen_root_frame = new_individual.graph.node_view[node_to_remove]['frame_path'][1]
 
         # logging.debug(f"Removing node: {node_to_remove}")
         if node_to_remove == new_individual.entry_point:
             new_individual.entry_point = new_individual.get_next(node_to_remove)
         new_individual.delete_node(node_to_remove)
-        assert node_to_remove not in new_individual.nodes(), "Node has not been removed"
+        assert node_to_remove not in new_individual.graph.nodes(), "Node has not been removed"
 
         # Example: If the removed NodeID_2 was a destination of a Reference in NodeID_1 and NodeID_6 -> change the value
         #  in parameter of the NodeID_1 and NodeID_6 with a new possible target (mutate(1))
         from .parameter.reference import LocalReference
-        for node in new_individual.nodes(frame=chosen_root_frame):
-            for parameter_name, parameter in new_individual.nodes[node]["parameters"].items():
+        for node in new_individual.graph.nodes(frame=chosen_root_frame):
+            for parameter_name, parameter in new_individual.graph.node_view[node]["parameters"].items():
                 if isinstance(parameter, LocalReference) and parameter.value == node_to_remove:
                     parameter.mutate(1)
 
         if sigma == 1.0 or not (random_generator.random() < sigma):
             break
 
-    assert len(original_individual.nodes()) > len(new_individual.nodes()), "Something wrong!"
+    assert len(original_individual.graph.nodes()) > len(new_individual.graph.nodes()), "Something wrong!"
     new_individual.finalize()
     if new_individual.is_valid() == False:
         return [None]
@@ -641,7 +640,7 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
         chosen_parent_node = random_generator.choice(candidate_nodes)
 
-        frame_path = new_individual.nodes[chosen_parent_node]["frame_path"]
+        frame_path = new_individual.graph.node_view[chosen_parent_node]["frame_path"]
         candidate_macros = chosen_frame.section.macro_pool
         chosen_macro = random_generator.choice(candidate_macros)
 
@@ -653,12 +652,12 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         # Initialize parameters of the inserted node
         new_individual.initialize_macros(chosen_macro, node_to_insert)
 
-        assert node_to_insert in new_individual.nodes(), "Node has not been inserted"
+        assert node_to_insert in new_individual.graph.nodes(), "Node has not been inserted"
 
         if sigma == 1.0 or not (random_generator.random() < sigma):
             break
 
-    assert len(original_individual.nodes()) < len(new_individual.nodes()), "Something wrong!"
+    assert len(original_individual.graph.nodes()) < len(new_individual.graph.nodes()), "Something wrong!"
     new_individual.finalize()
     if new_individual.is_valid() == False:
         return [None]
@@ -691,11 +690,11 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
         #   had no effect
         while True:
             # Choose a node that contains the parameter to mutate
-            chosen_node = random_generator.choice(new_individual.nodes())
+            chosen_node = random_generator.choice(new_individual.graph.nodes())
 
             # Create a list of parameters contained into the macro
             candidate_parameters = []
-            for parameter_name, parameter in new_individual.nodes[chosen_node]['parameters'].items():
+            for parameter_name, parameter in new_individual.graph.node_view[chosen_node]['parameters'].items():
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 
@@ -704,6 +703,7 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
             if candidate_parameters:
                 # Choose only one parameter to mutate in the list of all parameters of the chosen macro
                 chosen_parameter = random_generator.choice(candidate_parameters)
+                assert sigma
                 chosen_parameter.mutate(sigma)
                 break
 
@@ -743,8 +743,8 @@ def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> Li
         # Create a list that contains all parameters
         candidate_parameters = []
         # Iterate for each node in the individual and save a list of parameters
-        for node in new_individual.nodes():
-            for parameter_name, parameter in new_individual.nodes[node]['parameters'].items():
+        for node in new_individual.graph.nodes():
+            for parameter_name, parameter in new_individual.graph.node_view[node]['parameters'].items():
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 

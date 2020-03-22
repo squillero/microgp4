@@ -62,11 +62,11 @@ if __name__ == "__main__":
     library['main'] = [word_macro]
 
     # Define the evaluator method and the fitness type
-    def my_script(data: str):
+    def evaluator_function(data: str):
         count = data.count('1')
         return list(str(count))
 
-    library.evaluator = ugp.fitness.make_evaluator(evaluator=my_script, fitness_type=ugp.fitness.Lexicographic)
+    library.evaluator = ugp.fitness.make_evaluator(evaluator=evaluator_function, fitness_type=ugp.fitness.Lexicographic)
 
     # Create a list of operators with their aritiy
     operators = ugp.Operators()

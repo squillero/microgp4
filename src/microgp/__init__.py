@@ -35,23 +35,43 @@ Distributed under Apache-2.0.
 
 import sys
 import warnings
+from collections import namedtuple
 
-# Standard messages
+# Version History (see history.rst)
+#
+# MicroGP v2: Copyright © 2002-2006 Giovanni Squillero
+#   Licensed under GPL2
+# MicroGP v3: Copyright © 2006-2016 Giovanni Squillero
+#   Licensed under GPL3
+# MicroGP v4: Copyright © 2020 Giovanni Squillero and Alberto Tonda
+#   Licensed under Apache-2.0
+
+VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 1)
+
+name = "microgp"
+__name__ = name
+__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}_{version_info.dev}"
+
+# Standard warnings
 WARN_V27 = "The code is quite probably not compatible with Python 2"
 WARN_V37 = "The code is only known to be compatible with Python 3.7+"
-WARN_DBG = "Paranoia checks are active: performances can be significantly impaired (consider using '-O')"
+WARN_DBG = "Paranoia checks are active; performances can be significantly impaired (consider using '-O')"
+WARN_DEPR_ACTIVE = "Showing all Deprecation Warnings (tweak with '-W' or PYTHONWARNINGS)"
 
-# Warnings
 if sys.version_info < (3,):
-    warnings.warn(WARN_V27, Warning)
+    warnings.warn(WARN_V27, Warning, stacklevel=2)
 elif sys.version_info < (3, 7):
-    warnings.warn(WARN_V37, Warning)
+    warnings.warn(WARN_V37, Warning, stacklevel=2)
 
 if sys.flags.optimize == 0:
-    warnings.warn(WARN_DBG, UserWarning)
+    warnings.warn(WARN_DBG, UserWarning, stacklevel=2)
+
+if version_info.tag == "a" and not sys.warnoptions:
+    warnings.filterwarnings("default", category=DeprecationWarning, module="microgp")
+warnings.warn(WARN_DEPR_ACTIVE, UserWarning, stacklevel=2)
 
 # MicroGP stuff
-from .version import version_info
 from .utils import logging, random_generator
 from .parameter import make_parameter
 from .macro import Macro
@@ -65,12 +85,6 @@ from .individual_operators import flat_mutation, hierarchical_mutation, add_node
     print_individual, macro_pool_uniform_crossover, macro_pool_one_cut_point_crossover, switch_proc_crossover, \
     create_random_individual
 from . import fitness
-
-# Version Info
-
-name = "microgp"
-__name__ = name
-__version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}_{version_info.dev}"
 
 def banner() -> None:
     """Shows the "official" MicroGP banner"""

@@ -93,21 +93,21 @@ class LocalReference(Reference):
             self.mutate(1)
 
     def _valid_targets(self) -> List[NodeID]:
-        assert len(self.individual.graph.nodes[self.node]['frame_path']) >= -self.frames_up, \
+        assert len(self.individual.graph.node_view[self.node]['frame_path']) >= -self.frames_up, \
             f"Can't go up the requested number of frames"
-        frame_path = self.individual.graph.nodes[self.node]['frame_path'][0:self.frames_up]
+        frame_path = self.individual.graph.node_view[self.node]['frame_path'][0:self.frames_up]
         vtargets = list()
         if self.allow_backward:
             vtargets += [
                 n for n in self.individual.get_predecessors(self.node)
-                if self.individual.graph.nodes[n]['frame_path'][0:len(frame_path)] == frame_path
+                if self.individual.graph.node_view[n]['frame_path'][0:len(frame_path)] == frame_path
             ]
         if self.allow_self:
             vtargets += [self.node]
         if self.allow_forward:
             vtargets += [
                 n for n in self.individual.get_successors(self.node)
-                if self.individual.graph.nodes[n]['frame_path'][0:len(frame_path)] == frame_path
+                if self.individual.graph.node_view[n]['frame_path'][0:len(frame_path)] == frame_path
             ]
         # logging.debug("Valid targets for %s: %s" % (frame_path, vtargets))
         return vtargets

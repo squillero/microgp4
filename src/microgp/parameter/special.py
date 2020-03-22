@@ -28,7 +28,7 @@ import os
 from datetime import datetime
 import psutil
 
-from ..version import version_info
+from .. import version_info
 from ..node import NodeID
 from .base import Parameter, Structural, Special
 

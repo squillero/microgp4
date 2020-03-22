@@ -26,6 +26,7 @@
 
 # MicroGP's own random generator.
 
+from typing import List, Any;
 import random as py_random
 from . import logging
 
@@ -34,7 +35,6 @@ class MicroGP_Random():
         self._py_random = py_random.Random()
         self._calls = 0
         self.seed(42)
-        logging.info("Initialized random generator")
 
     def seed(self, *args, **kwargs):
         self._calls = 0
@@ -64,7 +64,8 @@ class MicroGP_Random():
         logging.debug(f"shuffle : {old} -> {new}")
         return value
 
-    def choice(self, *args, **kwargs):
+    def choice(self, *args, sigma=None, previous_index=None, **kwargs) -> Any:
+        assert (sigma is None and previous_index is None) or (sigma is not None and previous_index is not None), "both sigma and previous_index should be specified"
         old = f"{self}"
         self._calls += 1
         value = self._py_random.choice(*args, **kwargs)
@@ -72,7 +73,7 @@ class MicroGP_Random():
         logging.debug(f"choice : {old} -> {new}")
         return value
 
-    def choices(self, *args, **kwargs):
+    def choices(self, *args, **kwargs) -> List[Any]:
         old = f"{self}"
         self._calls += 1
         value = self._py_random.choices(*args, **kwargs)

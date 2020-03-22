@@ -9,8 +9,6 @@
 #                                                                           #
 #############################################################################
 
-import subprocess
-from datetime import datetime
 # Copyright 2020 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -25,11 +23,11 @@ from datetime import datetime
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import os
-from typing import Callable, Type, Union, Tuple, Any
 import subprocess
 from datetime import datetime
-
+from typing import Callable, Type, Union, Tuple, Any
 from .fitnesstuple import FitnessTuple
 from .simple import Simple
 from ..utils import logging
@@ -52,7 +50,7 @@ def _run_script(script: Union[str, callable],
     """
     assert script, "script can't be None"
     assert isinstance(script, str) or hasattr(script, '__call__'), "script must be a string (name of the" \
-                                                                    "script or a callable (script itself)"
+                                                                   "script or a callable (script itself)"
     assert individual, "individual can't be None"
     filename = individual.constraints.file_name.format(id=individual.id)
     # filename = individual.constraints.file_name.format(id=individual.id)
@@ -94,7 +92,7 @@ def make_evaluator(evaluator: Union[str, callable],
     if isinstance(evaluator, str):
         assert os.path.isfile(evaluator), f"Can't use the script \"{evaluator}\" as evaluator"
         def r(i):
-            f, c = _run_script(evaluator, i, num_elements, auto_delete=False)
+            f, c = _run_script(evaluator, i, num_elements, auto_delete=True)
             return fitness_type(f), c
     elif callable(evaluator):
 

@@ -1,3 +1,8 @@
+License
+=======
+
+| MicroGP4 is distributed under the permissive `Apache License 2.0 <https://www.tldrlegal.com/l/apache2>`_.
+
 ::
 
                                  Apache License

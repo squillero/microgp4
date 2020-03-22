@@ -24,11 +24,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import warnings
 import scipy.stats as stats
 from typing import Type, Any
 from .base import Parameter
 from microgp import random_generator
 import microgp as ugp
+
+WARN_DEPR_ACTIVE = "sigma_choice() is deprecated and should be replaced with microgp.random_generator.choice"
 
 
 def make_parameter(base_class: Type[Parameter], **attributes: Any) -> Type:
@@ -52,8 +55,10 @@ def make_parameter(base_class: Type[Parameter], **attributes: Any) -> Type:
 
 
 def sigma_choice(seq, previous_index=None, sigma=None):
+    warnings.warn(WARN_DEPR_ACTIVE, DeprecationWarning, stacklevel=2)
     assert previous_index < len(seq), 'Previous index out of range'
     assert 0 < sigma < 1, 'Sigma must be 0 < sigma < 1'
+
     # original_sigma = sigma
     mean = previous_index
     # sigma = - math.log(sigma, 1.4)
@@ -61,6 +66,7 @@ def sigma_choice(seq, previous_index=None, sigma=None):
     x = range(len(seq))
     probs = stats.norm.pdf(x, mean, sigma)
     probs += probs[previous_index]
+    assert sum(probs) > 0, f"Some probabilities must be non-zero: seq={seq} probs={probs}"
     probs = probs / sum(probs)
     weights = probs
     weights[previous_index] = 0

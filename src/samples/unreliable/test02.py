@@ -24,17 +24,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
 import argparse
+import sys
 
 import microgp as ugp
-
 from microgp.utils import logging
 
 if __name__ == "__main__":
     ugp.banner()
 
-    # Set the arguments parser _________________________________________________________________________________________
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
     parser.add_argument("-d",
@@ -55,12 +53,6 @@ if __name__ == "__main__":
 
     ugp.logging.cpu_info("Program started")
 
-    # Define parameters ________________________________________________________________________________________________
-    registers = ugp.make_parameter(ugp.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
-    # cat_sor = ugp.make_parameter(ugp.parameter.CategoricalSorted,
-    #                              alternatives=['e', 'f', 'g', 'h', 'i', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'])
-    int256 = ugp.make_parameter(ugp.parameter.Integer, min=0, max=256)
-    # word8 = ugp.make_parameter(ugp.parameter.Bitstring, len_=8)
     ref_fwd = ugp.make_parameter(ugp.parameter.LocalReference,
                                  allow_self=False,
                                  allow_forward=True,
@@ -72,51 +64,44 @@ if __name__ == "__main__":
                                  allow_backward=True,
                                  frames_up=1)
 
-    # Define macros ____________________________________________________________________________________________________
-    epilogue = ugp.Macro("; That's all folks")
+    # define parameters
+    registers = ugp.make_parameter(ugp.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
+    # registers_ordered = ugp.make_parameter(ugp.parameter.CategoricalSorted, alternatives=['a', 'a', 'a', 'd'])
+    int256 = ugp.make_parameter(ugp.parameter.Integer, min=0, max=256)
+    proc1 = ugp.make_parameter(ugp.parameter.ExternalReference, section_name='proc1', min=5, max=5)
+    proc2 = ugp.make_parameter(ugp.parameter.ExternalReference, section_name='proc2', min=5, max=5)
+    proc3 = ugp.make_parameter(ugp.parameter.ExternalReference, section_name='proc3', min=5, max=5)
+    proc4 = ugp.make_parameter(ugp.parameter.ExternalReference, section_name='proc4', min=5, max=5)
+
+    # define macros
     add = ugp.Macro("    add {reg}, 0{num:x}h  \t; ie. {reg} += {num}", {'reg': registers, 'num': int256})
-    # add = ugp.Macro("    add {reg}, {num}b  \t; ie. {reg} += {num}", {'reg': cat_sor, 'num': bitstring8})
     sub = ugp.Macro("    sub {reg}, 0{num:x}h  \t; ie. {reg} -= {num}", {'reg': registers, 'num': int256})
-    # sub = ugp.Macro("    sub {reg}, {num}b  \t; ie. {reg} -= {num}", {'reg': cat_sor, 'num': bitstring8})
+    call1 = ugp.Macro("    call {reference}", {'reference': proc1})
+    # call2 = ugp.Macro("    call {reference}", {'reference': proc2})
+    call3 = ugp.Macro("    call {reference}", {'reference': proc3})
+    call4 = ugp.Macro("    call {reference}", {'reference': proc4})
+    call2 = ugp.Macro("    call {reference} and then call {reference2}", {'reference': proc2, 'reference2': proc3})
     jmp1 = ugp.Macro("    jmp {jmp_ref} \t\t; jump forward", {'jmp_ref': ref_fwd})
     jmp2 = ugp.Macro("    jmp {jmp_ref} \t\t; jump backward", {'jmp_ref': ref_bcw})
 
-    # That's the library
+    # define sections
+    generic_math = ugp.make_section({add, sub}, size=(2, 5), instances=(0, 10))
+    # generic_math = ugp.make_section({add, sub}, size=(1, 2), instances=(0, 10))
 
-    # Assigning to the library calls `make_section` to all elements, in more details:
-    # a sequence of sections is transformed in a SubsectionsSequence
-    # a set of sections, in a SubsectionsAlternative
-    # a set of macros, in a MacroPool
-    # a macro, in a MacroPool containing only the very same macro
-    # a string, in a parameter-less macro -- ie. string -> macro -> macro pool
-    # make_section can still be useful to tweak the number of macros eg. size=(min, max)
-    # or to customize the label format eg. label_format="[label_{node}]\n"
-
-    # Define sections __________________________________________________________________________________________________
-    sec2a = ugp.make_section({add}, size=(2, 5), name='sec2a', instances=(0, 1))
-    sec2b = ugp.make_section({sub}, size=(4, 10), name='sec2b', instances=(0, 1))
-    sec_jmp = ugp.make_section({jmp1, jmp2}, size=(5, 5), name='sec_jmp')
-    # sec2a = ugp.make_section({add}, size=(1, 3), name='sec2a', instances=(0, 1))
-    # sec2b = ugp.make_section({sub}, size=(2, 3), name='sec2b', instances=(0, 1))
-    # sec_jmp = ugp.make_section({jmp1, jmp2}, size=(2, 3), name='sec_jmp')
-
-    # Note the wickedness: there can be ONLY ONE sec2a and ONE sec2b, but the library specifies
-    # { sec2a OR sec2b } THEN sec_jmp THEN { sec2a OR sec2b }
-    # ... we are going to create quite a number of illegal individuals :-)
-
-    # Set the created sections in the special section ('main') _________________________________________________________
+    # Create a constraints library
     library = ugp.Constraints()
-    library['main'] = [
-        "; Prologue\n; Created on: {info:now} by {info}",
-        [{sec2a, sec2b}, sec_jmp, {sec2a, sec2b}],  # framing is useful: sec_jmp references specify frames_up=1
-        "; That's all folks"
-    ]
-    library['proc'] = []
-    # Create a new checker function ____________________________________________________________________________________
-    library.global_properties.add_checker(lambda **v: True)
 
-    # Delete old solutions
-    ugp.delete_solutions()
+    sec_jmp = ugp.make_section(jmp1, size=(1, 4), name='sec_jmp')
+    sec2_jmp = ugp.make_section({jmp1, jmp2}, size=(3, 5), name='sec_jmp2')
+    library['main'] = [generic_math, sec_jmp, {call1, call2}, {call3, call4}, call2, "\t; ----", generic_math, ""]
+    # library['main'] = [generic_math, [jmp1, add, call1, jmp2], sec_jmp, {jmp1, jmp1}, call2, "\t; ----", generic_math, ""]
+    # library['main'] = ["; main starts here", add, sub, call1, ""]
+
+    library['proc1'] = ["proc {info:node} near", generic_math, call2, "endp", ""]
+    library['proc2'] = ["proc {info:node} near", generic_math, add, "endp", ""]
+    # library['proc2'] = ["proc {info:node} near", {add, sub}, jmp2, "endp", ""]
+    library['proc3'] = ["proc {info:node} near", call4, {call2, add}, "endp", ""]
+    library['proc4'] = ["proc {info:node} near", call3, "endp", ""]
 
     if sys.platform != "win32":
         script = "./evaluator.sh"
@@ -127,7 +112,7 @@ if __name__ == "__main__":
     # let's get weird
     # also note that there is only a limited number of instances that can be ==
     # sec2a.properties.add_cumulative_builder(lambda num_nodes, **v: {'sec2a': num_nodes})
-    # sec2b.properties.add_cumulative_builder(lambda **v: {'sec2b': v['num_no des']})
+    # sec2b.properties.add_cumulative_builder(lambda **v: {'sec2b': v['num_nodes']})
     # library.global_properties.add_check(lambda sec2a, sec2b, **v: sec2a == sec2b)
 
     # Create a list of operators with their arities_____________________________________________________________________
@@ -140,8 +125,8 @@ if __name__ == "__main__":
     # Add mutation operators
     mutation_op1 = ugp.GenOperator(ugp.remove_node_mutation, 1)
     mutation_op2 = ugp.GenOperator(ugp.add_node_mutation, 1)
-    mutation_op3 = ugp.GenOperator(ugp.flat_mutation, 1)
-    mutation_op4 = ugp.GenOperator(ugp.hierarchical_mutation, 1)
+    mutation_op3 = ugp.GenOperator(ugp.hierarchical_mutation, 1)
+    mutation_op4 = ugp.GenOperator(ugp.flat_mutation, 1)
     operators += mutation_op1
     operators += mutation_op2
     operators += mutation_op3
@@ -149,45 +134,41 @@ if __name__ == "__main__":
 
     # Add crossover operators
     crossover_op1 = ugp.GenOperator(ugp.switch_proc_crossover, 2)
-    crossover_op2 = ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
-    crossover_op3 = ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
+    crossover_op2 = ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
+    crossover_op3 = ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
     operators += crossover_op1
-    operators += crossover_op2
-    operators += crossover_op3
+    # operators += crossover_op2
+    # operators += crossover_op3
 
     # Create the object that will manage the evolution__________________________________________________________________
     mu = 10
     nu = 20
     sigma = 0.5
-    lambda_ = 10
-    max_age = 5
+    lambda_ = 7
+    max_age = 10
 
-    darwin = ugp.Darwin(constraints=library,
-                        operators=operators,
-                        mu=mu,
-                        nu=nu,
-                        lambda_=lambda_,
-                        sigma=sigma,
-                        max_age=max_age)
+    for _ in range(1):
+        darwin = ugp.Darwin(
+            constraints=library,
+            operators=operators,
+            mu=mu,
+            nu=nu,
+            lambda_=lambda_,
+            sigma=sigma,
+            max_age=max_age,
+        )
 
-    # Evolve____________________________________________________________________________________________________________
-    darwin.evolve()
-    logging.bare("This is the population:")
-    for individual in darwin.population:
-        ugp.print_individual(individual, plot=True)
-        ugp.logging.bare(individual.fitness)
+        # Evolve____________________________________________________________________________________________________________
+        darwin.evolve()
+        logging.bare("This is the final population:")
+        for individual in darwin.population:
+            ugp.print_individual(individual, plot=True)
+            ugp.logging.bare(individual.fitness)
+            ugp.logging.bare("")
 
-    # Print best individuals
-    logging.bare("These are the best ever individuals:")
-    ugp.print_individual(darwin.archive)
+        # Print best individuals
+        logging.bare("These are the best ever individuals:")
+        ugp.print_individual(darwin.archive.individuals)
 
-    # bests = darwin.archive.individuals
-    # for best in bests:
-    #     print(best.fitness)
-
-    ugp.delete_solutions()
-
-    ugp.logging.verbose(library.stats)
     ugp.logging.cpu_info("Program completed")
-    ugp.delete_solutions()
     sys.exit(0)

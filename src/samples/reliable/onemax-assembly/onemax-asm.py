@@ -119,7 +119,7 @@ if __name__ == "__main__":
                                    '    .ident  "GCC: (Debian 8.3.0-6) 8.3.0"\n' +
                                    '    .section    .note.GNU-stack,"",@progbits\n')
     else:
-        ERROR
+        exit(-1)
 
     init_macro = ugp.Macro(
         "    movl	${int_a}, %eax\n" + "    movl	${int_b}, %ebx\n" + "    movl	${int_c}, %ecx\n" +
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     # Define section
     sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
 
-    # Create a constraints library
+    # Create the instruction library
     library = ugp.Constraints(file_name="solution{id}.s")
     library['main'] = [prologue_macro, init_macro, sec1, epilogue_macro]
 
@@ -144,6 +144,24 @@ if __name__ == "__main__":
     else:
         script = "./eval.sh"
     library.evaluator = ugp.fitness.make_evaluator(evaluator=script, fitness_type=ugp.fitness.Lexicographic)
+
+    # Define and set a property. It checks whether the section 'sec1' has or not the same number of 'shr' and 'shl'
+    def shift_count(individual, frame, **kk):
+        from microgp.individual import get_nodes_in_frame
+        shl_count = 0
+        shr_count = 0
+        nodes = get_nodes_in_frame(individual, frame)
+        for node in nodes:
+            parameters = individual.graph.node_view[node]['parameters']
+            if 'shift' in parameters.keys():
+                if parameters['shift'].value == 'shr':
+                    shr_count += 1
+                elif parameters['shift'].value == 'shl':
+                    shl_count += 1
+        return {'shl_count': shl_count, 'shr_count': shr_count}
+
+    sec1.properties.add_base_builder(shift_count)
+    sec1.properties.add_checker(lambda shl_count, shr_count, **v: shl_count == shr_count)
 
     # Create a list of operators with their arity
     operators = ugp.Operators()
@@ -181,7 +199,7 @@ if __name__ == "__main__":
     # Print best individuals
     logging.bare("These are the best ever individuals:")
     best_individuals = darwin.archive.individuals
-    ugp.print_individual(best_individuals, plot=True, score=True)
+    ugp.print_individual(best_individuals, plot=False, score=True)
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)

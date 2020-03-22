@@ -25,7 +25,7 @@ a single macro (``word_macro``) with a parameter (``bit``) of type
 :mod:`microgp.parameter.bitstring.Bitstring` of length 8 bits. The main
 section contains a simple prologue and epilogue.
 
-The evaluator in both versions is a Python method (``my_script``) returning an ``int`` value
+The evaluator in both versions is a Python method (``evaluator_function``) returning an ``int`` value
 that is the sum of `1` in the individual's phenotype.
 
 .. code:: python
@@ -66,11 +66,11 @@ that is the sum of `1` in the individual's phenotype.
        library['main'] = ["Bitstring:", word_section]
 
        # Define the evaluator method and the fitness type
-       def my_script(data: str):
+       def evaluator_function(data: str):
            count = data.count('1')
            return list(str(count))
 
-       library.evaluator = ugp.fitness.make_evaluator(evaluator=my_script, fitness_type=ugp.fitness.Lexicographic)
+       library.evaluator = ugp.fitness.make_evaluator(evaluator=evaluator_function, fitness_type=ugp.fitness.Lexicographic)
 
        # Create a list of operators with their aritiy
        operators = ugp.Operators()
@@ -160,10 +160,10 @@ exactly 8 macros (``word_macro``) with a parameter (``bit``) of type
        library['main'] = ["Bitstring:", word_section]
 
        # Define the evaluator method and the fitness type
-       def my_script(data: str):
+       def evaluator_function(data: str):
            count = data.count('1')
            return list(str(count))
-       library.evaluator = ugp.fitness.make_evaluator(evaluator=my_script, fitness_type=ugp.fitness.Lexicographic)
+       library.evaluator = ugp.fitness.make_evaluator(evaluator=evaluator_function, fitness_type=ugp.fitness.Lexicographic)
 
        # Create a list of operators with their arity
        operators = ugp.Operators()
