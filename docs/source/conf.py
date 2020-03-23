@@ -16,15 +16,14 @@ import sys
 
 sys.path.insert(0, os.path.abspath('../../src'))
 
-from microgp import name as ugp_name
-from microgp import version as ugp_version
+import microgp
 
 # -- Project information -----------------------------------------------------
 
-project = ugp_name
-copyright = '2020 Giovanni Squillero and Alberto Tonda'
-author = 'Giovanni Squillero'
-release = ugp_version
+project = microgp.__name__
+release = microgp.__version__
+author = microgp.__author__
+copyright = microgp.__copyright__
 
 # -- General configuration ---------------------------------------------------
 
@@ -73,3 +72,8 @@ html_theme_options = {
 html_static_path = []
 
 master_doc = 'index'
+
+rst_prolog = f"""
+.. |ugp_name| replace:: {microgp.name}
+.. |ugp_version| replace:: {microgp.version}
+"""

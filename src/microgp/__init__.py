@@ -52,6 +52,9 @@ version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 3)
 # hard code
 __name__ = "microgp"
 __version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}.dev{version_info.dev}"
+__author__ = "Giovanni Squillero and Alberto Tonda"
+__copyright__ = '2020 Giovanni Squillero and Alberto Tonda'
+
 # human-readable
 name = f"MicroGP{version_info.epoch}"
 if version_info.tag == "a" and version_info.micro == 0:

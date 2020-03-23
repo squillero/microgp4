@@ -15,4 +15,4 @@ Authors
 | AgroParisTech, Université Paris-Saclay
 | 1 av. Brétignières
 | 78850 Thiverval-Grignon -- France
-| E-mail: alberto.tonda@inra.fr
+| E-mail: alberto.tonda@inra.f
