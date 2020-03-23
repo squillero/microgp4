@@ -5,5 +5,5 @@ MicroGP is extremely versatile: it is able to tackle problem those solutions are
 * Documentation on [ReadTheDocs](https://microgp4.readthedocs.io/)
 * Package on [PyPi](https://pypi.org/project/microgp/)
 
-###### MicroGP4 v1.0 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software) and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2).
+###### MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software) and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2).
 
