@@ -50,7 +50,7 @@ exclude_patterns = []
 #
 html_theme = 'sphinx_rtd_theme'
 html_logo = '../microgp_small.png'
-#html_logo = 'microgp.pgn'
+html_favicon = 'microgp-favicon.ico'
 
 html_theme_options = {
     'canonical_url': 'https://squillero.github.io/microgp4/',
