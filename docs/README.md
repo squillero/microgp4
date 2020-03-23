@@ -1,42 +1,9 @@
-THE STORY SO FAR
-================
+MicroGP is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques --- some inspired by the mechanisms of natural evolution --- are used to explore efficiently the search space.
 
-## MicroGP v1
+MicroGP is extremely versatile: it is able to tackle problem those solutions are simple fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines; candidate solutions can be evaluated using independent, proprietary external tools.  The first prototype was created around 2000, a fully working version was coded in C in 2002 and then re-engineered in C++ in 2006. MicroGP4 is in Python, redesigned from scratch to take advantage of the peculiar features of the language and to exploit its huge standard library. 
 
-> Unreleased
+[`pip install microgp`](https://pypi.org/project/microgp/)
 
-The study of an evolutionary tool for generating *real* assembly programs started around 2000. The first operational version dates back to 2001: it was composed of a few hundred lines of C code, plus a collection of scripts hacked together to test the feasibility of the idea (DOI: [10.1109/CEC.2002.1004462](http://dx.doi.org/10.1109/CEC.2002.1004462)). It has been retroactively labelled *MicroGP v1*, although no specific name was used at the time.
+The latest version is available as a [PyPi package](https://pypi.org/project/microgp/); the user guide and API reference are hosted on [ReadTheDocs](https://microgp4.readthedocs.io/).
 
-MicroGP v1 internally stores an assembly program as a directed acyclic graphs, where  each node encodes a fragment of code with some parameters. Evolution proceeds by tweaking the topology of the graph and modifying the parameters
-inside the nodes. The graph is eventually transformed into a valid assembly-language program in order to be evaluated, that is, assembled, linked and executed.
-
-## MicroGP v2
-
-> Copyright © 2002-2006 Giovanni Squillero; distributed under 
-[GPL2](https://www.tldrlegal.com/l/gpl2);
-available on [GitHub](https://github.com/squillero/microgp2).
-
-As its predecessor, MicroGP v2 internally encodes programs as graphs (directed multigraphs, this time), but it allows to load the list of the parametric code fragments (*macros*) from a file, targeting a specific microprocessor (hence the micro in the name). The evolutionary core has been completely re-designed looking at the *Genetic Programming* paradigm (hence the GP in the name). 
-
-MicroGP v2 was originally coded in C in a frenzy week while recovering from [varicella](https://en.wikipedia.org/wiki/Chickenpox), and the first release was named *Chicken Pox*. The initial development has been supported by Intel through a grant named *"GP Based Test Program generation"*; the final release (*April Fool*) consists of about 15,000 lines. It is described in the paper *MicroGP — An Evolutionary Assembly Program Generator* (DOI: [10.1007/s10710-005-2985-x](http://dx.doi.org/10.1007/s10710-005-2985-x)). 
-
-Over the years, MicroGP v2 was mainly exploited by engineers for the test and verification of small microprocessors, but it was also able to scale up tackling the post-silicon validation of a real Pentium 4 (DOI: [10.1109/MTV.2004.5](http://dx.doi.org/10.1109/MTV.2004.5)). In a far less mundane research, it created the first *machine-written programs* ever able to become *King of the Hill* in all the main international *core-war* competitions (DOI: [10.1109/TEVC.2005.856207](http://dx.doi.org/10.1109/TEVC.2005.856207)).
-
-With time, MicroGP v2 has been coerced into solving problems it was not meant for, such as design of the bayesian networks, the creation of mathematical functions represented as trees, integer and combinatorial optimization, real-value parameter optimization. Ultimately it was re-implemented from scratch in C++.
-
-## MicroGP v3
-
-> Copyright © 2006-2016 Giovanni Squillero; distributed under 
-[GPL3](https://www.tldrlegal.com/l/gpl-3.0);
-available on both [GitHub](https://github.com/squillero/microgp3) 
-and [Sourceforge](https://sourceforge.net/projects/ugp3/).
-
-MicroGP v3 brought a complete change of paradigm: the focus goes from the problem to the tool, and the main design goal shifts from the solution of a specific class of problems to the development of a tool that can tackle a wide range of possible applications.
-
-The development of the third version started in 2006 (release: *Noodle Soup*) with the intent to provide a clean implementation able to replicate the behavior of the previous version. The subsequent releases were *Bluebell* (2010), discribed in the book *Evolutionary Optimization: the µGP toolkit* (DOI: [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)); *Mistletoe* (2012); *PalmTree* (2014); and *Camellia* (2015). The coding of *Thuban* was eventually discontinued in 2016.
-
-## MicroGP v4
-
-> Copyright © 2020 Giovanni Squillero and Alberto Tonda; distributed under [Apache-2.0](https://www.tldrlegal.com/l/apache2); available on [GitHub](https://github.com/squillero/microgp4).
-
-MicroGP v4 *Kiwi* is ...
+###### MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software) and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2)
