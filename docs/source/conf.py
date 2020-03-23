@@ -49,9 +49,11 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+html_logo = '../microgp_small.png'
+#html_logo = 'microgp.pgn'
 
 html_theme_options = {
-    'canonical_url': '',
+    'canonical_url': 'https://squillero.github.io/microgp4/',
     'analytics_id': 'UA-28094298-6',  # Provided by Google in your dashboard
     'logo_only': False,
     'display_version': True,
