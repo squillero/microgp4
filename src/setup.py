@@ -46,7 +46,7 @@ setuptools.setup(
     description="A multi-purpose extensible self-adaptive evolutionary algorithm",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    #url="https://github.com/squillero/microgp4",
+    url="https://squillero.github.io/microgp4/",
     project_urls={
         "Bug Tracker": "https://github.com/squillero/microgp4/issues",
         "Documentation": "https://microgp4.readthedocs.io/en/pre-alpha/",
