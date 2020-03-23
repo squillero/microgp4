@@ -6,7 +6,4 @@ MicroGP is extremely versatile: it is able to tackle problem those solutions are
 
 The latest version is available as a [PyPi package](https://pypi.org/project/microgp/); the user guide and API reference are hosted on [ReadTheDocs](https://microgp4.readthedocs.io/).
 
-
-###### 
-###### Copyright © 2020 Giovanni Squillero and Alberto Tonda
 ###### MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software) and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2)
