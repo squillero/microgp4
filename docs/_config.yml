@@ -1,6 +1,6 @@
 theme: jekyll-theme-minimal
 title: MicroGP4
 description: Yet another multi-purpose extensible self-adaptive evolutionary algorithm
-logo: microgp.pgn
+logo: "microgp.pgn"
 show_downloads: "true"
 google_analytics: 28094298-6
