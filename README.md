@@ -6,9 +6,10 @@
 ![Language: Python](https://img.shields.io/badge/language-python-blue.svg)
 ![Version: 4!1.0α](https://img.shields.io/badge/version-4!1.0α-orange.svg)
 ![Codename: kiwi](https://img.shields.io/badge/codename-kiwi-orange.svg)
+[![Documentation Status](https://readthedocs.org/projects/microgp4/badge/?version=pre-alpha)](https://microgp4.readthedocs.io/en/pre-alpha/?badge=pre-alpha)
 ![](https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-28094298-6&cid=4f34399f-f437-4f67-9390-61c649f9b8b2&dp=1)
 
-> :warning: MicroGP4 is currently [**PRE-ALPHA**](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha).
+> :warning: MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development.
 
 MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques are used to explore efficiently the search space.
 
