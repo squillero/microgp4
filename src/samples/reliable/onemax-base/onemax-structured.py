@@ -102,10 +102,10 @@ if __name__ == "__main__":
     logging.bare("This is the final population:")
     for individual in darwin.population:
         msg = f"Solution {str(individual.id)} "
-        ugp.print_individual(individual, msg=msg, plot=True, score=True)
+        ugp.print_individual(individual, msg=msg, plot=False, score=True)
 
     # Print best individuals
-    ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=True)
+    ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=False)
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)

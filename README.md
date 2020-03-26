@@ -10,9 +10,7 @@ MicroGP4
 
 > :warning: MicroGP4 is currently [**PRE-ALPHA**](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha).
 
-MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding the optimal solution of generic problems. It is extremely versatile, being able to tackle problem those solutions are fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines.
-
-MicroGP first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information; [several different techniques](https://scholar.google.com/scholar?q=%28+squillero+OR+tonda+%29+AND+microgp) — some [inspired by the mechanisms of natural evolution](https://en.wikipedia.org/wiki/Evolutionary_computation) — are used to explore efficiently the search space, and eventually pinpoint the best solution. The first prototype was created [around Y2K](docs/history.rst), a fully working version was [coded in C in 2002](https://github.com/squillero/microgp2) and then [re-engineered in C++ in 2006](https://github.com/squillero/microgp3). The fourth version is in Python, redesigned from scratch to take advantage of the peculiar features of the language and to exploit its huge standard library. MicroGP would not have been possible without the help and support of [several people](docs/contributors.rst). 
+MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques --- some inspired by the mechanisms of natural evolution --- are used to explore efficiently the search space.
 
 #### Installation
 
