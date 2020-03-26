@@ -153,7 +153,6 @@ class Darwin:
         """Perform a generation of the evolution. Pick lambda (or nu)
         operators, clean the resulting set of individuals given by the
         operators, join it to population and keep the best mu individuals"""
-        logging.debug(f"Starting generation number {self._generation} {random_generator}")
 
         # Initialize the list of individuals that compose the offspring of the current generation
         whole_offspring = []
@@ -167,7 +166,6 @@ class Darwin:
 
         # Run operators
         for operator in selected_operators:
-            logging.debug(f"OPERATOR {operator} {random_generator}")
             arity = operator.arity
 
             # Get the list of individuals to work with
@@ -183,9 +181,7 @@ class Darwin:
 
             # Filter the None individuals and manage the Allopatric Selection
             # [ ind1, ind2, [ ind11, ind12, ind13], [ ind21, [ ind211, ind212], ind23] ], ind4 ]
-            logging.debug(f"Filtering: {random_generator}")
             final_offspring = self.filter_offspring(temporary_offspring)
-            logging.debug(f"Filtered: {random_generator}")
 
             # if not final_offspring:
             #     logging.warning(f'Operator {operator.function} has not produced a valid individual')

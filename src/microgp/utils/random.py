@@ -41,45 +41,25 @@ class MicroGP_Random():
         return self._py_random.seed(*args, **kwargs)
 
     def randint(self, *args, **kwargs):
-        old = f"{self}"
         self._calls += 1
-        value = self._py_random.randint(*args, **kwargs)
-        new = f"{self}"
-        logging.debug(f"randint : {old} -> {new}")
-        return value
+        return self._py_random.randint(*args, **kwargs)
 
     def random(self, *args, **kwargs):
-        old = f"{self}"
         self._calls += 1
-        value = self._py_random.random(*args, **kwargs)
-        new = f"{self}"
-        logging.debug(f"random : {old} -> {new}")
-        return value
+        return self._py_random.random(*args, **kwargs)
 
     def shuffle(self, *args, **kwargs):
-        old = f"{self}"
         self._calls += 1
-        value = self._py_random.shuffle(*args, **kwargs)
-        new = f"{self}"
-        logging.debug(f"shuffle : {old} -> {new}")
-        return value
+        return self._py_random.shuffle(*args, **kwargs)
 
     def choice(self, *args, sigma=None, previous_index=None, **kwargs) -> Any:
         assert (sigma is None and previous_index is None) or (sigma is not None and previous_index is not None), "both sigma and previous_index should be specified"
-        old = f"{self}"
         self._calls += 1
-        value = self._py_random.choice(*args, **kwargs)
-        new = f"{self}"
-        logging.debug(f"choice : {old} -> {new}")
-        return value
+        return self._py_random.choice(*args, **kwargs)
 
     def choices(self, *args, **kwargs) -> List[Any]:
-        old = f"{self}"
         self._calls += 1
-        value = self._py_random.choices(*args, **kwargs)
-        new = f"{self}"
-        logging.debug(f"choices : {old} -> {new}")
-        return value
+        return self._py_random.choices(*args, **kwargs)
 
     def __str__(self):
         random_state = hex(abs(hash(self._py_random.getstate())))
