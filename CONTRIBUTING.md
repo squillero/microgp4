@@ -38,14 +38,14 @@ When you download the source from GitHub ([squillero/microgp4](https://github.co
 - Under Windows, and if you are using [`conda`](https://docs.conda.io/projects/conda/), you should probably:
 
   ```cmd
-  conda install --channel conda-forge psutils
+  conda install --channel conda-forge psutil
   ```
 
-- Under Ubuntu/Debian, you may need `Python.h`:
+- While under Ubuntu/Debian, you may need `Python.h`:
 
   ```cmd
   sudo apt install python3-dev
-  pip3 install psutils
+  pip3 install psutil
   ```
  
 Have fun! And contact us if you want your code to be included in the next *official* release.
