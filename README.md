@@ -1,5 +1,5 @@
-MicroGP4
-========
+[MicroGP4](https://squillero.github.io/microgp4/)
+==========
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://opensource.org/licenses/Apache-2.0) 
 [![Status: Actrive](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/squillero/microgp3)
@@ -10,14 +10,17 @@ MicroGP4
 
 > :warning: MicroGP4 is currently [**PRE-ALPHA**](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha).
 
-MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques --- some inspired by the mechanisms of natural evolution --- are used to explore efficiently the search space.
+MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques — some inspired by the mechanisms of natural evolution — are used to explore efficiently the search space.
 
 #### Installation
 
-MicroGP is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29): 
+MicroGP4 is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29): 
+
 ```shell script
 pip install microgp
 ```
+
+The following packages are exploited if present, but are not required: [`matplotlib`](https://pypi.org/project/matplotlib/), [`psutil`](https://pypi.org/project/psutil/), [`coloredlogs`](https://pypi.org/project/coloredlogs/).
 
 #### Documentation
 
@@ -32,4 +35,5 @@ pip install microgp
 * [Alberto Tonda](https://github.com/albertotonda/)  [:email:](mailto:alberto.tonda@inra.fr) [:house:](https://www.researchgate.net/profile/Alberto_Tonda)
 
 ### Licence
+Copyright © 2020 Giovanni Squillero and Alberto Tonda  
 MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2). We welcome contributions [in many forms](docs/CONTRIBUTING.md).
