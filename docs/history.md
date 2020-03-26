@@ -36,4 +36,8 @@ The development of the third version started in 2006 (release: *Noodle Soup*) wi
 
 > Copyright © 2020 Giovanni Squillero and Alberto Tonda; distributed under [Apache-2.0](https://www.tldrlegal.com/l/apache2); available on [GitHub](https://github.com/squillero/microgp4).
 
-Last version, currently in pre-alpha.
+MicroGP4 has been re-designed in Python to take advantage of the peculiar features of the language, to exploit its huge standard library. It further increases usability thanks to state-of-the-art cooperative platforms: the tool is available as a [PyPi package](https://en.wikipedia.org/wiki/Python_Package_Index) and documentation is hosted on [Read the Docs](https://en.wikipedia.org/wiki/Read_the_Docs). 
+
+MicroGP4 is designed to be easily used by a data scientist already accustomed to environment like [scikit-learn](https://en.wikipedia.org/wiki/Scikit-learn) in [Jupyter](https://en.wikipedia.org/wiki/Project_Jupyter) notebooks. More experienced Python programmers can easily inject their own  functions **without** modifying the source code.
+
+**Notez Bien**: MicroGP4 is an active project and it is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha).
