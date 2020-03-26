@@ -14,7 +14,7 @@ MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both hum
 
 #### Installation
 
-MicroGP4 is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and you can install it using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29): 
+MicroGP4 is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and can be installed using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29): 
 
 ```shell script
 pip install microgp
@@ -36,4 +36,4 @@ The following packages are exploited if present, but are not required: [`matplot
 
 ### Licence
 Copyright © 2020 Giovanni Squillero and Alberto Tonda  
-MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2). We welcome contributions [in many forms](docs/CONTRIBUTING.md).
+MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2).
