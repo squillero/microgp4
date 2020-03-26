@@ -33,19 +33,19 @@ Anyhow, feel free to write us an email describing your story.
 
 We prepared an oversimplified [stylesheet](src/coding-style.md) to ease contributing to the code.
 
-When you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies:
+When you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies, including the optional ones (e.g., `colredlogs`, `matplotlib`, `psutils`).
 
 - Under Windows, and if you are using [`conda`](https://docs.conda.io/projects/conda/), you should probably:
 
   ```cmd
-  conda install --channel conda-forge --file src\requirements.txt 
+  conda install --channel conda-forge psutils
   ```
 
-- Under Ubuntu/Debian, you may need `Python.h` to install `psutil`:
+- Under Ubuntu/Debian, you may need `Python.h`:
 
   ```cmd
   sudo apt install python3-dev
-  pip3 install --requirement src/requirements.txt
+  pip3 install psutils
   ```
  
 Have fun! And contact us if you want your code to be included in the next *official* release.
