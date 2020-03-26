@@ -27,4 +27,4 @@ An evolutionary algorithm performs better than a pure random approach. This rath
 * Evolutionary algorithms are inherently parallel: a nearly-linear speed-up may be easily achieved on multiple instruction/multiple data (MIMD) architectures.
 * It's easy to trade-off between computational resources and quality of the results.
 
-Unfortunately, several hidden and rather obscure details may significantly impair evolutionary algorithms' efficacy. This may explain the relative slow acceptance, compared to other bio-inspired heuristics, such as simulate annealing or artificial neural network. 
+Unfortunately, several hidden and rather obscure details may significantly impair evolutionary algorithms' efficacy. This may explain the relative slow acceptance, compared to other bio-inspired heuristics, such as simulate annealing or artificial neural network [[5]](https://doi.org/10.1007/978-3-642-27467-1).
