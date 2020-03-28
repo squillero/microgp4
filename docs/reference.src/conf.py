@@ -30,10 +30,13 @@ copyright = microgp.__copyright__
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
+extensions = ['m2r',
+              'sphinx.ext.autodoc',
               'sphinx.ext.coverage',
               'sphinx_rtd_theme',
               'sphinx.ext.napoleon']
+
+source_suffix = ['.rst', '.md']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -49,8 +52,8 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-html_logo = '../microgp_small.png'
-html_favicon = 'microgp-favicon.ico'
+html_logo = '../images/microgp.png'
+html_favicon = '../images/microgp-favicon.ico'
 
 html_theme_options = {
     'canonical_url': 'https://squillero.github.io/microgp4/',

@@ -1,12 +1,21 @@
+#############################################################################
+#          __________                                                       #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0.a1 "Kiwi"  #
+#  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
+# / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
+# \__  /\____/_/   /__  __/                                                 #
+#   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!!" #
+#                                                                           #
+#############################################################################
+
 # Minimal makefile for Sphinx documentation
-#
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = build
+SOURCEDIR     = reference.src
+BUILDDIR      = reference.build
 
 # Put it first so that "make" without argument is like "make help".
 help:
