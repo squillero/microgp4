@@ -31,6 +31,7 @@ copyright = microgp.__copyright__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['m2r',
+              'sphinx.ext.autosectionlabel',
               'sphinx.ext.autodoc',
               'sphinx.ext.coverage',
               'sphinx_rtd_theme',

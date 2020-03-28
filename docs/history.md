@@ -1,4 +1,4 @@
-# MicroGP 2000--2020
+# The story so far...
 
 ## MicroGP1
 

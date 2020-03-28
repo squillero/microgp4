@@ -17,8 +17,8 @@ random set of individuals (strings of bits), evolve them till they will
 contain only ones.
 
 
-Version 1 (base)
-****************
+Base
+****
 
 In version one an individual is composed by a ``word_section`` which contains
 a single macro (``word_macro``) with a parameter (``bit``) of type
@@ -114,8 +114,8 @@ that is the sum of `1` in the individual's phenotype.
 
 
 
-Version 2 (slightly structured)
-*******************************
+Structured
+**********
 
 In version two an individual is composed by a ``word_section`` which contains
 exactly 8 macros (``word_macro``) with a parameter (``bit``) of type
@@ -206,8 +206,8 @@ exactly 8 macros (``word_macro``) with a parameter (``bit``) of type
        ugp.logging.cpu_info("Program completed")
        sys.exit(0)
 
-Version 3 (assembly)
-********************
+Assembly
+********
 
 The following code produces assembly code that can be run on x86 processors.
 The goal is to generate an assembly script that writes in ``eax`` a binary

@@ -1,26 +1,28 @@
-.. MicroGP4 documentation master file, created by
-   sphinx-quickstart on Thu Dec 12 15:32:24 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+This is |ugp_name| |ugp_version|
 
 """""""""""""""""
 Table of Contents
 """""""""""""""""
 
+| :ref:`genindex`
+| :ref:`search`
+
 .. toctree::
+   :caption: Introduction
    :maxdepth: 1
 
    summary.rst
 
 .. toctree::
    :caption: User Guide
-   :maxdepth: 4
+   :maxdepth: 2
 
+   instructions.rst
    examples/one-max.rst
 
 .. toctree::
    :caption: API reference
-   :maxdepth: 3
+   :maxdepth: 2
 
    modules/microgp/individual
    modules/microgp/constraints
@@ -37,10 +39,11 @@ Table of Contents
    authors
    license
 
-Indices and tables
-==================
+.. toctree::
+   :caption: Appendixes
+   :maxdepth: 1
 
-* :ref:`genindex`
+   evolution
+   history
 * :ref:`modindex`
-* :ref:`search`
 

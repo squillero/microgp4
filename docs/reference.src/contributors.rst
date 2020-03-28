@@ -1,1 +1,1 @@
-.. mdinclude:: contributors.md
+.. mdinclude:: ../contributors.md
