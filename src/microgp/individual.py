@@ -126,6 +126,11 @@ class GraphWrapper:
         warnings.warn("Direct access to the NetworkX EdgeView class inside the individual is deprecated", DeprecationWarning, stacklevel=2)
         return self._graph.edges
 
+    @property
+    def nx_graph(self):
+        warnings.warn("Direct access to the NetworkX DiGraph inside the individual is deprecated", DeprecationWarning, stacklevel=2)
+        return self._graph
+
     def add_node(self, *args, **kwargs):
         self._graph.add_node(*args, **kwargs)
 
@@ -410,7 +415,7 @@ class Individual(Paranoid, Pedantic):
         if not node_color:
             node_color = self.next_chain_colors()
         # Node: try to dray with "spring"
-        return nx.draw_circular(self.graph,
+        return nx.draw_circular(self.graph.nx_graph,
                                 *args,
                                 edge_color=edge_color,
                                 with_labels=with_labels,
@@ -424,11 +429,11 @@ class Individual(Paranoid, Pedantic):
             'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray',
             'tab:olive', 'tab:cyan'
         ]
-        node_colors = [''] * len(self.graph.nodes)
+        node_colors = [''] * len(self.graph.node_view)
         heads = self.check_entry_point()
         known_heads = set(heads)
         index = 0
-        real_pos = [k for k in self.graph.graph.nodes()._nodes.keys()]
+        real_pos = [k for k in self.graph.node_view().keys()]
         while heads:
             node = heads.pop(0)
             while node:

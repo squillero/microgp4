@@ -30,4 +30,4 @@ try:
     microgp4_process_time = lambda: str(psutil.Process(os.getpid()).cpu_times())
 except:
     import time
-    microgp4_process_time = lambda: "process(user+system=%.2g)" % (time.process_time(),)
+    microgp4_process_time = lambda: "process_time(user+system=%.2g)" % (time.process_time(),)
