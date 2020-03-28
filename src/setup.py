@@ -36,6 +36,9 @@ with open("description.rst", "r", encoding="utf-8") as fh:
 
 with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = fh.readlines()
+for r in ['m2r']:
+    if r in requirements:
+        del requirements[requirements.index(r)]
 
 setuptools.setup(
     name="microgp",
