@@ -31,7 +31,7 @@
 import setuptools
 from microgp import __version__ as ugp_version
 
-with open("README.rst", "r", encoding="utf-8") as fh:
+with open("description.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 with open("requirements.txt", "r", encoding="utf-8") as fh:

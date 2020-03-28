@@ -35,6 +35,10 @@ The following packages are exploited if present, but are not required: [`matplot
 * [Giovanni Squillero](https://github.com/squillero) [:email:](mailto:squillero@polito.it) [:house:](https://staff.polito.it/giovanni.squillero/)
 * [Alberto Tonda](https://github.com/albertotonda/)  [:email:](mailto:alberto.tonda@inra.fr) [:house:](https://www.researchgate.net/profile/Alberto_Tonda)
 
+### Acknowledgements
+
+MicroGP would not have been possible without the help and support of [several people](https://squillero.github.io/microgp4/contributors.html) over the past 20 years. 
+
 ### Licence
 Copyright © 2020 Giovanni Squillero and Alberto Tonda  
 MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software), and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2).
