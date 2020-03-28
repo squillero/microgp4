@@ -6,6 +6,6 @@ MicroGP is extremely versatile: it is able to tackle problem those solutions are
 [`pip install microgp`](https://pypi.org/project/microgp/) 
 * The user guide and API reference are hosted on [Read the Docs](https://en.wikipedia.org/wiki/Read_the_Docs) at [https://microgp4.readthedocs.io/](https://microgp4.readthedocs.io/)
 
-The [history](history.html) of MicroGP started around 2000 with the creation of a collection of scripts for optimizing assembly-language programs, a fully working version was coded in C in 2002 and then re-engineered in C++ in 2006. The forth version has been redesigned from scratch in Python in 2019.
+The [history](history.html) of MicroGP started around 2000 with the creation of a collection of scripts for optimizing assembly-language programs, a fully working version was coded in C in 2002 and then re-engineered in C++ in 2006. The design of the forth version in Python started in 2018.
 
 MicroGP4 is [free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software) and it is distributed under the permissive [Apache License 2.0](https://www.tldrlegal.com/l/apache2). All types of [contributions](contributors.html) are welcomed.
