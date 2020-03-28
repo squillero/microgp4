@@ -18,10 +18,11 @@ MicroGP (µGP, ``ugp``) is an evolutionary optimizer able to outperform both hum
 MicroGP4 is on PyPi ([project/microgp](https://pypi.org/project/microgp/)) and can be installed using [`pip`](https://en.wikipedia.org/wiki/Pip_Pip_%28package_manager%29): 
 
 ```shell script
+pip install coloredlogs matplotlib psutil   # optional
 pip install microgp
 ```
 
-The following packages are exploited if present, but are not required: [`matplotlib`](https://pypi.org/project/matplotlib/), [`psutil`](https://pypi.org/project/psutil/), [`coloredlogs`](https://pypi.org/project/coloredlogs/).
+The packages [`coloredlogs`](https://pypi.org/project/coloredlogs/), [`matplotlib`](https://pypi.org/project/matplotlib/) and [`psutil`](https://pypi.org/project/psutil/) are optional as they are exploited only if present.
 
 #### Documentation
 
@@ -37,7 +38,7 @@ The following packages are exploited if present, but are not required: [`matplot
 
 ### Acknowledgements
 
-MicroGP would not have been possible without the help and support of [several people](https://squillero.github.io/microgp4/contributors.html) over the past 20 years. 
+MicroGP would not have been possible without the help and support of [several people](https://squillero.github.io/microgp4/contributors.html). 
 
 ### Licence
 Copyright © 2020 Giovanni Squillero and Alberto Tonda  
