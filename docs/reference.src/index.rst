@@ -5,7 +5,6 @@ Table of Contents
 """""""""""""""""
 
 | :ref:`genindex`
-| :ref:`search`
 
 .. toctree::
    :caption: Introduction
