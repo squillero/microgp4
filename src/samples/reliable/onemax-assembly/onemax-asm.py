@@ -77,45 +77,23 @@ if __name__ == "__main__":
     shift_op_macro = ugp.Macro("    {shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
     branch_macro = ugp.Macro("{branch} {jmp}", {'branch': jmp_instructions, 'jmp': jmp_target})
     if sys.platform == "win32":
-        prologue_macro = ugp.Macro('    .file   "solution.c"\n' +
-                                   '    .text\n' +
-                                   '    .globl  _darwin\n' +
+        prologue_macro = ugp.Macro('    .file   "solution.c"\n' + '    .text\n' + '    .globl  _darwin\n' +
                                    '    .def    _darwin;        .scl    2;      .type   32;     .endef\n' +
-                                   '_darwin:\n' +
-                                   'LFB17:\n' +
-                                   '    .cfi_startproc\n' +
-                                   '    pushl   %ebp\n' +
-                                   '    .cfi_def_cfa_offset 8\n' +
-                                   '    .cfi_offset 5, -8\n' +
-                                   '    movl    %esp, %ebp\n' +
-                                   '    .cfi_def_cfa_register 5\n')
-        epilogue_macro = ugp.Macro('    movl	%eax, -4(%ebp)\n' +
-                                   '    movl	-4(%ebp), %eax\n' +
-                                   '    leave\n' +
-                                   '    .cfi_restore 5\n' +
-                                   '    .cfi_def_cfa 4, 4\n' +
-                                   '    ret\n' + '    .cfi_endproc\n' +
-                                   'LFE17:\n' +
+                                   '_darwin:\n' + 'LFB17:\n' + '    .cfi_startproc\n' + '    pushl   %ebp\n' +
+                                   '    .cfi_def_cfa_offset 8\n' + '    .cfi_offset 5, -8\n' +
+                                   '    movl    %esp, %ebp\n' + '    .cfi_def_cfa_register 5\n')
+        epilogue_macro = ugp.Macro('    movl	%eax, -4(%ebp)\n' + '    movl	-4(%ebp), %eax\n' + '    leave\n' +
+                                   '    .cfi_restore 5\n' + '    .cfi_def_cfa 4, 4\n' + '    ret\n' +
+                                   '    .cfi_endproc\n' + 'LFE17:\n' +
                                    '   .ident  "GCC: (MinGW.org GCC-8.2.0-5) 8.2.0"\n')
     elif sys.platform == "linux":
-        prologue_macro = ugp.Macro('    .file   "darwin.c"\n' +
-                                   '    .text\n' +
-                                   '    .globl  darwin\n' +
-                                   '    .type   darwin, @function\n' +
-                                   'darwin:\n' +
-                                   '.LFB6:\n' +
-                                   '    .cfi_startproc\n' +
-                                   '    pushq   %rbp\n' +
-                                   '    .cfi_def_cfa_offset 16\n' +
-                                   '    .cfi_offset 6, -16\n' +
-                                   '    movq    %rsp, %rbp\n' +
+        prologue_macro = ugp.Macro('    .file   "darwin.c"\n' + '    .text\n' + '    .globl  darwin\n' +
+                                   '    .type   darwin, @function\n' + 'darwin:\n' + '.LFB6:\n' +
+                                   '    .cfi_startproc\n' + '    pushq   %rbp\n' + '    .cfi_def_cfa_offset 16\n' +
+                                   '    .cfi_offset 6, -16\n' + '    movq    %rsp, %rbp\n' +
                                    '    .cfi_def_cfa_register 6\n')
-        epilogue_macro = ugp.Macro('    popq    %rbp\n' +
-                                   '    .cfi_def_cfa 7, 8\n' +
-                                   '    ret\n' +
-                                   '    .cfi_endproc\n' +
-                                   '.LFE6:\n' +
-                                   '    .size   darwin, .-darwin\n' +
+        epilogue_macro = ugp.Macro('    popq    %rbp\n' + '    .cfi_def_cfa 7, 8\n' + '    ret\n' +
+                                   '    .cfi_endproc\n' + '.LFE6:\n' + '    .size   darwin, .-darwin\n' +
                                    '    .ident  "GCC: (Debian 8.3.0-6) 8.3.0"\n' +
                                    '    .section    .note.GNU-stack,"",@progbits\n')
     else:
@@ -129,7 +107,6 @@ if __name__ == "__main__":
             'int_c': integer,
             'int_d': integer
         })
-
 
     # Define section
     sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))

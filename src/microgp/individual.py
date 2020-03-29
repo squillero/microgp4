@@ -118,17 +118,23 @@ class GraphWrapper:
 
     @property
     def node_view(self):
-        warnings.warn("Direct access to the NetworkX NodeView class inside the individual is deprecated", DeprecationWarning, stacklevel=2)
+        warnings.warn("Direct access to the NetworkX NodeView class inside the individual is deprecated",
+                      DeprecationWarning,
+                      stacklevel=2)
         return self._graph.nodes
 
     @property
     def edge_view(self):
-        warnings.warn("Direct access to the NetworkX EdgeView class inside the individual is deprecated", DeprecationWarning, stacklevel=2)
+        warnings.warn("Direct access to the NetworkX EdgeView class inside the individual is deprecated",
+                      DeprecationWarning,
+                      stacklevel=2)
         return self._graph.edges
 
     @property
     def nx_graph(self):
-        warnings.warn("Direct access to the NetworkX DiGraph inside the individual is deprecated", DeprecationWarning, stacklevel=2)
+        warnings.warn("Direct access to the NetworkX DiGraph inside the individual is deprecated",
+                      DeprecationWarning,
+                      stacklevel=2)
         return self._graph
 
     def add_node(self, *args, **kwargs):
@@ -142,7 +148,6 @@ class GraphWrapper:
 
     def remove_edge(self, *args, **kwargs):
         self._graph.remove_edge(*args, **kwargs)
-
 
     def get_section(self, node: NodeID) -> Section:
         """Returns the Section a node is in
@@ -548,7 +553,7 @@ class Individual(Paranoid, Pedantic):
         assert isinstance(node, NodeID), "Parameter must be of class 'Node' not %s" % (type(node),)
         assert node.run_paranoia_checks()
         assert len([to for _, to, key in self.graph.edge_view(node, keys=True) if key == 'next'
-                    ]) <= 1, "Found more than one next"
+                   ]) <= 1, "Found more than one next"
         # pretty weird use of a generator, but it could be efficient...
         return next((to for _, to, key in self.graph.edge_view(node, keys=True) if key == 'next'), None)
 
@@ -1091,9 +1096,7 @@ def get_nodes_in_frame(individual: Individual, frame: Frame, frame_path_limit: i
     return node_list
 
 
-def get_nodes_in_section(individual: Individual,
-                         section: Section,
-                         frame_path_limit: int = None,
+def get_nodes_in_section(individual: Individual, section: Section, frame_path_limit: int = None,
                          head: bool = False) -> List[NodeID]:
     """Gets all nodes of an individual inside a given frame
 

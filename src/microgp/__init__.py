@@ -34,6 +34,7 @@ Distributed under Apache-2.0.
 """
 
 import sys
+import os
 import warnings
 from collections import namedtuple
 
@@ -53,7 +54,7 @@ version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 5)
 __name__ = "microgp"
 __version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}.dev{version_info.dev}"
 __author__ = "Giovanni Squillero and Alberto Tonda"
-__copyright__ = '2020 Giovanni Squillero and Alberto Tonda'
+__copyright__ = 'Copyright (c) 2020 Giovanni Squillero and Alberto Tonda'
 
 # human-readable
 name = f"MicroGP{version_info.epoch}"
@@ -84,9 +85,9 @@ elif sys.version_info < (3, 7):
 if sys.flags.optimize == 0:
     warnings.warn(WARN_DBG, UserWarning, stacklevel=2)
 
-if version_info.tag == "a" and not sys.warnoptions:
+if version_info.tag == "a" and not sys.warnoptions and not os.environ['PYTHONWARNINGS']:
     warnings.filterwarnings("default", category=DeprecationWarning, module="microgp")
-warnings.warn(WARN_DEPR_ACTIVE, UserWarning, stacklevel=2)
+    warnings.warn(WARN_DEPR_ACTIVE, UserWarning, stacklevel=2)
 
 # MicroGP stuff
 from .utils import logging, random_generator
@@ -107,4 +108,4 @@ from . import fitness
 def show_banner() -> None:
     """Shows the "official" MicroGP banner"""
     logging.bare(f"This is {name} {version}")
-    logging.bare("© 2020 by Giovanni Squillero and Alberto Tonda")
+    logging.bare("Copyright © 2020 by Giovanni Squillero and Alberto Tonda")

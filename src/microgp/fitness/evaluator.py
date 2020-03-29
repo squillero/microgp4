@@ -74,8 +74,7 @@ def _run_script(script: Union[str, callable],
     return tuple(values), comment
 
 
-def make_evaluator(evaluator: Union[str, callable],
-                   fitness_type: Type[FitnessTuple] = Simple,
+def make_evaluator(evaluator: Union[str, callable], fitness_type: Type[FitnessTuple] = Simple,
                    num_elements: int = None) -> Callable:
     """Build a fitness evaluator that calls a script.
 
@@ -91,6 +90,7 @@ def make_evaluator(evaluator: Union[str, callable],
 
     if isinstance(evaluator, str):
         assert os.path.isfile(evaluator), f"Can't use the script \"{evaluator}\" as evaluator"
+
         def r(i):
             f, c = _run_script(evaluator, i, num_elements, auto_delete=True)
             return fitness_type(f), c

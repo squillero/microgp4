@@ -108,42 +108,43 @@ try:
     logging.addLevelName(WARNING, ' WARNING')
     logging.addLevelName(ERROR, ' ERROR')
     logging.addLevelName(CRITICAL, ' CRITICAL')
-    coloredlogs.install(level='DEBUG',
-                        logger=DefaultLogger,
-                        fmt="%(asctime)s%(levelname)s %(message)s",
-                        datefmt="%H:%M:%S", # TODO! Restore datefmt
-                        field_styles={
-                            'asctime': {
-                                'color': 'cyan'
-                            },
-                            'levelname': {
-                                'color': 'blue',
-                                'bold': False,
-                                'bright': True
-                            }
-                        },
-                        level_styles={
-                            logging.getLevelName(ERROR): {
-                                'color': 'red',
-                                'bold': True
-                            },
-                            logging.getLevelName(CRITICAL): {
-                                'color': 'red',
-                                'bold': True
-                            },
-                            logging.getLevelName(WARNING): {
-                                'color': 'yellow',
-                                'bold': True
-                            },
-                            logging.getLevelName(DEBUG): {
-                                'color': 'black',
-                                'bright': True
-                            },
-                            logging.getLevelName(SPAM): {
-                                'color': 'black',
-                                'bright': True
-                            }
-                        })
+    coloredlogs.install(
+        level='DEBUG',
+        logger=DefaultLogger,
+        fmt="%(asctime)s%(levelname)s %(message)s",
+        datefmt="%H:%M:%S",  # TODO! Restore datefmt
+        field_styles={
+            'asctime': {
+                'color': 'cyan'
+            },
+            'levelname': {
+                'color': 'blue',
+                'bold': False,
+                'bright': True
+            }
+        },
+        level_styles={
+            logging.getLevelName(ERROR): {
+                'color': 'red',
+                'bold': True
+            },
+            logging.getLevelName(CRITICAL): {
+                'color': 'red',
+                'bold': True
+            },
+            logging.getLevelName(WARNING): {
+                'color': 'yellow',
+                'bold': True
+            },
+            logging.getLevelName(DEBUG): {
+                'color': 'black',
+                'bright': True
+            },
+            logging.getLevelName(SPAM): {
+                'color': 'black',
+                'bright': True
+            }
+        })
 except:
     WARN_NOCOLOR = "Colored log not available (install module 'coloredlogs')."
     warnings.warn(WARN_NOCOLOR, RuntimeWarning)

@@ -25,6 +25,7 @@
 # limitations under the License.
 
 # MEMO
+# https://packaging.python.org/tutorials/packaging-projects/
 # python .\setup.py sdist
 # twine upload dist/*
 

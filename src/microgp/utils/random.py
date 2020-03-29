@@ -26,11 +26,13 @@
 
 # MicroGP's own random generator.
 
-from typing import List, Any;
+from typing import List, Any
 import random as py_random
 from . import logging
 
+
 class MicroGP_Random():
+
     def __init__(self):
         self._py_random = py_random.Random()
         self._calls = 0
@@ -53,7 +55,8 @@ class MicroGP_Random():
         return self._py_random.shuffle(*args, **kwargs)
 
     def choice(self, *args, sigma=None, previous_index=None, **kwargs) -> Any:
-        assert (sigma is None and previous_index is None) or (sigma is not None and previous_index is not None), "both sigma and previous_index should be specified"
+        assert (sigma is None and previous_index is None) or (
+            sigma is not None and previous_index is not None), "both sigma and previous_index should be specified"
         self._calls += 1
         return self._py_random.choice(*args, **kwargs)
 
@@ -64,5 +67,6 @@ class MicroGP_Random():
     def __str__(self):
         random_state = hex(abs(hash(self._py_random.getstate())))
         return f"{self._calls}:0x{random_state}"
+
 
 random_generator = MicroGP_Random()

@@ -104,8 +104,8 @@ if __name__ == "__main__":
 
     def blackhole(*args):
         return [42]
-    library.evaluator = ugp.fitness.make_evaluator(evaluator=blackhole, fitness_type=ugp.fitness.Lexicographic)
 
+    library.evaluator = ugp.fitness.make_evaluator(evaluator=blackhole, fitness_type=ugp.fitness.Lexicographic)
 
     # TODO: Separate from random_individual -> Individual and random_individual -> List[Individual]
 
@@ -113,7 +113,13 @@ if __name__ == "__main__":
 
     #for seed in tqdm(range(5000), ncols=78, dynamic_ncols=False, ascii=True, unit='t', unit_scale=False, bar_format='{n_fmt:>5s}/{total_fmt:5s}[{bar}]'):
     #'{percentage:3.0f}%|{bar}| {rate_fmt} {n_fmt}/{total_fmt} '
-    for seed in tqdm(range(5000), ncols=78, dynamic_ncols=False, ascii=True, unit='t', unit_scale=False, bar_format='Testing: {percentage:3.2f}% completed @ {rate_fmt} ({remaining} remaining)'):
+    for seed in tqdm(range(5000),
+                     ncols=78,
+                     dynamic_ncols=False,
+                     ascii=True,
+                     unit='t',
+                     unit_scale=False,
+                     bar_format='Testing: {percentage:3.2f}% completed @ {rate_fmt} ({remaining} remaining)'):
         ugp.random_generator.seed(seed)
         first = [f"{random_generator}"]
         for _ in range(5):
