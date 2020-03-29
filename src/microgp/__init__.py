@@ -85,7 +85,7 @@ elif sys.version_info < (3, 7):
 if sys.flags.optimize == 0:
     warnings.warn(WARN_DBG, UserWarning, stacklevel=2)
 
-if version_info.tag == "a" and not sys.warnoptions and not os.environ['PYTHONWARNINGS']:
+if version_info.tag == "a" and not sys.warnoptions and 'PYTHONWARNINGS' not in os.environ:
     warnings.filterwarnings("default", category=DeprecationWarning, module="microgp")
     warnings.warn(WARN_DEPR_ACTIVE, UserWarning, stacklevel=2)
 
