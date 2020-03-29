@@ -53,8 +53,8 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-html_logo = '../images/microgp.png'
-html_favicon = '../images/microgp-favicon.ico'
+html_logo = '../images/logo/150x150.png'
+html_favicon = '../images/icons/24x24.ico'
 
 html_theme_options = {
     'canonical_url': 'https://squillero.github.io/microgp4/',

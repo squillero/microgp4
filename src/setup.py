@@ -31,14 +31,12 @@
 import setuptools
 from microgp import __version__ as ugp_version
 
-with open("description.rst", "r", encoding="utf-8") as fh:
+with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+OPTIONAL = ['m2r', 'coloredlogs', 'matplotlib', 'psutil']
 with open("requirements.txt", "r", encoding="utf-8") as fh:
-    requirements = fh.readlines()
-for r in ['m2r']:
-    if r in requirements:
-        del requirements[requirements.index(r)]
+    requirements = [r for r in fh.readlines() if not any(o in r for o in OPTIONAL)]
 
 setuptools.setup(
     name="microgp",

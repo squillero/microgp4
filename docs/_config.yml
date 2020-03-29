@@ -11,6 +11,6 @@
 theme: jekyll-theme-minimal
 title: MicroGP
 description: A multi-purpose extensible self-adaptive evolutionary algorithm
-logo: images/microgp.png
+logo: images/logo/150x150.png
 show_downloads: false
 google_analytics: 28094298-6

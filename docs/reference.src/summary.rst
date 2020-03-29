@@ -17,9 +17,9 @@ Audience
 
 The expected audience for MicroGP4 includes computer scientists, engineers and practitioners.
 
-* As MicroGP4's basic APIs are quite simple, it can be used interactively from a Jupyter notebook --- just like `scikit-learn <https://scikit-learn.org/>`_ and `keras <https://keras.io/>`_ --- allowing to quickly assess new ideas and build prototypes.
+* MicroGP4 can be used interactively from a Jupyter notebook --- just like `scikit-learn <https://scikit-learn.org/>`_ and `keras <https://keras.io/>`_ --- allowing to quickly assess new ideas and build prototypes.
 * An external tool can be used as evaluator, allowing to optimize virtually any problem.
-* The evolutionary code can be tweaked with user-defined Python functions without the need to hack the package itself.
+* The evolutionary code can be tweaked with user-defined Python functions without the need to hack the core package itself.
 * The modular design allows scholars to exploit MicroGP4 for testing new ideas and novel algorithms.
 
 In the past, due to its ability to handle realistic assembly programs and to exploit a commercial simulator as evaluator, MicroGP has been extensively used for the test, verification and validation of programmable cores and sequential circuits.

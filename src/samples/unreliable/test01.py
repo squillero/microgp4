@@ -32,7 +32,7 @@ import microgp as ugp
 from microgp.utils import logging
 
 if __name__ == "__main__":
-    ugp.banner()
+    ugp.show_banner()
 
     # Set the arguments parser _________________________________________________________________________________________
     parser = argparse.ArgumentParser()

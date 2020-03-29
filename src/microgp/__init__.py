@@ -26,8 +26,8 @@
 
 """MicroGP 4!1.0α "Kiwi" <https://github.com/squillero/microgp4>
 
-A versatile optimizer able to outperform both human experts and conventional
-heuristics in finding the optimal solution of difficult problems.
+A versatile evolutionary optimizer able to outperform both human experts and
+conventional heuristics in finding the optimal solution of difficult problems.
 
 Copyright © 2020 Giovanni Squillero and Alberto Tonda.
 Distributed under Apache-2.0.
@@ -47,7 +47,7 @@ from collections import namedtuple
 #   Licensed under Apache-2.0
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 3)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 5)
 
 # hard code
 __name__ = "microgp"
@@ -103,7 +103,8 @@ from .individual_operators import flat_mutation, hierarchical_mutation, add_node
     create_random_individual
 from . import fitness
 
-def banner() -> None:
+
+def show_banner() -> None:
     """Shows the "official" MicroGP banner"""
     logging.bare(f"This is {name} {version}")
     logging.bare("© 2020 by Giovanni Squillero and Alberto Tonda")

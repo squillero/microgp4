@@ -30,7 +30,7 @@ import microgp as ugp
 from microgp.utils import logging
 
 if __name__ == "__main__":
-    ugp.banner()
+    ugp.show_banner()
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
     parser.add_argument("-d",
