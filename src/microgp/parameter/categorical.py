@@ -27,7 +27,6 @@
 from microgp import *
 from ..utils import logging
 from .base import Parameter
-from .helpers import sigma_choice
 from microgp import random_generator
 import microgp as ugp
 
@@ -89,6 +88,8 @@ class CategoricalSorted(Parameter):
         alternatives (list): sorted list of possible values
     """
 
+    # TODO: Make categorical an index!
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         assert getattr(self, 'alternatives', None), "Illegal or missing alternatives list (not using make_parameter?)"
@@ -105,9 +106,9 @@ class CategoricalSorted(Parameter):
         elif sigma == 1:
             self._value = random_generator.choice(self.alternatives)
         else:
-            actual_index = self.alternatives.index(self._value)
-            new_value = sigma_choice(seq=self.alternatives, previous_index=actual_index, sigma=sigma)
-            self._value = new_value
+            self._value = random_generator.choice(seq=self.alternatives,
+                                                  last_index=self.alternatives.index(self._value),
+                                                  strength=sigma)
 
     @property
     def value(self):

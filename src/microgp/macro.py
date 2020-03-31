@@ -93,7 +93,9 @@ class Macro(Paranoid):
             parameter_type: type of the parameter
         """
 
-        warnings.warn("add_parameter is deprecated. Parametrs should be set on creation.", DeprecationWarning)
+        warnings.warn("add_parameter is deprecated. Parameters should be set on creation.",
+                      DeprecationWarning,
+                      stacklevel=2)
         assert isinstance(name, str), "Name must be a string"
         assert isinstance(parameter_type, type), "Parameter type should be a 'type' (d'ho!?)"
         assert isinstance(parameter_type(), Parameter), "Parameter type must be of type 'Parameter' (d'ho!?)"

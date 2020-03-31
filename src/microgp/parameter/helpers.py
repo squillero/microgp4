@@ -32,8 +32,6 @@ import microgp as ugp
 from .base import Parameter
 from microgp import random_generator
 
-WARN_DEPR_ACTIVE = "sigma_choice() is deprecated and should be replaced with microgp.random_generator.choice"
-
 
 def make_parameter(base_class: Type[Parameter], **attributes: Any) -> Type:
     """Binds a Base parameter class, fixing some of its internal attributes.
@@ -53,48 +51,3 @@ def make_parameter(base_class: Type[Parameter], **attributes: Any) -> Type:
     """
     signature = ", ".join([str(k) + "=" + str(v) for k, v in attributes.items()])
     return type("{}({})".format(base_class.__name__, signature), (base_class,), attributes)
-
-
-def sigma_choice(seq, previous_index=None, sigma=None):
-    warnings.warn(WARN_DEPR_ACTIVE, DeprecationWarning, stacklevel=2)
-    assert previous_index < len(seq), 'Previous index out of range'
-    assert 0 < sigma < 1, 'Sigma must be 0 < sigma < 1'
-
-    if isinstance(seq, range):
-        # seq is range!
-        print(type(seq))
-        print(seq)
-        return 42
-        #exit(0)
-    elif isinstance(seq, Iterable):
-        # sequence is iterable
-        print(type(seq))
-        print(seq)
-        exit(0)
-        # seq is a list
-        # original_sigma = sigma
-        mean = previous_index
-        # sigma = - math.log(sigma, 1.4)
-        sigma = (10**(sigma**2))
-        x = range(len(seq))
-        probs = stats.norm.pdf(x, mean, sigma)
-        probs += probs[previous_index]
-        assert sum(probs) > 0, f"Some probabilities must be non-zero: seq={seq} probs={probs}"
-        probs = probs / sum(probs)
-        weights = probs
-        weights[previous_index] = 0
-        return random_generator.choices(seq, weights, k=1)[0]
-    else:
-        assert not isinstance(seq, range) and not isinstance(seq, Iterable), \
-            "Seq must be either a range or an iterable collection"
-
-    # import matplotlib.pyplot as plt
-    # fig = plt.figure()
-    # ax = fig.add_subplot(1, 1, 1)
-    # # ax.plot(x, probs, color='tab:blue')
-    # ax.plot(x, weights, color='tab:orange')
-    # plt.title("Sigma = " + str(original_sigma) + ", new_sigma = " + str(sigma))
-    # plt.show()
-
-    # print(sum(weights))
-    # return rnd.choices(seq, weights, k=1)[0]

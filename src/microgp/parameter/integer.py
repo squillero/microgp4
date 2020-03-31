@@ -24,7 +24,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .helpers import sigma_choice
 from ..utils import logging
 from .base import Parameter
 from microgp import random_generator
@@ -70,11 +69,9 @@ class Integer(Parameter):
         if sigma == 0:
             logging.debug("sigma == 0")
         elif sigma == 1:
-            self._value = random_generator.randint(self.min, self.max - 1)
+            self._value = random_generator.randrange(self.min, self.max)
         else:
-            new_value = sigma_choice(seq=range(self.min, self.max, 1), previous_index=self._value, sigma=sigma)
-            # new_value = sigma_choice(sigma, self._value, self.max - self.min)
-            self._value = new_value
+            self._value = random_generator.randrange(self.min, self.max, loc=self._value, strength=sigma)
 
     @property
     def value(self):

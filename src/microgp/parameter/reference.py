@@ -27,7 +27,6 @@
 from typing import List, Union
 
 from .base import Structural
-from .helpers import sigma_choice
 from ..individual_operators import unroll_macro_list, Individual
 from ..utils import logging
 from ..node import NodeID
@@ -225,11 +224,9 @@ class LocalReference(Reference):
             new_target = random_generator.choice(self._valid_targets())
         else:
             valid_targets = self._valid_targets()
-            mean = valid_targets.index(old_target)
-            # size = len(valid_targets)
-            # index = sigma_choice(sigma, mean, size)
-            # new_target = valid_targets[index]
-            new_target = sigma_choice(seq=valid_targets, previous_index=mean, sigma=sigma)
+            new_target = random_generator.choice(seq=valid_targets,
+                                                 last_index=valid_targets.index(old_target),
+                                                 strength=sigma)
         return new_target
 
     @property
