@@ -13,6 +13,7 @@
 
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.abspath('../../src'))
 
@@ -52,12 +53,17 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+html_title = f"{microgp.name} {microgp.version}"
+html_short_title = f"microgp{microgp.__version__}"
+html_show_copyright = False
 html_theme = 'sphinx_rtd_theme'
+#html_theme = 'alabaster'
 html_logo = '../images/logo/150x150.png'
 html_favicon = '../images/icons/24x24.ico'
+html_show_sourcelink = False
 
 html_theme_options = {
-    'canonical_url': 'https://squillero.github.io/microgp4/',
+    'canonical_url': 'https://microgp4.readthedocs.io/',
     'analytics_id': 'UA-28094298-6',  # Provided by Google in your dashboard
     'logo_only': False,
     'display_version': True,
@@ -82,4 +88,5 @@ master_doc = 'index'
 rst_prolog = f"""
 .. |ugp_name| replace:: {microgp.name}
 .. |ugp_version| replace:: {microgp.version}
+.. |now| replace:: {time.ctime()}
 """

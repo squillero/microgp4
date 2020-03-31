@@ -2,14 +2,16 @@
 Authors
 =======
 
-| **Giovanni Squillero**
+`Giovanni Squillero <https://staff.polito.it/giovanni.squillero/>`_
+-------------------
 | Politecnico di Torino
 | Department of Control and Computer Engineering
 | Corso Duca degli Abruzzi 24
 | 10129 Torino --- Italy
 | E-mail: giovanni.squillero@polito.it
 
-| **Alberto Tonda**
+`Alberto Tonda <https://www.researchgate.net/profile/Alberto_Tonda>`_
+--------------
 | Génie et Microbiologie des Procédés Alimentaires (GMPA)
 | French National Institute for Agricultural Research
 | AgroParisTech, Université Paris-Saclay

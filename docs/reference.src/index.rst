@@ -1,4 +1,4 @@
-This is |ugp_name| |ugp_version|
+This is |ugp_name| |ugp_version| on |now|
 
 """""""""""""""""
 Table of Contents

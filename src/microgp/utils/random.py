@@ -28,6 +28,8 @@
 
 from typing import List, Any
 import random as py_random
+from numpy import random as np_random
+from scipy.stats import truncnorm
 from . import logging
 
 
@@ -35,6 +37,7 @@ class MicroGP_Random():
 
     def __init__(self):
         self._py_random = py_random.Random()
+        self._np_random = np_random.get_state()
         self._calls = 0
         self.seed(42)
 
@@ -42,9 +45,30 @@ class MicroGP_Random():
         self._calls = 0
         return self._py_random.seed(*args, **kwargs)
 
-    def randint(self, *args, **kwargs):
+    def randint(self, start: int, stop: int, strength=False) -> int:
         self._calls += 1
-        return self._py_random.randint(*args, **kwargs)
+        assert isinstance(start, int) and isinstance(stop, int), "Range must be int"
+        assert strength is None or 0 <= strength <= 1, "Illegal strength"
+
+        if strength is None or strength == 1:
+            # pure random
+            val = self._py_random.randint(start, stop)
+        elif strength == 0:
+            # deterministic
+            val = 0
+        else:
+            # "true" random
+            min_ = start - .5
+            max_ = stop + .5
+            scale = strength/(1-strength**3)
+            scale *= start - stop
+            a, b = min_/scale, max_/scale
+            # restore n' save numpy random state hoping for reproducibility
+            np_random.set_state(self._np_random())
+            val = round(truncnorm.rvs(a=a, b=b, loc=0, scale=scale))
+            self._np_random = np_random.get_state()
+            assert start <= val <= stop, f"Uh!? val={val}"
+        return val
 
     def random(self, *args, **kwargs):
         self._calls += 1

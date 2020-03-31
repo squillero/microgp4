@@ -40,6 +40,4 @@ The development of the third version started in 2006 (release: *Noodle Soup*) wi
 
 MicroGP4 has been re-designed in Python to take advantage of the peculiar features of the language and of its huge standard library. It further increases usability thanks to state-of-the-art cooperative platforms: the tool is available as a [PyPi package](https://en.wikipedia.org/wiki/Python_Package_Index), and the full documentation is hosted on [Read the Docs](https://en.wikipedia.org/wiki/Read_the_Docs). 
 
-MicroGP4 can be easily exploited by any data scientist familiar to [scikit-learn](https://en.wikipedia.org/wiki/Scikit-learn) in a [Jupyter](https://en.wikipedia.org/wiki/Project_Jupyter) notebook, or similar environments. More experienced Python programmers can inject their own functions *without* modifying the source code.
-
 **Notez Bien**: MicroGP4 is an active project and it is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha).
