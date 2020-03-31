@@ -9,11 +9,12 @@
 [![Documentation Status](https://readthedocs.org/projects/microgp4/badge/?version=pre-alpha)](https://microgp4.readthedocs.io/en/pre-alpha/?badge=pre-alpha)
 ![](https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-28094298-6&cid=4f34399f-f437-4f67-9390-61c649f9b8b2&dp=1)
 
-#### MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development.
+### MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development.
 
 MicroGP (µGP, `ugp`) is an [evolutionary optimizer](https://squillero.github.io/microgp4/evolution.html) able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques are used to explore efficiently the search space. [**[read more...]**](https://squillero.github.io/microgp4/evolution.html)
 
-> :warning: The GitHub repo is only useful if you want to hack into the code (see: [CONTRIBUTING](CONTRIBUTING.md)). For using the tool read the [instructions](https://microgp4.readthedocs.io/en/pre-alpha/instructions.html).
+> :warning: The repo is only useful if you want to hack into the code (see: [CONTRIBUTING](CONTRIBUTING.md)). 
+> For using MicroGP read the [instructions](https://microgp4.readthedocs.io/en/pre-alpha/instructions.html).
 
 #### Documentation and Previous Versions
 
