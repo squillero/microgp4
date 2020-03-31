@@ -17,7 +17,7 @@ First off all, thanks! :+1:
 
 Please, contact directly Alberto or Giovanni:
 
-* If you enjoy playing with Python and Evolutionary Computation, and you are looking for a 6-month master thesis. Note: We are **always** looking for valuable students, even if there are no theses *officially* advertised.
+* If you enjoy playing with Python and Evolutionary Computation, and you are looking for a 6-month master thesis. Note: We are **always** looking for valuable students, even when there are no theses advertised on the official channels.
 * If you have a great idea about an improvement, but you are not sure how to hack it.
 * If you feel like doing it.
 
@@ -48,7 +48,7 @@ When you download the source from GitHub ([squillero/microgp4](https://github.co
   pip3 install psutil
   ```
  
-Have fun! And contact us if you want your code to be included in the next *official* release.
+Have fun! And contact us if you want your code to be included in the next release.
 
 ## Money Donations
 
