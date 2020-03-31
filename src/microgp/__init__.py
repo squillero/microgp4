@@ -48,7 +48,7 @@ from collections import namedtuple
 #   Licensed under Apache-2.0
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 5)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 10)
 
 # hard code
 __name__ = "microgp"

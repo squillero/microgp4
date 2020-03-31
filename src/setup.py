@@ -32,7 +32,7 @@
 import setuptools
 from microgp import __version__ as ugp_version
 
-with open("README.rst", "r", encoding="utf-8") as fh:
+with open("../docs/index.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 OPTIONAL = ['m2r', 'coloredlogs', 'matplotlib', 'psutil']
@@ -47,7 +47,8 @@ setuptools.setup(
     license='Apache-2.0',
     description="A multi-purpose extensible self-adaptive evolutionary algorithm",
     long_description=long_description,
-    long_description_content_type="text/x-rst",
+    #long_description_content_type="text/x-rst",
+    long_description_content_type="text/markdown",
     url="https://squillero.github.io/microgp4/",
     project_urls={
         "Bug Tracker": "https://github.com/squillero/microgp4/issues",
