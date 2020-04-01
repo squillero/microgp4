@@ -300,7 +300,7 @@ A possible solution could be:
 
 The correspondent graph plot is:
 
-.. image:: ../images/onemax_assembly_solution_plot.jpg
+.. image:: ../../images/onemax_assembly_solution_plot.jpg
   :width: 500
   :align: center
   :alt: Structure of a node

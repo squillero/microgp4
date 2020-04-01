@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
 #   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
@@ -26,7 +27,7 @@
 import argparse
 import sys
 
-import microgp as ugp
+import microgp as ugp4
 from microgp.utils import logging
 
 if __name__ == "__main__":
@@ -73,14 +74,30 @@ if __name__ == "__main__":
         'regS': reg_param,
         'regD': reg_param
     })
-    instr_op_macro2 = ugp.Macro("    {instr} {regS}, {regD}", {
-        'instr': instr_param,
-        'regS': reg_param,
-        'regD': reg_param
-    })
     shift_op_macro = ugp.Macro("    {shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
-    shift_op_macro2 = ugp.Macro("    {shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
     branch_macro = ugp.Macro("{branch} {jmp}", {'branch': jmp_instructions, 'jmp': jmp_target})
+    if sys.platform == "win32":
+        prologue_macro = ugp.Macro('    .file   "solution.c"\n' + '    .text\n' + '    .globl  _darwin\n' +
+                                   '    .def    _darwin;        .scl    2;      .type   32;     .endef\n' +
+                                   '_darwin:\n' + 'LFB17:\n' + '    .cfi_startproc\n' + '    pushl   %ebp\n' +
+                                   '    .cfi_def_cfa_offset 8\n' + '    .cfi_offset 5, -8\n' +
+                                   '    movl    %esp, %ebp\n' + '    .cfi_def_cfa_register 5\n')
+        epilogue_macro = ugp.Macro('    movl	%eax, -4(%ebp)\n' + '    movl	-4(%ebp), %eax\n' + '    leave\n' +
+                                   '    .cfi_restore 5\n' + '    .cfi_def_cfa 4, 4\n' + '    ret\n' +
+                                   '    .cfi_endproc\n' + 'LFE17:\n' +
+                                   '   .ident  "GCC: (MinGW.org GCC-8.2.0-5) 8.2.0"\n')
+    elif sys.platform == "linux":
+        prologue_macro = ugp.Macro('    .file   "darwin.c"\n' + '    .text\n' + '    .globl  darwin\n' +
+                                   '    .type   darwin, @function\n' + 'darwin:\n' + '.LFB6:\n' +
+                                   '    .cfi_startproc\n' + '    pushq   %rbp\n' + '    .cfi_def_cfa_offset 16\n' +
+                                   '    .cfi_offset 6, -16\n' + '    movq    %rsp, %rbp\n' +
+                                   '    .cfi_def_cfa_register 6\n')
+        epilogue_macro = ugp.Macro('    popq    %rbp\n' + '    .cfi_def_cfa 7, 8\n' + '    ret\n' +
+                                   '    .cfi_endproc\n' + '.LFE6:\n' + '    .size   darwin, .-darwin\n' +
+                                   '    .ident  "GCC: (Debian 8.3.0-6) 8.3.0"\n' +
+                                   '    .section    .note.GNU-stack,"",@progbits\n')
+    else:
+        exit(-1)
 
     init_macro = ugp.Macro(
         "    movl	${int_a}, %eax\n" + "    movl	${int_b}, %ebx\n" + "    movl	${int_c}, %ecx\n" +
@@ -91,57 +108,61 @@ if __name__ == "__main__":
             'int_d': integer
         })
 
-    from microgp import random_generator
-
     # Define section
-    #sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(10, 10))
-    sec1 = ugp.make_section({instr_op_macro, shift_op_macro}, size=(5, 50))
+    sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
 
-    # Create a constraints library
+    # Create the instruction library
     library = ugp.Constraints(file_name="solution{id}.s")
-    #library['main'] = ["prologue", {jmp1, init_macro, instr_op_macro, shift_op_macro}, "epilogue"]
-    library['main'] = ["prologue", sec1, "epilogue"]
+    library['main'] = [prologue_macro, init_macro, sec1, epilogue_macro]
 
-    def blackhole(*args):
-        return [42]
+    # Define the evaluator script and the fitness type
+    if sys.platform == "win32":
+        script = "eval.bat"
+    else:
+        script = "./eval.sh"
+    library.evaluator = ugp.fitness.make_evaluator(evaluator=script, fitness_type=ugp.fitness.Lexicographic)
 
-    library.evaluator = ugp.fitness.make_evaluator(evaluator=blackhole, fitness_type=ugp.fitness.Lexicographic)
+    # Define and set a property. It checks whether the section 'sec1' has or not the same number of 'shr' and 'shl'
+    def shift_count(individual, frame, **kk):
+        from microgp.individual import get_nodes_in_frame
+        shl_count = 0
+        shr_count = 0
+        nodes = get_nodes_in_frame(individual, frame)
+        for node in nodes:
+            parameters = individual.graph.node_view[node]['parameters']
+            if 'shift' in parameters.keys():
+                if parameters['shift'].value == 'shr':
+                    shr_count += 1
+                elif parameters['shift'].value == 'shl':
+                    shl_count += 1
+        return {'shl_count': shl_count, 'shr_count': shr_count}
 
-    # TODO: Separate from random_individual -> Individual and random_individual -> List[Individual]
+    sec1.properties.add_base_builder(shift_count)
+    sec1.properties.add_checker(lambda shl_count, shr_count, **v: shl_count == shr_count)
 
-    from tqdm import tqdm
+    # Create a list of operators with their arity
+    operators = ugp.Operators()
+    # Add initialization operators
+    operators += ugp.GenOperator(ugp.create_random_individual, 0)
+    # Add mutation operators
+    operators += ugp.GenOperator(ugp.hierarchical_mutation, 1)
+    operators += ugp.GenOperator(ugp.flat_mutation, 1)
+    operators += ugp.GenOperator(ugp.add_node_mutation, 1)
+    operators += ugp.GenOperator(ugp.remove_node_mutation, 1)
+    # Add crossover operators
+    operators += ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
+    operators += ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
 
-    #for seed in tqdm(range(5000), ncols=78, dynamic_ncols=False, ascii=True, unit='t', unit_scale=False, bar_format='{n_fmt:>5s}/{total_fmt:5s}[{bar}]'):
-    #'{percentage:3.0f}%|{bar}| {rate_fmt} {n_fmt}/{total_fmt} '
-    for seed in tqdm(range(5000),
-                     ncols=78,
-                     dynamic_ncols=False,
-                     ascii=True,
-                     unit='t',
-                     unit_scale=False,
-                     bar_format='Testing: {percentage:3.2f}% completed @ {rate_fmt} ({remaining} remaining)'):
-        ugp.random_generator.seed(seed)
-        first = [f"{random_generator}"]
-        for _ in range(5):
-            i = ugp.create_random_individual(constraints=library)[0]
-            first.append(f"{random_generator}")
+    # Create the object that will manage the evolution
+    mu = 10
+    nu = 20
+    sigma = 0.7
+    lambda_ = 7
+    max_age = 10
 
-        ugp.random_generator.seed(seed)
-        second = [f"{random_generator}"]
-        for _ in range(5):
-            i = ugp.create_random_individual(constraints=library)[0]
-            second.append(f"{random_generator}")
-
-        assert first == second, "%d -> %s" % (seed, [(f, s) for f, s in zip(first, second) if f != s])
-
-    sys.exit(0)
-    # Evolve
-    darwin.evolve()
-
-    # Print best individuals
-    logging.bare("These are the best ever individuals:")
-    best_individuals = darwin.archive.individuals
-    ugp.print_individual(best_individuals, plot=True, score=True)
+    for t in range(10):
+        i = ugp4
+    sys.stdout.flush()
 
     ugp.logging.cpu_info("Program completed")
     sys.exit(0)

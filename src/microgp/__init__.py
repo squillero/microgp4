@@ -38,25 +38,24 @@ import os
 import warnings
 from collections import namedtuple
 
-# Version History (see history.rst)
-#
-# MicroGP v2: Copyright © 2002-2006 Giovanni Squillero
-#   Licensed under GPL2
-# MicroGP v3: Copyright © 2006-2016 Giovanni Squillero
-#   Licensed under GPL3
-# MicroGP v4: Copyright © 2020 Giovanni Squillero and Alberto Tonda
-#   Licensed under Apache-2.0
-
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 12)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 13)
 
 # hard code
 __name__ = "microgp"
 __version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}.dev{version_info.dev}"
 __author__ = "Giovanni Squillero and Alberto Tonda"
-__copyright__ = 'Copyright (c) 2020 Giovanni Squillero and Alberto Tonda'
+__copyright__ = """Copyright (c) 2002-2006 Giovanni Squillero.
+All Rights Reserved. Licensed under GPL2.
 
-# human-readable
+Copyright (c) 2006-2016 Giovanni Squillero.
+All Rights Reserved. Licensed under GPL3.
+
+Copyright (c) 2020 Giovanni Squillero and Alberto Tonda.
+All Rights Reserved. Licensed under Apache-2.0.
+"""
+
+#almost human-readable
 name = f"MicroGP{version_info.epoch}"
 if version_info.tag == "a" and version_info.micro == 0:
     version = f"v{version_info.major}.{version_info.minor}_{version_info.dev} pre-alpha \"{version_info.codename}\""
@@ -70,6 +69,8 @@ elif version_info.tag == "":
     version = f"v{version_info.major}.{version_info.minor}.{version_info.micro}_{version_info.dev} \"{version_info.codename}\""
 else:
     version = "unknown"
+author = __author__
+
 
 # Standard warnings
 WARN_V27 = "The code is quite probably not compatible with Python 2"
@@ -88,6 +89,7 @@ if sys.flags.optimize == 0:
 if version_info.tag == "a" and not sys.warnoptions and 'PYTHONWARNINGS' not in os.environ:
     warnings.filterwarnings("default", category=DeprecationWarning, module="microgp")
     warnings.warn(WARN_DEPR_ACTIVE, UserWarning, stacklevel=2)
+    # hint: try using "-W error:microgp:DeprecationWarning"
 
 # MicroGP stuff
 from .utils import logging, random_generator
@@ -109,3 +111,9 @@ def show_banner() -> None:
     """Shows the "official" MicroGP banner"""
     logging.bare(f"This is {name} {version}")
     logging.bare("Copyright © 2020 by Giovanni Squillero and Alberto Tonda")
+
+
+def copyright():
+    """Lists contributors and copyright notices."""
+    print(__copyright__)
+

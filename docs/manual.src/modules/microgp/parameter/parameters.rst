@@ -38,7 +38,7 @@ Parameter
 
 Parameters inheritance hierarchies:
 
-.. image:: ../images/parameter_class_uml.jpg
+.. image:: ../../images/parameter_class_uml.jpg
   :width: 800
   :alt: Structure of a node
 

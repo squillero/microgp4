@@ -11,6 +11,8 @@ Table of Contents
    :maxdepth: 1
 
    summary.rst
+   Developer repository <https://github.com/squillero/microgp4>
+   Home page <https://squillero.github.com/microgp4>
 
 .. toctree::
    :caption: User Guide

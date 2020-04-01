@@ -26,8 +26,7 @@
 
 # MEMO
 # https://packaging.python.org/tutorials/packaging-projects/
-# python .\setup.py sdist
-# twine upload dist/*
+# del /q dist\* & python .\setup.py sdist & twine upload dist\*
 
 import setuptools
 from microgp import __version__ as ugp_version

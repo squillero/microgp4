@@ -9,28 +9,24 @@
 [![Documentation Status](https://readthedocs.org/projects/microgp4/badge/?version=pre-alpha)](https://microgp4.readthedocs.io/en/pre-alpha/?badge=pre-alpha)
 ![](https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-28094298-6&cid=4f34399f-f437-4f67-9390-61c649f9b8b2&dp=1)
 
-### :warning: MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development.
+#### :warning: MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development :warning:
 
-MicroGP (µGP, `ugp`) is an [evolutionary optimizer](https://squillero.github.io/microgp4/evolution.html) able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques are used to explore efficiently the search space. [**[read more...]**](https://squillero.github.io/microgp4/)
+MicroGP (µGP, `ugp`) is an [evolutionary optimizer](https://squillero.github.io/microgp4/evolution.html) able to outperform both human experts and conventional heuristics in finding good solution of hard problems. [**[read more]**](https://squillero.github.io/microgp4/)
 
 > The repo is only useful if you want to hack into the code (see: [CONTRIBUTING](CONTRIBUTING.md)).  
-> For using MicroGP read the [instructions](https://microgp4.readthedocs.io/).
+> For using MicroGP4 read the [instructions](https://microgp4.readthedocs.io/).
 
-#### Documentation and Previous Versions
+### Documentation and Previous Versions
 
 * The documentation for MicroGP4 is on https://microgp4.readthedocs.io/
-* The documentation for [MicroGP3](http://ugp3.sourceforge.net/) (v3.1 *"Bluebell"*), together with the old design rationale, can be found in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
+* The documentation for [MicroGP3](http://ugp3.sourceforge.net/) (v3.1 *"Bluebell"*), together with its design rationale, can be found in the book *Evolutionary Optimization: the µGP toolkit*, Springer Science & Business Media (2011), [10.1007/978-0-387-09426-7](https://www.doi.org/10.1007/978-0-387-09426-7)
 * [MicroGP2](https://github.com/squillero/microgp2) is described in the paper "MicroGP — An Evolutionary Assembly Program Generator", *Genetic Programming and Evolvable Machines*,  vol. 6, 247–263 (2005), [10.1007/s10710-005-2985-x](http://dx.doi.org/10.1007/s10710-005-2985-x)
-* MicroGP1 (i.e., an unnamed evolutionary tool able to generate real assembly programs), has been presented in the paper "Efficient machine-code test-program induction", *Proceedings of the Congress on Evolutionary Computation* (2002), [10.1109/CEC.2002.1004462](http://dx.doi.org/10.1109/CEC.2002.1004462)
+* An evolutionary tool able to generate real assembly programs (MicroGP1) has been presented in the paper "Efficient machine-code test-program induction", *Proceedings of the Congress on Evolutionary Computation* (2002), [10.1109/CEC.2002.1004462](http://dx.doi.org/10.1109/CEC.2002.1004462)
 
 ### Contacts
 
 * [Giovanni Squillero](https://github.com/squillero) [:email:](mailto:squillero@polito.it) [:house:](https://staff.polito.it/giovanni.squillero/)
 * [Alberto Tonda](https://github.com/albertotonda/)  [:email:](mailto:alberto.tonda@inra.fr) [:house:](https://www.researchgate.net/profile/Alberto_Tonda)
-
-### Acknowledgements
-
-MicroGP would not have been possible without the help and support of [several people](docs/contributors.md). 
 
 ### Licence
 Copyright © 2020 Giovanni Squillero and Alberto Tonda  

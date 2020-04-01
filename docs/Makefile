@@ -14,8 +14,8 @@
 # from the environment for the first two.
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = reference.src
-BUILDDIR      = reference.build
+SOURCEDIR     = manual.src
+BUILDDIR      = manual.build
 
 # Put it first so that "make" without argument is like "make help".
 help:

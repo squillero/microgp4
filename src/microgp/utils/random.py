@@ -26,7 +26,7 @@
 
 # MicroGP's own random generator.
 
-from typing import Sequence, List, Any, Optional
+from typing import Sequence, List, Any, Optional, Collection
 import warnings
 import random as py_random
 from numpy import random as np_random
@@ -35,6 +35,7 @@ from . import logging
 
 
 class MicroGP_Random():
+    """Internal random engine to guarantee reproducibility."""
 
     def __init__(self):
         self._py_random = py_random.Random()
@@ -47,7 +48,7 @@ class MicroGP_Random():
         return self._py_random.seed(*args, **kwargs)
 
     def randrange(self, a: int, b: int, *args, **kwargs) -> int:
-        """Alias for self.randint(a, b-1)"""
+        """Alias for randint(a, b-1)"""
         return self.randint(a, b - 1)
 
     def randint(self, a: int, b: int, loc: Optional[int] = None, strength: Optional[float] = None) -> int:
@@ -83,10 +84,12 @@ class MicroGP_Random():
         return val
 
     def random(self, *args, **kwargs):
+        """Proxy for random.random()"""
         self._calls += 1
         return self._py_random.random(*args, **kwargs)
 
     def shuffle(self, *args, **kwargs):
+        """Proxy for random.shuffle()"""
         self._calls += 1
         warnings.warn("microgp.random_generator.shuffle() is deprecated.", DeprecationWarning, stacklevel=2)
         return self._py_random.shuffle(*args, **kwargs)
@@ -116,10 +119,11 @@ class MicroGP_Random():
         else:
             return seq[new_index]
 
-    def choices(self, *args, **kwargs) -> List[Any]:
+    def choices(self, population: Collection[Any], k: int = 1, **kwargs) -> List[Any]:
+        """Proxy for random.choiches()"""
         self._calls += 1
-        warnings.warn("microgp.random_generator.choices() is deprecated.", DeprecationWarning, stacklevel=2)
-        return self._py_random.choices(*args, **kwargs)
+        assert not kwargs, "Only population and k are supported by microgp.random_generator.choices()"
+        return self._py_random.choices(population, k=k)
 
     def __str__(self):
         random_state = hex(abs(hash(self._py_random.getstate())))
