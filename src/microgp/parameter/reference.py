@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Union
+from typing import List, Optional
 
 from .base import Structural
 from ..individual_operators import unroll_macro_list, Individual
@@ -152,7 +152,7 @@ class LocalReference(Reference):
                 exit("This should not happen")
         return n_of_jumps
 
-    def offset_to_value(self, offset: int) -> Union[NodeID, None]:
+    def offset_to_value(self, offset: int) -> Optional[NodeID]:
         """Return the correspondent destination NodeID starting from the offset. Or None"""
         """
            self.node = n231 and offset = -2
@@ -330,11 +330,11 @@ class ExternalReference(Reference):
         self._value = new_value
 
     @property
-    def final_destination(self) -> Union[NodeID, None]:
+    def final_destination(self) -> Optional[NodeID]:
         return self._final_destination
 
     @final_destination.setter
-    def final_destination(self, destination: Union[NodeID, None]):
+    def final_destination(self, destination: Optional[NodeID]):
         assert isinstance(destination, NodeID) or not destination, "destination not a NodeID or None"
         self._final_destination = destination
         old_target = next((t for f, t, k in self.individual.graph.edges(self.node, keys=True) if k == self.name), None)

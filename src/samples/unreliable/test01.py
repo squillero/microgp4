@@ -53,7 +53,7 @@ if __name__ == "__main__":
         ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
         ugp.logging.debug("Verbose level set to DEBUG")
 
-    ugp.logging.cpu_info("Program started")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
 
     # Define parameters ________________________________________________________________________________________________
     registers = ugp.make_parameter(ugp.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
@@ -182,5 +182,5 @@ if __name__ == "__main__":
     #     print(best.fitness)
 
     ugp.logging.verbose(library.stats)
-    ugp.logging.cpu_info("Program completed")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
     sys.exit(0)

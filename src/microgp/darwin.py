@@ -24,7 +24,7 @@
 # limitations under the License.
 
 import warnings
-from typing import Union, Set, List
+from typing import Union, Set, List, Optional
 
 from .archive import Archive
 from .constraints import Constraints
@@ -222,8 +222,8 @@ class Darwin:
             self._population.grow_old(self._population - self.archive.individuals)
         self._generation += 1
 
-    def filter_offspring(self, temporary_offspring: Union[None, List[Union[Individual, None]]]) \
-            -> Union[List[Union[Individual, None]], None]:
+    def filter_offspring(self, temporary_offspring: Optional[List[Optional[Individual]]]) \
+            -> Optional[List[Optional[Individual]]]:
         """Remove "None" elements and choose the best element in sublist recursively
 
         Args:
@@ -242,7 +242,7 @@ class Darwin:
                 filtered_offspring += [individual]
         return filtered_offspring
 
-    def get_best_unpacking(self, individuals: list) -> Union[Individual, None]:
+    def get_best_unpacking(self, individuals: list) -> Optional[Individual]:
         """Find the best value in the given list (recursive)"""
         temp = []
         for individual in individuals:

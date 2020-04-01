@@ -47,7 +47,7 @@ if __name__ == "__main__":
     elif args.verbose > 1:
         ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
         ugp.logging.debug("Verbose level set to DEBUG")
-    ugp.logging.cpu_info("Program started")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
 
     # Define a parameter of type ugp.parameter.Bitstring and length = 8
     word8 = ugp.make_parameter(ugp.parameter.Bitstring, len_=8)
@@ -105,5 +105,5 @@ if __name__ == "__main__":
     # Print best individuals
     ugp.print_individual(darwin.archive.individuals, msg="Archive:", plot=True, score=True)
 
-    ugp.logging.cpu_info("Program completed")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
     sys.exit(0)

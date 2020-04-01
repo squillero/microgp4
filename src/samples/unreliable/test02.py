@@ -51,7 +51,7 @@ if __name__ == "__main__":
         ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
         ugp.logging.debug("Verbose level set to DEBUG")
 
-    ugp.logging.cpu_info("Program started")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
 
     ref_fwd = ugp.make_parameter(ugp.parameter.LocalReference,
                                  allow_self=False,
@@ -170,5 +170,5 @@ if __name__ == "__main__":
         logging.bare("These are the best ever individuals:")
         ugp.print_individual(darwin.archive.individuals)
 
-    ugp.logging.cpu_info("Program completed")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
     sys.exit(0)

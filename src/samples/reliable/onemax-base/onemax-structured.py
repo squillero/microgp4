@@ -47,7 +47,7 @@ if __name__ == "__main__":
     elif args.verbose > 1:
         ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
         ugp.logging.debug("Verbose level set to DEBUG")
-    ugp.logging.cpu_info("Program started")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
 
     # Define a parameter of type ugp.parameter.Categorical that can take two values: 0 or 1
     bit = ugp.make_parameter(ugp.parameter.Categorical, alternatives=[0, 1])
@@ -107,5 +107,5 @@ if __name__ == "__main__":
     # Print best individuals
     ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=False)
 
-    ugp.logging.cpu_info("Program completed")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
     sys.exit(0)

@@ -67,11 +67,12 @@ DefaultLogger.setLevel(logging.INFO)
 DefaultLogger.__doc__ = "Default MicroGP4 logger"
 
 
-def cpu_info(msg: str, log_level: int = DEBUG) -> None:
+def log_cpu(level: int = INFO, msg: str = "", *args, **kwargs) -> None:
+    """Like log(), but including cpu time."""
     if msg:
-        DefaultLogger.log(log_level, "%s: %s", msg, microgp4_process_time())
+        DefaultLogger.log(level, "%s: %s", msg, microgp4_process_time())
     else:
-        DefaultLogger.log(log_level, "%s", msg, microgp4_process_time())
+        DefaultLogger.log(level, "%s", msg, microgp4_process_time())
 
 
 def log_split(level: int, msg: str) -> None:
@@ -79,7 +80,7 @@ def log_split(level: int, msg: str) -> None:
         DefaultLogger.log(level, line)
 
 
-DefaultLogger.cpu_info = cpu_info
+DefaultLogger.log_cpu = log_cpu
 DefaultLogger.log_split = log_split
 
 # Log SPAM, VERBOSE & BARE

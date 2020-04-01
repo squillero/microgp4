@@ -26,7 +26,7 @@
 
 import inspect
 import sys
-from typing import Dict, Set, Callable, Union
+from typing import Dict, Set, Callable, Optional
 
 from .utils import logging
 
@@ -132,7 +132,7 @@ class Properties:
         ), "Missing **values from method's signature: checker%s" % (inspect.signature(new_checker),)
         self._checkers.add(new_checker)
 
-    def update_values(self, cumulative_values: Union[dict, None] = None, **kwargs):
+    def update_values(self, cumulative_values: Optional[dict] = None, **kwargs):
         """Runs properties builders and collect the results into `values` dictionary."""
 
         # base builders

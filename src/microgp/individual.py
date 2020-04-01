@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Tuple, Set, Dict, Union, Sequence
+from typing import List, Tuple, Set, Dict, Union, Sequence, Optional
 from collections import Counter, defaultdict
 import warnings
 import copy
@@ -313,11 +313,11 @@ class Individual(Paranoid, Pedantic):
         self._age = value
 
     @property
-    def parents(self) -> Union[None, Set['Individual']]:
+    def parents(self) -> Optional[Set['Individual']]:
         return self._parents
 
     @parents.setter
-    def parents(self, parents: Union[None, Set['Individual']]):
+    def parents(self, parents: Optional[Set['Individual']]):
         """Set the set of individual parents"""
         self._parents = parents
 
@@ -456,7 +456,7 @@ class Individual(Paranoid, Pedantic):
             index = (index + 1) % len(colors)
         return node_colors
 
-    def add_node(self, parent_node: Union[NodeID, None], macro: Macro, frame_path: Sequence[Frame]) -> NodeID:
+    def add_node(self, parent_node: Optional[NodeID], macro: Macro, frame_path: Sequence[Frame]) -> NodeID:
         """Adds a node in the individual and chains it
 
         Args:
@@ -697,7 +697,7 @@ class Individual(Paranoid, Pedantic):
         assert self._finalized, "Individual can't be converted to str because it is not finalized"
         return self._canonic_phenotype
 
-    def check_entry_point(self) -> List[Union[NodeID, None]]:
+    def check_entry_point(self) -> List[Optional[NodeID]]:
         """Check if there is only one head for the main and if it corresponds
         to the previously set `self._entry_point`
 
@@ -753,7 +753,7 @@ class Individual(Paranoid, Pedantic):
                         known_heads.add(target)
         self._canonic_phenotype = "\n".join(macros)
 
-    def link_movable_nodes(self) -> Union[bool, None]:
+    def link_movable_nodes(self) -> Optional[bool]:
         """Set the value of the parameters of type LocalReference and ExternalReference when the node is movable"""
         if len(self._unlinked_nodes.keys()) == 0:
             return

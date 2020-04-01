@@ -8,6 +8,7 @@
 #   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!!" #
 #                                                                           #
 #############################################################################
+
 # Copyright 2020 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -22,12 +23,9 @@
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import warnings
-from itertools import permutations
 
 try:
     import matplotlib.cbook
-    #warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
     import matplotlib.pyplot as plt
 except:
     plt = None
@@ -132,8 +130,8 @@ def order_by_fitness(individuals_pool: Union[Set[Individual], List[Individual]])
 
 # INITIALIZATION________________________________________________________________________________________________________
 # TODO: Separate the 'create_random_individual -> Individual' from an 'init_random_individual -> [Individual]'
-def create_random_individual(constraints: Constraints, max_retries: Union[int, None] = 100, **kwargs) -> \
-        List[Union[Individual, None]]:
+def create_random_individual(constraints: Constraints, max_retries: Optional[int] = 100, **kwargs) -> \
+        List[Optional[Individual]]:
     """Creates a random individual.
 
     Individuals are created starting from section `main`. The new individual is
@@ -207,7 +205,7 @@ def create_random_individual(constraints: Constraints, max_retries: Union[int, N
 
 
 # CROSSOVERS____________________________________________________________________________________________________________
-def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Union[Individual, None]]:
+def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Optional[Individual]]:
     """Let's consider a sequence of nodes connected through edges with label=
     'next', we will call this sequence `next-chain`. This operator selects
     the `next-chains` belonging to the common sections between the two parents
@@ -292,7 +290,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
 
 
 def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
-                                       **kwargs) -> List[Union[Individual, None]]:
+                                       **kwargs) -> List[Optional[Individual]]:
     """This crossover builds two lists of MacroPools in parentA and parentB
     belonging to common sections, chooses one element for each list and
     chooses one node (called cut_node). parentA and parentB are cloned and
@@ -417,7 +415,7 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     return [individualC, individualD]
 
 
-def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Union[Individual, None]]:
+def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Optional[Individual]]:
     """This crossover builds two lists of MacroPools in parentA and parentB
       belonging to common sections, chooses one element for each list.
       parentA and parentB are cloned and subsequently modified (in individualC
@@ -532,7 +530,7 @@ def check_muation_parameters(original_individual: Individual, sigma: float):
     assert isinstance(original_individual, Individual), "Original individual must be of type Individual"
 
 
-def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Union[Individual, None]]:
+def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
     """Try to remove a node taken from the possible set of nodes in the
     individual. The removal could fail because of the minimum number of nodes
     that the individual must contain. This method returns a modified copy of
@@ -603,7 +601,7 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         return [new_individual]
 
 
-def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Union[Individual, None]]:
+def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
     """Insert a new node in the individual graph. An insertion of a new node
     could fail because of there are no valid targets for the node that
     contains a LocalReference.
@@ -667,7 +665,7 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         return [new_individual]
 
 
-def hierarchical_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Union[Individual, None]]:
+def hierarchical_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
     """Choose a node in the graph, choose a parameter inside the node, mutate it.
     Each parameter has probability: `1/len(nodes) * 1/len(parameters in that node)`.
 
@@ -720,7 +718,7 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
         return [new_individual]
 
 
-def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Union[Individual, None]]:
+def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
     """Build a list of all parameters contained in all nodes then choose one
     of them and mutate it. Each parameter has probability: `1/len(nodes)`.
 

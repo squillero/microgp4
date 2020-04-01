@@ -48,7 +48,7 @@ if __name__ == "__main__":
     elif args.verbose > 1:
         ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
         ugp.logging.debug("Verbose level set to DEBUG")
-    ugp.logging.cpu_info("Program started")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
 
     # Define parameters
     reg_alternatives = ['%eax', '%ebx', '%ecx', '%edx']
@@ -178,5 +178,5 @@ if __name__ == "__main__":
     best_individuals = darwin.archive.individuals
     ugp.print_individual(best_individuals, plot=False, score=True)
 
-    ugp.logging.cpu_info("Program completed")
+    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
     sys.exit(0)

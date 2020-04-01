@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Any, Collection, Sequence, Set, List, Tuple, Dict, Union, Callable
+from typing import Any, Collection, Sequence, Set, List, Tuple, Dict, Callable, Optional
 from itertools import combinations
 from collections import Counter
 
@@ -46,7 +46,7 @@ class Section(Paranoid):
         Section._COUNTER[tag] += 1
         return "%s%d" % (tag, Section._COUNTER[tag])
 
-    def __init__(self, name: str, instances: Union[None, Tuple[int, int]] = None, label_format=None) -> None:
+    def __init__(self, name: str, instances: Optional[Tuple[int, int]] = None, label_format=None) -> None:
         assert name, "Invalid section name: '%s'" % (name,)
         self._name = name
         self._checkers = list()
@@ -81,11 +81,11 @@ class Section(Paranoid):
         raise NotImplementedError
 
     @property
-    def instances(self) -> Union[None, Tuple[int, int]]:
+    def instances(self) -> Optional[Tuple[int, int]]:
         return self._instances
 
     @instances.setter
-    def instances(self, new_val: Union[None, Tuple[int, int]]) -> None:
+    def instances(self, new_val: Optional[Tuple[int, int]]) -> None:
         if new_val is not None:
             assert len(new_val) == 2, "instances should be a tuple(min, max)"
             assert isinstance(new_val[0], int) and new_val[0] >= 0, "min instances should be an integer >= 0"
@@ -374,7 +374,7 @@ class Constraints(Paranoid, Pedantic):
 
 def make_section(section_definition: Any,
                  name: str = None,
-                 instances: Union[None, Tuple[int, int]] = None,
+                 instances: Optional[Tuple[int, int]] = None,
                  size: Tuple[int, int] = None,
                  label_format: str = None) -> Section:
     """Builds a section from a human-readable description.
