@@ -127,3 +127,7 @@ class Macro(Paranoid):
     def __add__(self, other):
         from .constraints import MacroPool, SubsectionsSequence
         return SubsectionsSequence([MacroPool([self]), MacroPool([other])])
+
+    def __lt__(self, other) -> bool:
+        # required for reproducibility
+        return self._text < other._text

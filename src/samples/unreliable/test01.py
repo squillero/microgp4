@@ -27,12 +27,12 @@
 import sys
 import argparse
 
-import microgp as ugp
+import microgp as ugp4
 
 from microgp.utils import logging
 
 if __name__ == "__main__":
-    ugp.show_banner()
+    ugp4.show_banner()
 
     # Set the arguments parser _________________________________________________________________________________________
     parser = argparse.ArgumentParser()
@@ -46,40 +46,40 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.verbose == 0:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.INFO)
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.INFO)
     elif args.verbose == 1:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.VERBOSE)
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.VERBOSE)
     elif args.verbose > 1:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
-        ugp.logging.debug("Verbose level set to DEBUG")
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.DEBUG)
+        ugp4.logging.debug("Verbose level set to DEBUG")
 
-    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
+    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
 
     # Define parameters ________________________________________________________________________________________________
-    registers = ugp.make_parameter(ugp.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
-    # cat_sor = ugp.make_parameter(ugp.parameter.CategoricalSorted,
+    registers = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
+    # cat_sor = ugp4.make_parameter(ugp4.parameter.CategoricalSorted,
     #                              alternatives=['e', 'f', 'g', 'h', 'i', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'])
-    int256 = ugp.make_parameter(ugp.parameter.Integer, min=0, max=256)
-    # word8 = ugp.make_parameter(ugp.parameter.Bitstring, len_=8)
-    ref_fwd = ugp.make_parameter(ugp.parameter.LocalReference,
-                                 allow_self=False,
-                                 allow_forward=True,
-                                 allow_backward=False,
-                                 frames_up=1)
-    ref_bcw = ugp.make_parameter(ugp.parameter.LocalReference,
-                                 allow_self=False,
-                                 allow_forward=False,
-                                 allow_backward=True,
-                                 frames_up=1)
+    int256 = ugp4.make_parameter(ugp4.parameter.Integer, min=0, max=256)
+    # word8 = ugp4.make_parameter(ugp4.parameter.Bitstring, len_=8)
+    ref_fwd = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                  allow_self=False,
+                                  allow_forward=True,
+                                  allow_backward=False,
+                                  frames_up=1)
+    ref_bcw = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                  allow_self=False,
+                                  allow_forward=False,
+                                  allow_backward=True,
+                                  frames_up=1)
 
     # Define macros ____________________________________________________________________________________________________
-    epilogue = ugp.Macro("; That's all folks")
-    add = ugp.Macro("    add {reg}, 0{num:x}h  \t; ie. {reg} += {num}", {'reg': registers, 'num': int256})
-    # add = ugp.Macro("    add {reg}, {num}b  \t; ie. {reg} += {num}", {'reg': cat_sor, 'num': bitstring8})
-    sub = ugp.Macro("    sub {reg}, 0{num:x}h  \t; ie. {reg} -= {num}", {'reg': registers, 'num': int256})
-    # sub = ugp.Macro("    sub {reg}, {num}b  \t; ie. {reg} -= {num}", {'reg': cat_sor, 'num': bitstring8})
-    jmp1 = ugp.Macro("    jmp {jmp_ref} \t\t; jump forward", {'jmp_ref': ref_fwd})
-    jmp2 = ugp.Macro("    jmp {jmp_ref} \t\t; jump backward", {'jmp_ref': ref_bcw})
+    epilogue = ugp4.Macro("; That's all folks")
+    add = ugp4.Macro("    add {reg}, 0{num:x}h  \t; ie. {reg} += {num}", {'reg': registers, 'num': int256})
+    # add = ugp4.Macro("    add {reg}, {num}b  \t; ie. {reg} += {num}", {'reg': cat_sor, 'num': bitstring8})
+    sub = ugp4.Macro("    sub {reg}, 0{num:x}h  \t; ie. {reg} -= {num}", {'reg': registers, 'num': int256})
+    # sub = ugp4.Macro("    sub {reg}, {num}b  \t; ie. {reg} -= {num}", {'reg': cat_sor, 'num': bitstring8})
+    jmp1 = ugp4.Macro("    jmp {jmp_ref} \t\t; jump forward", {'jmp_ref': ref_fwd})
+    jmp2 = ugp4.Macro("    jmp {jmp_ref} \t\t; jump backward", {'jmp_ref': ref_bcw})
 
     # That's the library
 
@@ -93,19 +93,19 @@ if __name__ == "__main__":
     # or to customize the label format eg. label_format="[label_{node}]\n"
 
     # Define sections __________________________________________________________________________________________________
-    sec2a = ugp.make_section({add}, size=(2, 5), name='sec2a', instances=(0, 1))
-    sec2b = ugp.make_section({sub}, size=(4, 10), name='sec2b', instances=(0, 1))
-    sec_jmp = ugp.make_section({jmp1, jmp2}, size=(5, 5), name='sec_jmp')
-    # sec2a = ugp.make_section({add}, size=(1, 3), name='sec2a', instances=(0, 1))
-    # sec2b = ugp.make_section({sub}, size=(2, 3), name='sec2b', instances=(0, 1))
-    # sec_jmp = ugp.make_section({jmp1, jmp2}, size=(2, 3), name='sec_jmp')
+    sec2a = ugp4.make_section({add}, size=(2, 5), name='sec2a', instances=(0, 1))
+    sec2b = ugp4.make_section({sub}, size=(4, 10), name='sec2b', instances=(0, 1))
+    sec_jmp = ugp4.make_section({jmp1, jmp2}, size=(5, 5), name='sec_jmp')
+    # sec2a = ugp4.make_section({add}, size=(1, 3), name='sec2a', instances=(0, 1))
+    # sec2b = ugp4.make_section({sub}, size=(2, 3), name='sec2b', instances=(0, 1))
+    # sec_jmp = ugp4.make_section({jmp1, jmp2}, size=(2, 3), name='sec_jmp')
 
     # Note the wickedness: there can be ONLY ONE sec2a and ONE sec2b, but the library specifies
     # { sec2a OR sec2b } THEN sec_jmp THEN { sec2a OR sec2b }
     # ... we are going to create quite a number of illegal individuals :-)
 
     # Set the created sections in the special section ('main') _________________________________________________________
-    library = ugp.Constraints()
+    library = ugp4.Constraints()
     library['main'] = [
         "; Prologue\n; Created on: {info:now} by {info}",
         [{sec2a, sec2b}, sec_jmp, {sec2a, sec2b}],  # framing is useful: sec_jmp references specify frames_up=1
@@ -118,7 +118,7 @@ if __name__ == "__main__":
         script = "./evaluator.sh"
     else:
         script = "evaluator.bat"
-    library.evaluator = ugp.fitness.make_evaluator(evaluator=script, fitness_type=ugp.fitness.Lexicographic)
+    library.evaluator = ugp4.fitness.make_evaluator(evaluator=script, fitness_type=ugp4.fitness.Lexicographic)
 
     # let's get weird
     # also note that there is only a limited number of instances that can be ==
@@ -127,26 +127,26 @@ if __name__ == "__main__":
     # library.global_properties.add_check(lambda sec2a, sec2b, **v: sec2a == sec2b)
 
     # Create a list of operators with their arities_____________________________________________________________________
-    operators = ugp.Operators()
+    operators = ugp4.Operators()
 
     # Add initialization operators
-    init_op1 = ugp.GenOperator(ugp.create_random_individual, 0)
+    init_op1 = ugp4.GenOperator(ugp4.create_random_individual, 0)
     operators += init_op1
 
     # Add mutation operators
-    mutation_op1 = ugp.GenOperator(ugp.remove_node_mutation, 1)
-    mutation_op2 = ugp.GenOperator(ugp.add_node_mutation, 1)
-    mutation_op3 = ugp.GenOperator(ugp.flat_mutation, 1)
-    mutation_op4 = ugp.GenOperator(ugp.hierarchical_mutation, 1)
+    mutation_op1 = ugp4.GenOperator(ugp4.remove_node_mutation, 1)
+    mutation_op2 = ugp4.GenOperator(ugp4.add_node_mutation, 1)
+    mutation_op3 = ugp4.GenOperator(ugp4.flat_mutation, 1)
+    mutation_op4 = ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
     operators += mutation_op1
     operators += mutation_op2
     operators += mutation_op3
     operators += mutation_op4
 
     # Add crossover operators
-    crossover_op1 = ugp.GenOperator(ugp.switch_proc_crossover, 2)
-    crossover_op2 = ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
-    crossover_op3 = ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
+    crossover_op1 = ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
+    crossover_op2 = ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
+    crossover_op3 = ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
     operators += crossover_op1
     operators += crossover_op2
     operators += crossover_op3
@@ -158,29 +158,29 @@ if __name__ == "__main__":
     lambda_ = 10
     max_age = 5
 
-    darwin = ugp.Darwin(constraints=library,
-                        operators=operators,
-                        mu=mu,
-                        nu=nu,
-                        lambda_=lambda_,
-                        sigma=sigma,
-                        max_age=max_age)
+    darwin = ugp4.Darwin(constraints=library,
+                         operators=operators,
+                         mu=mu,
+                         nu=nu,
+                         lambda_=lambda_,
+                         sigma=sigma,
+                         max_age=max_age)
 
     # Evolve____________________________________________________________________________________________________________
     darwin.evolve()
     logging.bare("This is the population:")
     for individual in darwin.population:
-        ugp.print_individual(individual, plot=True)
-        ugp.logging.bare(individual.fitness)
+        ugp4.print_individual(individual, plot=True)
+        ugp4.logging.bare(individual.fitness)
 
     # Print best individuals
     logging.bare("These are the best ever individuals:")
-    ugp.print_individual(darwin.archive.individuals)
+    ugp4.print_individual(darwin.archive.individuals)
 
     # bests = darwin.archive.individuals
     # for best in bests:
     #     print(best.fitness)
 
-    ugp.logging.verbose(library.stats)
-    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
+    ugp4.logging.verbose(library.stats)
+    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program completed")
     sys.exit(0)

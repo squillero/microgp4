@@ -119,11 +119,13 @@ class MicroGP_Random():
         else:
             return seq[new_index]
 
-    def choices(self, population: Collection[Any], k: int = 1, **kwargs) -> List[Any]:
+    def group_choice(self, population: Collection[Any], num: float = 1, **kwargs) -> List[Any]:
         """Proxy for random.choiches()"""
         self._calls += 1
-        assert not kwargs, "Only population and k are supported by microgp.random_generator.choices()"
-        return self._py_random.choices(population, k=k)
+        result = [self.choice(population) for _ in range(int(num))]
+        while self.random() < num % 1:
+            result.append(self.choice(population))
+        return result
 
     def __str__(self):
         random_state = hex(abs(hash(self._py_random.getstate())))

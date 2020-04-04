@@ -24,10 +24,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import warnings
+
 import argparse
 import sys
 
 import microgp as ugp4
+warnings.filterwarnings("error", category=DeprecationWarning, module='microgp')
+
 
 if __name__ == "__main__":
     ugp4.show_banner()
@@ -61,69 +65,101 @@ if __name__ == "__main__":
     integer = ugp4.make_parameter(ugp4.parameter.Integer, min=-32768, max=32767)
     int8 = ugp4.make_parameter(ugp4.parameter.Integer, min=0, max=256)
     jmp_target = ugp4.make_parameter(ugp4.parameter.LocalReference,
-                                    allow_self=False,
-                                    allow_forward=True,
-                                    allow_backward=False,
-                                    frames_up=0)
+                                     allow_self=False,
+                                     allow_forward=True,
+                                     allow_backward=False,
+                                     frames_up=0)
 
     # Define the macros
-    jmp1 = ugp4.Macro("    {jmp_instr} {jmp_ref}", {'jmp_instr': jmp_instructions, 'jmp_ref': jmp_target})
-    instr_op_macro = ugp4.Macro("    {instr} {regS}, {regD}", {
-        'instr': instr_param,
-        'regS': reg_param,
-        'regD': reg_param
-    })
-    shift_op_macro = ugp4.Macro("    {shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
+    jmp1 = ugp4.Macro("{jmp_instr} {jmp_ref}", {'jmp_instr': jmp_instructions, 'jmp_ref': jmp_target})
+    instr_op_macro = ugp4.Macro("{instr} {regS}, {regD}", {'instr': instr_param, 'regS': reg_param, 'regD': reg_param})
+    shift_op_macro = ugp4.Macro("{shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
     branch_macro = ugp4.Macro("{branch} {jmp}", {'branch': jmp_instructions, 'jmp': jmp_target})
-    if sys.platform == "win32":
-        prologue_macro = ugp4.Macro('    .file   "solution.c"\n' + '    .text\n' + '    .globl  _darwin\n' +
-                                   '    .def    _darwin;        .scl    2;      .type   32;     .endef\n' +
-                                   '_darwin:\n' + 'LFB17:\n' + '    .cfi_startproc\n' + '    pushl   %ebp\n' +
-                                   '    .cfi_def_cfa_offset 8\n' + '    .cfi_offset 5, -8\n' +
-                                   '    movl    %esp, %ebp\n' + '    .cfi_def_cfa_register 5\n')
-        epilogue_macro = ugp4.Macro('    movl	%eax, -4(%ebp)\n' + '    movl	-4(%ebp), %eax\n' + '    leave\n' +
-                                   '    .cfi_restore 5\n' + '    .cfi_def_cfa 4, 4\n' + '    ret\n' +
-                                   '    .cfi_endproc\n' + 'LFE17:\n' +
-                                   '   .ident  "GCC: (MinGW.org GCC-8.2.0-5) 8.2.0"\n')
-    elif sys.platform == "linux":
-        prologue_macro = ugp4.Macro('    .file   "darwin.c"\n' + '    .text\n' + '    .globl  darwin\n' +
-                                   '    .type   darwin, @function\n' + 'darwin:\n' + '.LFB6:\n' +
-                                   '    .cfi_startproc\n' + '    pushq   %rbp\n' + '    .cfi_def_cfa_offset 16\n' +
-                                   '    .cfi_offset 6, -16\n' + '    movq    %rsp, %rbp\n' +
-                                   '    .cfi_def_cfa_register 6\n')
-        epilogue_macro = ugp4.Macro('    popq    %rbp\n' + '    .cfi_def_cfa 7, 8\n' + '    ret\n' +
-                                   '    .cfi_endproc\n' + '.LFE6:\n' + '    .size   darwin, .-darwin\n' +
-                                   '    .ident  "GCC: (Debian 8.3.0-6) 8.3.0"\n' +
-                                   '    .section    .note.GNU-stack,"",@progbits\n')
-    else:
-        exit(-1)
-
-    init_macro = ugp4.Macro(
-        "    movl	${int_a}, %eax\n" + "    movl	${int_b}, %ebx\n" + "    movl	${int_c}, %ecx\n" +
-        "    movl	${int_d}, %edx\n", {
-            'int_a': integer,
-            'int_b': integer,
-            'int_c': integer,
-            'int_d': integer
-        })
+    prologue_macro = ugp4.Macro('const prologue')
+    epilogue_macro = ugp4.Macro('const epilogue')
+    init_macro = ugp4.Macro("${int_a} ${int_b} ${int_c} ${int_d}", {
+        'int_a': integer,
+        'int_b': integer,
+        'int_c': integer,
+        'int_d': integer
+    })
 
     # Define section
-    sec1 = ugp4.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
+    section = ugp4.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
+
+    def shift_count(individual, frame, **kk):
+        from microgp.individual import get_nodes_in_frame
+        shl_count = 0
+        shr_count = 0
+        nodes = get_nodes_in_frame(individual, frame)
+        for node in nodes:
+            #parameters = individual.graph[node]['parameters']
+            parameters = individual.graph[node]['parameters']
+            if 'shift' in parameters.keys():
+                if parameters['shift'].value == 'shr':
+                    shr_count += 1
+                elif parameters['shift'].value == 'shl':
+                    shl_count += 1
+        return {'shl_count': shl_count, 'shr_count': shr_count}
+
+    #section.properties.add_base_builder(shift_count)
+    #section.properties.add_checker(lambda shl_count, shr_count, **v: shl_count == shr_count)
 
     # Create the instruction library
     library = ugp4.Constraints(file_name="solution{id}.s")
-    library['main'] = [prologue_macro, init_macro, sec1, epilogue_macro]
+    library['main'] = [
+        prologue_macro, init_macro,
+        ugp4.make_section({section}, size=(1, 50)), epilogue_macro
+    ]
 
     def dummy_fitness(individual):
         return [42]
 
-
     library.evaluator = ugp4.fitness.make_evaluator(evaluator=dummy_fitness, fitness_type=ugp4.fitness.Lexicographic)
 
-    for t in range(100):
-        i = ugp4.create_random_individual(library)
-        print(ugp4.random_generator)
-        sys.stdout.flush()
+    # Create a list of operators with their arity
+    operators = ugp4.Operators()
+    # Add initialization operators
+    operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
+    # Add mutation operators
+    operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)    # REP ERROR
+    operators += ugp4.GenOperator(ugp4.flat_mutation, 1)            # REP ERROR
+    operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)        # REP ERROR
+    operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)     # REP ERROR
+    # Add crossover operators
+    operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+    #operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
+
+    def dummy_op(original_individual, sigma, **kwargs):
+        return ugp4.create_random_individual(library)
+    def dummy_op2(original_individual, sigma, **kwargs):
+        return ugp4.create_random_individual(library)
+    operators += ugp4.GenOperator(dummy_op, 1)
+    operators += ugp4.GenOperator(dummy_op2, 1)
+
+
+    # Create the object that will manage the evolution
+    mu = 5
+    nu = 5
+    sigma = 0.7
+    lambda_ = 7
+    max_age = 10
+
+    darwin = ugp4.Darwin(
+        constraints=library,
+        operators=operators,
+        mu=mu,
+        nu=nu,
+        lambda_=lambda_,
+        sigma=sigma,
+        max_age=max_age,
+    )
+
+    # Evolve
+    darwin.evolve()
 
     ugp4.logging.log_cpu(ugp4.logging.INFO, "Program completed")
+    sys.stderr.flush()
+    sys.stdout.flush()
+    print(ugp4.random_generator)
     sys.exit(0)

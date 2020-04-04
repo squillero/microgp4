@@ -62,7 +62,7 @@ WARNING = logging.WARNING
 ERROR = logging.ERROR
 
 # Setup DefaultLogger's handler
-DefaultLogger.handler = []
+DefaultLogger.handler = list()
 DefaultLogger.setLevel(logging.INFO)
 DefaultLogger.__doc__ = "Default MicroGP4 logger"
 

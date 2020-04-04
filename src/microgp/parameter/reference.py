@@ -31,7 +31,7 @@ from ..individual_operators import unroll_macro_list, Individual
 from ..utils import logging
 from ..node import NodeID
 from microgp import random_generator
-import microgp as ugp
+import microgp as ugp4
 
 
 class Reference(Structural):
@@ -54,12 +54,12 @@ class LocalReference(Reference):
 
     **Examples:**
 
-    >>> ref_fwd = ugp.make_parameter(ugp.parameter.LocalReference,
+    >>> ref_fwd = ugp4.make_parameter(ugp4.parameter.LocalReference,
     >>>                              allow_self=False,
     >>>                              allow_forward=True,
     >>>                              allow_backward=False,
     >>>                              frames_up=1)
-    >>> ref_bcw = ugp.make_parameter(ugp.parameter.LocalReference,
+    >>> ref_bcw = ugp4.make_parameter(ugp4.parameter.LocalReference,
     >>>                              allow_self=False,
     >>>                              allow_forward=False,
     >>>                              allow_backward=True,
@@ -92,21 +92,21 @@ class LocalReference(Reference):
             self.mutate(1)
 
     def _valid_targets(self) -> List[NodeID]:
-        assert len(self.individual.graph.node_view[self.node]['frame_path']) >= -self.frames_up, \
+        assert len(self.individual.graph[self.node]['frame_path']) >= -self.frames_up, \
             f"Can't go up the requested number of frames"
-        frame_path = self.individual.graph.node_view[self.node]['frame_path'][0:self.frames_up]
+        frame_path = self.individual.graph[self.node]['frame_path'][0:self.frames_up]
         vtargets = list()
         if self.allow_backward:
             vtargets += [
                 n for n in self.individual.get_predecessors(self.node)
-                if self.individual.graph.node_view[n]['frame_path'][0:len(frame_path)] == frame_path
+                if self.individual.graph[n]['frame_path'][0:len(frame_path)] == frame_path
             ]
         if self.allow_self:
             vtargets += [self.node]
         if self.allow_forward:
             vtargets += [
                 n for n in self.individual.get_successors(self.node)
-                if self.individual.graph.node_view[n]['frame_path'][0:len(frame_path)] == frame_path
+                if self.individual.graph[n]['frame_path'][0:len(frame_path)] == frame_path
             ]
         # logging.debug("Valid targets for %s: %s" % (frame_path, vtargets))
         return vtargets
@@ -250,7 +250,7 @@ class ExternalReference(Reference):
 
     **Examples:**
 
-    >>> proc1 = ugp.make_parameter(ugp.parameter.ExternalReference, section_name='proc1', min=5, max=5)
+    >>> proc1 = ugp4.make_parameter(ugp4.parameter.ExternalReference, section_name='proc1', min=5, max=5)
 
     Args:
         section_name (str): name of the new target section.

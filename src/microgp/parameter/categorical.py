@@ -28,7 +28,7 @@ from microgp import *
 from ..utils import logging
 from .base import Parameter
 from microgp import random_generator
-import microgp as ugp
+import microgp as ugp4
 
 
 class Categorical(Parameter):
@@ -36,7 +36,7 @@ class Categorical(Parameter):
 
     **Example:**
 
-    >>> registers = ugp.make_parameter(ugp.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
+    >>> registers = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
 
 
     Args:
@@ -82,7 +82,7 @@ class CategoricalSorted(Parameter):
 
     **Example:**
 
-    >>> cat_sor = ugp.make_parameter(ugp.parameter.CategoricalSorted, alternatives=['e', 'f', 'g', 'h', 'i', 'l'])
+    >>> cat_sor = ugp4.make_parameter(ugp4.parameter.CategoricalSorted, alternatives=['e', 'f', 'g', 'h', 'i', 'l'])
 
     Args:
         alternatives (list): sorted list of possible values

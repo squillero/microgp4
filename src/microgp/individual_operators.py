@@ -36,7 +36,7 @@ from .macro import Macro
 from .parameter import Information
 from .utils import logging
 from microgp import random_generator
-import microgp as ugp
+import microgp as ugp4
 
 
 def print_individual(individuals: Union[Individual, List[Individual]], msg: str = '', plot=False, score=False):
@@ -65,7 +65,7 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
                 individual.draw()
                 plt.show()
         if score:
-            ugp.logging.bare(f"Fitness score: {individual.fitness}\n")
+            ugp4.logging.bare(f"Fitness score: {individual.fitness}\n")
 
 
 def unroll_macro_list(individual: Individual, section_name: str, frame_path: Sequence[Frame] = None) \
@@ -336,10 +336,13 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     # Copy all the genes from the primary parent and set internal creation characteristics______________________________
     # Initialize first son (individualC)
     individualC = Individual(parentA.constraints, copy_from=parentA)
+    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    # TODO: Merge (operaor, (parents)) in a single field
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_one_cut_point_crossover
     # Initialize second son (individualD)
     individualD = Individual(parentB.constraints, copy_from=parentB)
+    assert all(individualD.graph[n]['frame_path'] for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_one_cut_point_crossover
 
@@ -360,6 +363,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
                         and len(get_nodes_in_frame(parentB, frame_D)) > 1:
                     candidates.append((frame_C, frame_D))
 
+    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+
     if not candidates:
         return [None, None]
 
@@ -368,6 +373,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
 
     nodes_in_frame_C = get_nodes_in_frame(individualC, chosen_frame_C)
     nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
+
+    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
 
     # __________________________Choose the cut nodes________________________________________________________________
     # Example:
@@ -388,6 +395,7 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     # __________________________Create movable nodes and fill parameters____________________________________________
     nodes_to_copy_from_C = nodes_in_frame_C[:cut_index_C + 1]
     nodes_to_copy_from_D = nodes_in_frame_D[cut_index_D + 1:]
+    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
     first_movable_node_C = individualC.create_movable_nodes(individualD, nodes_to_copy_from_D)
     first_movable_node_D = individualD.create_movable_nodes(individualC, nodes_to_copy_from_C)
 
@@ -396,8 +404,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     #   outside the chosen frame and the frame path of the nodes in frame (they will be used in individualC.finalize())
     first_outside_C = individualC.get_next(nodes_in_frame_C[-1])
     first_outside_D = individualD.get_next(nodes_in_frame_D[-1])
-    frame_path_C = individualC.graph.node_view[cut_node_C]["frame_path"]
-    frame_path_D = individualD.graph.node_view[cut_node_D]["frame_path"]
+    frame_path_C = individualC.graph[cut_node_C]["frame_path"]
+    frame_path_D = individualD.graph[cut_node_D]["frame_path"]
     individualC._unlinked_nodes[first_movable_node_C] = (cut_node_C, first_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (cut_node_D, first_outside_D, frame_path_D)
 
@@ -458,10 +466,13 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     individualC = Individual(parentA.constraints, copy_from=parentA)
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_uniform_crossover
+    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+
     # Initialize second son (individualD) from parentB
     individualD = Individual(parentB.constraints, copy_from=parentB)
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_uniform_crossover
+    assert all(individualD.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
 
     # If the individuals are identical -> return the copies
     if parentA == parentB:
@@ -488,6 +499,7 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
     first_node_id_C = nodes_in_frame_C[0]
     first_node_id_D = nodes_in_frame_D[0]
+
     # __________________________Create movable nodes and fill parameters____________________________________________
     nodes_to_copy_from_C = nodes_in_frame_C
     nodes_to_copy_from_D = nodes_in_frame_D
@@ -503,15 +515,19 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     pred_D = individualD.get_predecessors(first_node_id_D)
     pred_C = pred_C[0] if pred_C else None
     pred_D = pred_D[0] if pred_D else None
-    frame_path_C = individualC.graph.node_view[first_node_id_C]["frame_path"]
-    frame_path_D = individualD.graph.node_view[first_node_id_D]["frame_path"]
+    frame_path_C = individualC.graph[first_node_id_C]["frame_path"]
+    frame_path_D = individualD.graph[first_node_id_D]["frame_path"]
     individualC._unlinked_nodes[first_movable_node_C] = (pred_C, first_node_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (pred_D, first_node_outside_D, frame_path_D)
 
     individualC.finalize()
-    individualD.finalize()
     is_valid_C = individualC.is_valid()
+    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+
+    individualD.finalize()
     is_valid_D = individualD.is_valid()
+    assert all(individualD.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+
     individualC = None if not is_valid_C else individualC
     individualD = None if not is_valid_D else individualD
     # if is_valid_C and is_valid_D:
@@ -572,7 +588,7 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         # Choose randomly the node that will be removed
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
         node_to_remove = random_generator.choice(candidate_nodes)
-        chosen_root_frame = new_individual.graph.node_view[node_to_remove]['frame_path'][1]
+        chosen_root_frame = new_individual.graph[node_to_remove]['frame_path'][1]
 
         # logging.debug(f"Removing node: {node_to_remove}")
         if node_to_remove == new_individual.entry_point:
@@ -584,7 +600,7 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         #  in parameter of the NodeID_1 and NodeID_6 with a new possible target (mutate(1))
         from .parameter.reference import LocalReference
         for node in new_individual.graph.nodes(frame=chosen_root_frame):
-            for parameter_name, parameter in new_individual.graph.node_view[node]["parameters"].items():
+            for parameter_name, parameter in new_individual.graph[node]["parameters"].items():
                 if isinstance(parameter, LocalReference) and parameter.value == node_to_remove:
                     parameter.mutate(1)
 
@@ -638,7 +654,7 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
         chosen_parent_node = random_generator.choice(candidate_nodes)
 
-        frame_path = new_individual.graph.node_view[chosen_parent_node]["frame_path"]
+        frame_path = new_individual.graph[chosen_parent_node]["frame_path"]
         candidate_macros = chosen_frame.section.macro_pool
         chosen_macro = random_generator.choice(candidate_macros)
 
@@ -691,8 +707,8 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
             chosen_node = random_generator.choice(new_individual.graph.nodes())
 
             # Create a list of parameters contained into the macro
-            candidate_parameters = []
-            for parameter_name, parameter in new_individual.graph.node_view[chosen_node]['parameters'].items():
+            candidate_parameters = list()
+            for parameter_name, parameter in new_individual.graph[chosen_node]['parameters'].items():
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 
@@ -736,13 +752,14 @@ def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> Li
     new_individual.parents = {original_individual}
     new_individual.operator = flat_mutation
 
-    # Do while not (rnd.random() < sigma)
     while True:
         # Create a list that contains all parameters
-        candidate_parameters = []
+        candidate_parameters = list()
         # Iterate for each node in the individual and save a list of parameters
         for node in new_individual.graph.nodes():
-            for parameter_name, parameter in new_individual.graph.node_view[node]['parameters'].items():
+            for parameter_name in sorted(new_individual.graph[node]['parameters']):
+                # node parameters need to be in predictable order!
+                parameter = new_individual.graph[node]['parameters'][parameter_name]
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 

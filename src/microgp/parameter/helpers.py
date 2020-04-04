@@ -28,7 +28,7 @@ import warnings
 from typing import Type, Any
 from collections import Iterable
 import scipy.stats as stats
-import microgp as ugp
+import microgp as ugp4
 from .base import Parameter
 from microgp import random_generator
 
@@ -45,8 +45,8 @@ def make_parameter(base_class: Type[Parameter], **attributes: Any) -> Type:
 
     **Examples:**
 
-        >>> register = ugp.make_parameter(ugp.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
-        >>> int8 = ugp.make_parameter(ugp.parameter.Integer, min_=-128, max_=128)
+        >>> register = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
+        >>> int8 = ugp4.make_parameter(ugp4.parameter.Integer, min_=-128, max_=128)
         >>> p1, p2 = register(), int8()
     """
     signature = ", ".join([str(k) + "=" + str(v) for k, v in attributes.items()])

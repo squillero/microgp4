@@ -39,14 +39,14 @@ class Operators:
 
     - Create and fill an Operators object to be passed to a Darwin object
 
-    >>> operators = ugp.Operators()
-    >>> init_op1 = ugp.GenOperator(ugp.create_random_individual, 0)
+    >>> operators = ugp4.Operators()
+    >>> init_op1 = ugp4.GenOperator(ugp4.create_random_individual, 0)
     >>> operators += init_op1
-    >>> mutation_op1 = ugp.GenOperator(ugp.remove_node_mutation, 1)
+    >>> mutation_op1 = ugp4.GenOperator(ugp4.remove_node_mutation, 1)
     >>> operators += mutation_op1
-    >>> crossover_op1 = ugp.GenOperator(ugp.switch_proc_crossover, 2)
+    >>> crossover_op1 = ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
     >>> operators += crossover_op1
-    >>> crossover_op2 = ugp.GenOperator(ugp.five_individuals_crossover, 5)
+    >>> crossover_op2 = ugp4.GenOperator(ugp4.five_individuals_crossover, 5)
     >>> operators += crossover_op2
 
     - Select k operators that has arity in the given range
@@ -56,7 +56,7 @@ class Operators:
     """
 
     def __init__(self) -> None:
-        self._gen_operators = []
+        self._gen_operators = list()
         self.stats = dict()
 
     def __iadd__(self, gen_operator: GenOperator) -> 'Operators':
@@ -102,14 +102,14 @@ class Operators:
         assert k > 0, "k must be > 0"
         assert len(self._gen_operators) > 0, "No operators available"
 
-        valid_operators = []
+        valid_operators = list()
         for candidate_operator in self._gen_operators:
             if candidate_operator.arity >= min_arity and (max_arity is None or candidate_operator.arity <= max_arity):
                 valid_operators.append(candidate_operator)
 
         assert len(valid_operators) > 0, "No operators available for the given set of arities"
 
-        selected_operators = []
+        selected_operators = list()
         for _ in range(k):
             # TODO: consider statistics in future implementations
             operator = random_generator.choice(valid_operators)

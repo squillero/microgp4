@@ -15,6 +15,8 @@ and then
     >>> import microgp as ugp4
     >>> ugp4.show_banner()
 
+Caveat: on some systems the package manager is ``pip3``.
+
 Optional dependencies
 =====================
 
@@ -41,13 +43,12 @@ The packages `coloredlogs <https://pypi.org/project/coloredlogs/>`_, `matplotlib
 Source Code
 ===========
 
-The source code is hosted on `GitHub <https://en.wikipedia.org/wiki/GitHub>`_ at https://github.com/squillero/microgp4. The default branch is the more stable, experimental branches (``exp/*``) are only meaningful for developers.
-
-It could be enough to:
+The source code is hosted on `GitHub <https://en.wikipedia.org/wiki/GitHub>`_ at https://github.com/squillero/microgp4, the default branch is *usually* aligned with the PyPi package. On Ubuntu/Debian it could be enough to:
 
 ::
 
-    pip install -U -r requirements.txt
-    python ./setup.py install
+    git clone https://github.com/squillero/microgp4.git
+    cd microgp4/src
+    pip3 install -U -r requirements.txt
+    python3 ./setup.py install
 
-have fun...

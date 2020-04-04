@@ -27,11 +27,11 @@
 import argparse
 import sys
 
-import microgp as ugp
+import microgp as ugp4
 from microgp.utils import logging
 
 if __name__ == "__main__":
-    ugp.show_banner()
+    ugp4.show_banner()
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
     parser.add_argument("-d",
@@ -42,64 +42,64 @@ if __name__ == "__main__":
                         help="log debug messages (same as -vv)")
     args = parser.parse_args()
     if args.verbose == 0:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.INFO)
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.INFO)
     elif args.verbose == 1:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.VERBOSE)
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.VERBOSE)
     elif args.verbose > 1:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
-        ugp.logging.debug("Verbose level set to DEBUG")
-    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.DEBUG)
+        ugp4.logging.debug("Verbose level set to DEBUG")
+    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
 
     # Define parameters
     reg_alternatives = ['%eax', '%ebx', '%ecx', '%edx']
-    reg_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=reg_alternatives)
+    reg_param = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=reg_alternatives)
     instr_alternatives = ['add', 'sub', 'and', 'or', 'xor', 'cmp']
-    instr_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=instr_alternatives)
+    instr_param = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=instr_alternatives)
     shift_alternatives = ['shr', 'shl']
-    shift_param = ugp.make_parameter(ugp.parameter.Categorical, alternatives=shift_alternatives)
+    shift_param = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=shift_alternatives)
     jmp_alternatives = ['ja', 'jz', 'jnz', 'je', 'jne', 'jc', 'jnc', 'jo', 'jno', 'jmp']
-    jmp_instructions = ugp.make_parameter(ugp.parameter.Categorical, alternatives=jmp_alternatives)
-    integer = ugp.make_parameter(ugp.parameter.Integer, min=-32768, max=32767)
-    int8 = ugp.make_parameter(ugp.parameter.Integer, min=0, max=256)
-    jmp_target = ugp.make_parameter(ugp.parameter.LocalReference,
-                                    allow_self=False,
-                                    allow_forward=True,
-                                    allow_backward=False,
-                                    frames_up=0)
+    jmp_instructions = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=jmp_alternatives)
+    integer = ugp4.make_parameter(ugp4.parameter.Integer, min=-32768, max=32767)
+    int8 = ugp4.make_parameter(ugp4.parameter.Integer, min=0, max=256)
+    jmp_target = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                     allow_self=False,
+                                     allow_forward=True,
+                                     allow_backward=False,
+                                     frames_up=0)
 
     # Define the macros
-    jmp1 = ugp.Macro("    {jmp_instr} {jmp_ref}", {'jmp_instr': jmp_instructions, 'jmp_ref': jmp_target})
-    instr_op_macro = ugp.Macro("    {instr} {regS}, {regD}", {
+    jmp1 = ugp4.Macro("    {jmp_instr} {jmp_ref}", {'jmp_instr': jmp_instructions, 'jmp_ref': jmp_target})
+    instr_op_macro = ugp4.Macro("    {instr} {regS}, {regD}", {
         'instr': instr_param,
         'regS': reg_param,
         'regD': reg_param
     })
-    shift_op_macro = ugp.Macro("    {shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
-    branch_macro = ugp.Macro("{branch} {jmp}", {'branch': jmp_instructions, 'jmp': jmp_target})
+    shift_op_macro = ugp4.Macro("    {shift} ${int8}, {regD}", {'shift': shift_param, 'int8': int8, 'regD': reg_param})
+    branch_macro = ugp4.Macro("{branch} {jmp}", {'branch': jmp_instructions, 'jmp': jmp_target})
     if sys.platform == "win32":
-        prologue_macro = ugp.Macro('    .file   "solution.c"\n' + '    .text\n' + '    .globl  _darwin\n' +
-                                   '    .def    _darwin;        .scl    2;      .type   32;     .endef\n' +
-                                   '_darwin:\n' + 'LFB17:\n' + '    .cfi_startproc\n' + '    pushl   %ebp\n' +
-                                   '    .cfi_def_cfa_offset 8\n' + '    .cfi_offset 5, -8\n' +
-                                   '    movl    %esp, %ebp\n' + '    .cfi_def_cfa_register 5\n')
-        epilogue_macro = ugp.Macro('    movl	%eax, -4(%ebp)\n' + '    movl	-4(%ebp), %eax\n' + '    leave\n' +
-                                   '    .cfi_restore 5\n' + '    .cfi_def_cfa 4, 4\n' + '    ret\n' +
-                                   '    .cfi_endproc\n' + 'LFE17:\n' +
-                                   '   .ident  "GCC: (MinGW.org GCC-8.2.0-5) 8.2.0"\n')
+        prologue_macro = ugp4.Macro('    .file   "solution.c"\n' + '    .text\n' + '    .globl  _darwin\n' +
+                                    '    .def    _darwin;        .scl    2;      .type   32;     .endef\n' +
+                                    '_darwin:\n' + 'LFB17:\n' + '    .cfi_startproc\n' + '    pushl   %ebp\n' +
+                                    '    .cfi_def_cfa_offset 8\n' + '    .cfi_offset 5, -8\n' +
+                                    '    movl    %esp, %ebp\n' + '    .cfi_def_cfa_register 5\n')
+        epilogue_macro = ugp4.Macro('    movl	%eax, -4(%ebp)\n' + '    movl	-4(%ebp), %eax\n' + '    leave\n' +
+                                    '    .cfi_restore 5\n' + '    .cfi_def_cfa 4, 4\n' + '    ret\n' +
+                                    '    .cfi_endproc\n' + 'LFE17:\n' +
+                                    '   .ident  "GCC: (MinGW.org GCC-8.2.0-5) 8.2.0"\n')
     elif sys.platform == "linux":
-        prologue_macro = ugp.Macro('    .file   "darwin.c"\n' + '    .text\n' + '    .globl  darwin\n' +
-                                   '    .type   darwin, @function\n' + 'darwin:\n' + '.LFB6:\n' +
-                                   '    .cfi_startproc\n' + '    pushq   %rbp\n' + '    .cfi_def_cfa_offset 16\n' +
-                                   '    .cfi_offset 6, -16\n' + '    movq    %rsp, %rbp\n' +
-                                   '    .cfi_def_cfa_register 6\n')
-        epilogue_macro = ugp.Macro('    popq    %rbp\n' + '    .cfi_def_cfa 7, 8\n' + '    ret\n' +
-                                   '    .cfi_endproc\n' + '.LFE6:\n' + '    .size   darwin, .-darwin\n' +
-                                   '    .ident  "GCC: (Debian 8.3.0-6) 8.3.0"\n' +
-                                   '    .section    .note.GNU-stack,"",@progbits\n')
+        prologue_macro = ugp4.Macro('    .file   "darwin.c"\n' + '    .text\n' + '    .globl  darwin\n' +
+                                    '    .type   darwin, @function\n' + 'darwin:\n' + '.LFB6:\n' +
+                                    '    .cfi_startproc\n' + '    pushq   %rbp\n' + '    .cfi_def_cfa_offset 16\n' +
+                                    '    .cfi_offset 6, -16\n' + '    movq    %rsp, %rbp\n' +
+                                    '    .cfi_def_cfa_register 6\n')
+        epilogue_macro = ugp4.Macro('    popq    %rbp\n' + '    .cfi_def_cfa 7, 8\n' + '    ret\n' +
+                                    '    .cfi_endproc\n' + '.LFE6:\n' + '    .size   darwin, .-darwin\n' +
+                                    '    .ident  "GCC: (Debian 8.3.0-6) 8.3.0"\n' +
+                                    '    .section    .note.GNU-stack,"",@progbits\n')
     else:
         exit(-1)
 
-    init_macro = ugp.Macro(
+    init_macro = ugp4.Macro(
         "    movl	${int_a}, %eax\n" + "    movl	${int_b}, %ebx\n" + "    movl	${int_c}, %ecx\n" +
         "    movl	${int_d}, %edx\n", {
             'int_a': integer,
@@ -109,10 +109,10 @@ if __name__ == "__main__":
         })
 
     # Define section
-    sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
+    sec1 = ugp4.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
 
     # Create the instruction library
-    library = ugp.Constraints(file_name="solution{id}.s")
+    library = ugp4.Constraints(file_name="solution{id}.s")
     library['main'] = [prologue_macro, init_macro, sec1, epilogue_macro]
 
     # Define the evaluator script and the fitness type
@@ -120,7 +120,7 @@ if __name__ == "__main__":
         script = "eval.bat"
     else:
         script = "./eval.sh"
-    library.evaluator = ugp.fitness.make_evaluator(evaluator=script, fitness_type=ugp.fitness.Lexicographic)
+    library.evaluator = ugp4.fitness.make_evaluator(evaluator=script, fitness_type=ugp4.fitness.Lexicographic)
 
     # Define and set a property. It checks whether the section 'sec1' has or not the same number of 'shr' and 'shl'
     def shift_count(individual, frame, **kk):
@@ -129,7 +129,8 @@ if __name__ == "__main__":
         shr_count = 0
         nodes = get_nodes_in_frame(individual, frame)
         for node in nodes:
-            parameters = individual.graph.node_view[node]['parameters']
+            #parameters = individual.graph[node]['parameters']
+            parameters = individual.graph[node]['parameters']
             if 'shift' in parameters.keys():
                 if parameters['shift'].value == 'shr':
                     shr_count += 1
@@ -141,17 +142,17 @@ if __name__ == "__main__":
     sec1.properties.add_checker(lambda shl_count, shr_count, **v: shl_count == shr_count)
 
     # Create a list of operators with their arity
-    operators = ugp.Operators()
+    operators = ugp4.Operators()
     # Add initialization operators
-    operators += ugp.GenOperator(ugp.create_random_individual, 0)
+    operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
     # Add mutation operators
-    operators += ugp.GenOperator(ugp.hierarchical_mutation, 1)
-    operators += ugp.GenOperator(ugp.flat_mutation, 1)
-    operators += ugp.GenOperator(ugp.add_node_mutation, 1)
-    operators += ugp.GenOperator(ugp.remove_node_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
     # Add crossover operators
-    operators += ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
-    operators += ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
+    #operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+    #operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
 
     # Create the object that will manage the evolution
     mu = 10
@@ -160,7 +161,7 @@ if __name__ == "__main__":
     lambda_ = 7
     max_age = 10
 
-    darwin = ugp.Darwin(
+    darwin = ugp4.Darwin(
         constraints=library,
         operators=operators,
         mu=mu,
@@ -175,8 +176,8 @@ if __name__ == "__main__":
 
     # Print best individuals
     logging.bare("These are the best ever individuals:")
-    best_individuals = darwin.archive.individuals
-    ugp.print_individual(best_individuals, plot=False, score=True)
+    for i in darwin.archive.individuals:
+        print(f"{i}\n\n\n")
 
-    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
+    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program completed")
     sys.exit(0)

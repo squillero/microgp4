@@ -71,7 +71,6 @@ else:
     version = "unknown"
 author = __author__
 
-
 # Standard warnings
 WARN_V27 = "The code is quite probably not compatible with Python 2"
 WARN_V37 = "The code is only known to be compatible with Python 3.7+"
@@ -116,4 +115,3 @@ def show_banner() -> None:
 def copyright():
     """Lists contributors and copyright notices."""
     print(__copyright__)
-

@@ -27,7 +27,7 @@
 from ..utils import logging
 from .base import Parameter
 from microgp import random_generator
-import microgp as ugp
+import microgp as ugp4
 
 
 class Integer(Parameter):
@@ -35,7 +35,7 @@ class Integer(Parameter):
 
     **Example**:
 
-    >>> int256 = ugp.make_parameter(ugp.parameter.Integer, min=0, max=256)
+    >>> int256 = ugp4.make_parameter(ugp4.parameter.Integer, min=0, max=256)
 
     Args:
         min (int): minimum value **included**.

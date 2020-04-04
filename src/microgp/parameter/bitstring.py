@@ -27,7 +27,7 @@
 from ..utils import logging
 from .base import Parameter
 from microgp import random_generator
-import microgp as ugp
+import microgp as ugp4
 
 
 class Bitstring(Parameter):
@@ -35,7 +35,7 @@ class Bitstring(Parameter):
 
     **Example:**
 
-    >>> word8 = ugp.make_parameter(ugp.parameter.Bitstring, len_=8)
+    >>> word8 = ugp4.make_parameter(ugp4.parameter.Bitstring, len_=8)
 
     Args:
         len\_ (int > 0): length of the bit string

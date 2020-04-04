@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Union, Set
+from typing import Union, Set, List
 
 from .individual import Individual
 from .individual_operators import order_by_fitness
@@ -106,9 +106,7 @@ class Population:
         """Run several tournaments among a few (floor(tau) or ceil(tau))
         individuals and return the best one based on the fitness"""
         assert self._individuals, 'There are not individuals in the population'
-        individuals = random_generator.choices(list(self._individuals), k=int(tau))
-        if random_generator.random() < (tau - int(tau)):
-            individuals.append(random_generator.choice(self._individuals))
+        individuals = random_generator.group_choice(self.individuals, num=tau)
         best = order_by_fitness(individuals)[0]
         return best
 
@@ -139,5 +137,5 @@ class Population:
         pass
 
     @property
-    def individuals(self) -> Set[Individual]:
-        return self._individuals
+    def individuals(self) -> List[Individual]:
+        return sorted(list(self._individuals))

@@ -114,6 +114,10 @@ class Section(Paranoid):
             checkers.add(standard_checkers.check_frame_size(self.size))
         return checkers
 
+    def __lt__(self, other) -> bool:
+        # required for reproducibility
+        return self._name < other._name
+
 
 class RootSection(Section):
     """The ROOT section of an individual. Each individual have one and only
@@ -393,15 +397,15 @@ def make_section(section_definition: Any,
 
     - Create a section of name `word_sec` containing a macro (word_macro), it will appear once inside the individual
 
-        >>> word_section = ugp.make_section(word_macro, size=(1, 1), name='word_sec')
+        >>> word_section = ugp4.make_section(word_macro, size=(1, 1), name='word_sec')
 
     - Create a section of name `sec_jmp` that contains 1 to 4 macros (jmp1), it will appear once inside the individual
 
-        >>> sec_jmp = ugp.make_section(jmp1, size=(1, 4), name='sec_jmp')
+        >>> sec_jmp = ugp4.make_section(jmp1, size=(1, 4), name='sec_jmp')
 
     - Create a section with a default unique name that contains 2 to 5 macros chosen in {add, sub} and it can appear 0 to 10 times inside the individual
 
-        >>> generic_math = ugp.make_section({add, sub}, size=(2, 5), instances=(0, 10))
+        >>> generic_math = ugp4.make_section({add, sub}, size=(2, 5), instances=(0, 10))
 
     - Build the **main** section with 3 sections, the second one is a `SubsectionsSequence`_ that contains 3 sections:
 
@@ -434,7 +438,7 @@ def make_section(section_definition: Any,
                                       name=name,
                                       label_format=label_format)
     elif isinstance(section_definition, set):
-        tmp = list(section_definition)
+        tmp = sorted(list(section_definition))      # (!) 20200401 -- pretty important! needed for reproducibility
         if isinstance(tmp[0], Macro):
             section = MacroPool(macro_pool=tmp, name=name, label_format=label_format)
         else:

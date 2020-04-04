@@ -40,10 +40,10 @@ class GenOperator:
 
     - Build three genetic operators passing the method and the arity
 
-    >>> init_op1 = ugp.GenOperator(ugp.create_random_individual, 0)
-    >>> mutation_op1 = ugp.GenOperator(ugp.remove_node_mutation, 1)
-    >>> crossover_op1 = ugp.GenOperator(ugp.switch_proc_crossover, 2)
-    >>> crossover_op2 = ugp.GenOperator(ugp.five_individuals_crossover, 5)
+    >>> init_op1 = ugp4.GenOperator(ugp4.create_random_individual, 0)
+    >>> mutation_op1 = ugp4.GenOperator(ugp4.remove_node_mutation, 1)
+    >>> crossover_op1 = ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
+    >>> crossover_op2 = ugp4.GenOperator(ugp4.five_individuals_crossover, 5)
 
     - Call the method inside the genetic operator
 
@@ -66,11 +66,15 @@ class GenOperator:
 
         self._function = function
         self._arity = arity
-        self._succeses = []
-        self._results = []
+        self._succeses = list()
+        self._results = list()
 
     def __call__(self, *args, **kwargs):
         return self._function(*args, **kwargs)
+
+    def __lt__(self, other) -> bool:
+        # required for reproducibility
+        return self._function.__name__ < other._function.__name__
 
     def update_successes(self, successes: int):
         assert successes >= 0, "Success parameter must be >= 0"

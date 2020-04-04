@@ -26,11 +26,11 @@
 import argparse
 import sys
 
-import microgp as ugp
+import microgp as ugp4
 from microgp.utils import logging
 
 if __name__ == "__main__":
-    ugp.show_banner()
+    ugp4.show_banner()
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="count", default=0, help="increase log verbosity")
     parser.add_argument("-d",
@@ -41,25 +41,25 @@ if __name__ == "__main__":
                         help="log debug messages (same as -vv)")
     args = parser.parse_args()
     if args.verbose == 0:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.INFO)
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.INFO)
     elif args.verbose == 1:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.VERBOSE)
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.VERBOSE)
     elif args.verbose > 1:
-        ugp.logging.DefaultLogger.setLevel(level=ugp.logging.DEBUG)
-        ugp.logging.debug("Verbose level set to DEBUG")
-    ugp.logging.log_cpu(ugp.logging.INFO, "Program started")
+        ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.DEBUG)
+        ugp4.logging.debug("Verbose level set to DEBUG")
+    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
 
-    # Define a parameter of type ugp.parameter.Categorical that can take two values: 0 or 1
-    bit = ugp.make_parameter(ugp.parameter.Categorical, alternatives=[0, 1])
+    # Define a parameter of type ugp4.parameter.Categorical that can take two values: 0 or 1
+    bit = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=[0, 1])
 
-    # Define a macro that contains a parameter of type ugp.parameter.Categorical
-    word_macro = ugp.Macro("{bit}", {'bit': bit})
+    # Define a macro that contains a parameter of type ugp4.parameter.Categorical
+    word_macro = ugp4.Macro("{bit}", {'bit': bit})
 
     # Create a section containing 8 macros
-    word_section = ugp.make_section(word_macro, size=(8, 8), name='word_sec')
+    word_section = ugp4.make_section(word_macro, size=(8, 8), name='word_sec')
 
     # Create a constraints library
-    library = ugp.Constraints()
+    library = ugp4.Constraints()
     library['main'] = ["Bitstring:", word_section]
 
     # Define the evaluator method and the fitness type
@@ -67,18 +67,19 @@ if __name__ == "__main__":
         count = data.count('1')
         return list(str(count))
 
-    library.evaluator = ugp.fitness.make_evaluator(evaluator=evaluator_function, fitness_type=ugp.fitness.Lexicographic)
+    library.evaluator = ugp4.fitness.make_evaluator(evaluator=evaluator_function,
+                                                    fitness_type=ugp4.fitness.Lexicographic)
 
     # Create a list of operators with their arity
-    operators = ugp.Operators()
+    operators = ugp4.Operators()
     # Add initialization operators
-    operators += ugp.GenOperator(ugp.create_random_individual, 0)
+    operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
     # Add mutation operators
-    operators += ugp.GenOperator(ugp.hierarchical_mutation, 1)
-    operators += ugp.GenOperator(ugp.flat_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
     # Add crossover operators
-    operators += ugp.GenOperator(ugp.macro_pool_one_cut_point_crossover, 2)
-    operators += ugp.GenOperator(ugp.macro_pool_uniform_crossover, 2)
+    operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+    operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
 
     # Create the object that will manage the evolution
     mu = 10
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     lambda_ = 7
     max_age = 10
 
-    darwin = ugp.Darwin(
+    darwin = ugp4.Darwin(
         constraints=library,
         operators=operators,
         mu=mu,
@@ -102,10 +103,10 @@ if __name__ == "__main__":
     logging.bare("This is the final population:")
     for individual in darwin.population:
         msg = f"Solution {str(individual.id)} "
-        ugp.print_individual(individual, msg=msg, plot=False, score=True)
+        ugp4.print_individual(individual, msg=msg, plot=False, score=True)
 
     # Print best individuals
-    ugp.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=False)
+    ugp4.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=False)
 
-    ugp.logging.log_cpu(ugp.logging.INFO, "Program completed")
+    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program completed")
     sys.exit(0)

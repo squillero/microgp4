@@ -62,7 +62,7 @@ class Darwin:
         >>> sigma = 0.2
         >>> lambda_ = 7
         >>> max_age = 10
-        >>> darwin = ugp.Darwin(
+        >>> darwin = ugp4.Darwin(
         >>>     constraints=library,
         >>>     operators=operators,
         >>>     mu=mu,
@@ -77,13 +77,13 @@ class Darwin:
         >>> logging.bare("This is the population:")
         >>> for individual in darwin.population:
         >>>     msg = 'Printing individual ' + individual.id
-        >>>     ugp.print_individual(individual, msg=msg, plot=True)
-        >>>     ugp.logging.bare(individual.fitness)
+        >>>     ugp4.print_individual(individual, msg=msg, plot=True)
+        >>>     ugp4.logging.bare(individual.fitness)
 
     - Print the `Archive`_ that contains the best eve individuals
 
         >>> logging.bare("These are the best ever individuals:")
-        >>> ugp.print_individual(darwin.archive)
+        >>> ugp4.print_individual(darwin.archive)
     """
     _WARN_POP_SIZE = "The population contains a number of individual lower than mu"
 
@@ -126,7 +126,7 @@ class Darwin:
 
         self._generation = 0
         if stopping_conditions is None:
-            self._stopping_conditions = []  # TODO: for future implementations
+            self._stopping_conditions = list()  # TODO: for future implementations
         else:
             self._stopping_conditions = stopping_conditions
 
@@ -143,7 +143,7 @@ class Darwin:
         # Continue until one or more of the stopping condition in the list is true
         # while all((not f(self) for f in self._stopping_conditions)):
         # i = 0
-        while self._generation < 5:
+        while self._generation < 3:
             self.do_generation()
             # i += 1
             # if i % 20 == 0:
@@ -155,7 +155,7 @@ class Darwin:
         operators, join it to population and keep the best mu individuals"""
 
         # Initialize the list of individuals that compose the offspring of the current generation
-        whole_offspring = []
+        whole_offspring = list()
 
         # Select operators
         if len(self._population) == 0:
@@ -169,7 +169,7 @@ class Darwin:
             arity = operator.arity
 
             # Get the list of individuals to work with
-            original_individuals = []
+            original_individuals = list()
             for _ in range(arity):
                 original_individuals.append(self._population.select(tau=self._tau))
 
@@ -222,6 +222,7 @@ class Darwin:
             self._population.grow_old(self._population - self.archive.individuals)
         self._generation += 1
 
+
     def filter_offspring(self, temporary_offspring: Optional[List[Optional[Individual]]]) \
             -> Optional[List[Optional[Individual]]]:
         """Remove "None" elements and choose the best element in sublist recursively
@@ -234,7 +235,7 @@ class Darwin:
         """
         if temporary_offspring is None:
             return None
-        filtered_offspring = []
+        filtered_offspring = list()
         for individual in temporary_offspring:
             if issubclass(type(individual), list):
                 individual = self.get_best_unpacking(individual)
@@ -244,7 +245,7 @@ class Darwin:
 
     def get_best_unpacking(self, individuals: list) -> Optional[Individual]:
         """Find the best value in the given list (recursive)"""
-        temp = []
+        temp = list()
         for individual in individuals:
             if issubclass(type(individual), list):
                 temp += self.get_best_unpacking(individual)
