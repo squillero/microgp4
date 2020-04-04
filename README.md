@@ -15,7 +15,8 @@ MicroGP (µGP, `ugp`) is an evolutionary optimizer able to outperform both human
 > For using MicroGP4 read [the instructions](https://microgp4.readthedocs.io/).  
 
 #### :warning: MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development
-.
+
+* The default branch is always the more stable.
 * Do not clone experimental branches `exp/*` unless you know what you are doing.
 * It may be wise to contact Alberto or Giovanni before digging in.
 
