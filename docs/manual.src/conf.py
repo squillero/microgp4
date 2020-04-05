@@ -24,7 +24,7 @@ import microgp
 project = microgp.__name__
 release = microgp.__version__
 author = microgp.__author__
-copyright = microgp.__copyright__
+copyright = f"2020 Giovanni Squillero & Alberto Tonda"
 
 # -- General configuration ---------------------------------------------------
 
@@ -56,6 +56,7 @@ exclude_patterns = list()
 html_title = f"{microgp.name} {microgp.version}"
 html_short_title = f"microgp{microgp.__version__}"
 html_show_copyright = False
+html_show_sphinx = True
 html_theme = 'sphinx_rtd_theme'
 #html_theme = 'alabaster'
 html_logo = '../images/logo/150x150.png'

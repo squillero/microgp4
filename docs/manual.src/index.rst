@@ -44,7 +44,8 @@ Table of Contents
    :caption: Appendixes
    :maxdepth: 1
 
-   evolution
    history
+   contributors
+   evolution
 * :ref:`modindex`
 

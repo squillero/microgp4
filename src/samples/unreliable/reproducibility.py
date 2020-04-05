@@ -53,6 +53,8 @@ if __name__ == "__main__":
         ugp4.logging.debug("Verbose level set to DEBUG")
     ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
 
+    ugp4.logging.warning
+
     # Define parameters
     reg_alternatives = ['%eax', '%ebx', '%ecx', '%edx']
     reg_param = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=reg_alternatives)
