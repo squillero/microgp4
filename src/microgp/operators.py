@@ -66,7 +66,7 @@ class Operators:
         if gen_operator not in self._gen_operators:
             self._gen_operators.append(gen_operator)
         else:
-            logging.debug(f'"{gen_operator}" is already in the list of operators')
+            logging.debug(f"\"{gen_operator}\" is already in the list of operators")
         return self
 
     def __isub__(self, gen_operator: GenOperator) -> 'Operators':
@@ -76,7 +76,7 @@ class Operators:
         if gen_operator in self._gen_operators:
             self._gen_operators.remove(gen_operator)
         else:
-            logging.debug(f'There is not "{gen_operator}" in the list of operators')
+            logging.debug(f"There is not \"{gen_operator}\" in the list of operators")
         return self
 
     def __contains__(self, operator_to_find) -> bool:

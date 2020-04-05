@@ -264,7 +264,7 @@ class ExternalReference(Reference):
         assert isinstance(getattr(self, 'section_name', None),
                           str), "Illegal or missing section_name (not using make_parameter?)"
         self._final_destination = None
-        if self.individual.nodes[self.node]["frame_path"] is None or do_not_init:
+        if self.individual.nodes[self.node]['frame_path'] is None or do_not_init:
             return
         else:
             # Avoid the mutation in case of this parameter is contained in a movable node. A movable node has not a

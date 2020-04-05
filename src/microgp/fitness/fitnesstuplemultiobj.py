@@ -61,12 +61,12 @@ class FitnessTupleMultiobj(tuple, Base):
     def __repr__(self):
         return "<{} at {} {}>".format(type(self), id(self), tuple(self))
 
-    def _is_dominated(self, other: Type["FitnessTupleMultiobj"]) -> bool:
+    def _is_dominated(self, other: Type['FitnessTupleMultiobj']) -> bool:
         """Return True if the current fitness is dominated by the other one"""
         return any(z[0] > z[1] for z in zip(self, other)) and all(z[0] >= z[1] for z in zip(self, other))
 
     @staticmethod
-    def sort(fmap: List[Tuple[Any, Type["FitnessTupleMultiobj"]]]) -> List[Tuple[Any, Type["FitnessTupleMultiobj"]]]:
+    def sort(fmap: List[Tuple[Any, Type['FitnessTupleMultiobj']]]) -> List[Tuple[Any, Type['FitnessTupleMultiobj']]]:
         """Sort a list of tuple (Any, FitnessTupleMultiobj) using Pareto front
 
         Args:

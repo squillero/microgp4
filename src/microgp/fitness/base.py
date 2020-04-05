@@ -65,13 +65,13 @@ class Base:
         """True if less or equally fit. There is no need to override this function."""
         raise NotImplementedError
 
-    def _is_dominated(self, other: Type["Base"]) -> bool:
+    def _is_dominated(self, other: Type['Base']) -> bool:
         raise NotImplementedError
 
     @staticmethod
-    def sort(fmap: List[Tuple[Any, Type["Base"]]]) -> List[Tuple[Any, Type["Base"]]]:
+    def sort(fmap: List[Tuple[Any, Type['Base']]]) -> List[Tuple[Any, Type['Base']]]:
         raise NotImplementedError
 
 
-def is_dominated(x: Type["Base"], y: Type["Base"]) -> bool:
+def is_dominated(x: Type['Base'], y: Type['Base']) -> bool:
     return x._is_dominated(y)

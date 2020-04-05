@@ -30,7 +30,7 @@ import argparse
 import sys
 
 import microgp as ugp4
-warnings.filterwarnings("error", category=DeprecationWarning, module='microgp')
+#warnings.filterwarnings("error", category=DeprecationWarning, module='microgp')
 
 
 if __name__ == "__main__":

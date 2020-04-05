@@ -364,6 +364,7 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
                     candidates.append((frame_C, frame_D))
 
     assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph[n]['frame_path'] for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
 
     if not candidates:
         return [None, None]
@@ -375,6 +376,7 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
 
     assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph[n]['frame_path'] for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
 
     # __________________________Choose the cut nodes________________________________________________________________
     # Example:
@@ -404,8 +406,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     #   outside the chosen frame and the frame path of the nodes in frame (they will be used in individualC.finalize())
     first_outside_C = individualC.get_next(nodes_in_frame_C[-1])
     first_outside_D = individualD.get_next(nodes_in_frame_D[-1])
-    frame_path_C = individualC.graph[cut_node_C]["frame_path"]
-    frame_path_D = individualD.graph[cut_node_D]["frame_path"]
+    frame_path_C = individualC.graph[cut_node_C]['frame_path']
+    frame_path_D = individualD.graph[cut_node_D]['frame_path']
     individualC._unlinked_nodes[first_movable_node_C] = (cut_node_C, first_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (cut_node_D, first_outside_D, frame_path_D)
 
@@ -515,8 +517,8 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     pred_D = individualD.get_predecessors(first_node_id_D)
     pred_C = pred_C[0] if pred_C else None
     pred_D = pred_D[0] if pred_D else None
-    frame_path_C = individualC.graph[first_node_id_C]["frame_path"]
-    frame_path_D = individualD.graph[first_node_id_D]["frame_path"]
+    frame_path_C = individualC.graph[first_node_id_C]['frame_path']
+    frame_path_D = individualD.graph[first_node_id_D]['frame_path']
     individualC._unlinked_nodes[first_movable_node_C] = (pred_C, first_node_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (pred_D, first_node_outside_D, frame_path_D)
 
@@ -600,7 +602,7 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         #  in parameter of the NodeID_1 and NodeID_6 with a new possible target (mutate(1))
         from .parameter.reference import LocalReference
         for node in new_individual.graph.nodes(frame=chosen_root_frame):
-            for parameter_name, parameter in new_individual.graph[node]["parameters"].items():
+            for parameter_name, parameter in new_individual.graph[node]['parameters'].items():
                 if isinstance(parameter, LocalReference) and parameter.value == node_to_remove:
                     parameter.mutate(1)
 
@@ -654,7 +656,7 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
         chosen_parent_node = random_generator.choice(candidate_nodes)
 
-        frame_path = new_individual.graph[chosen_parent_node]["frame_path"]
+        frame_path = new_individual.graph[chosen_parent_node]['frame_path']
         candidate_macros = chosen_frame.section.macro_pool
         chosen_macro = random_generator.choice(candidate_macros)
 

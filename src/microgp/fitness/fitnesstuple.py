@@ -62,12 +62,12 @@ class FitnessTuple(tuple, Base):
     def __repr__(self):
         return "<{} at {} {}>".format(type(self), id(self), tuple(self))
 
-    def _is_dominated(self, other: Type["FitnessTuple"]) -> bool:
+    def _is_dominated(self, other: Type['FitnessTuple']) -> bool:
         """Return True if the current fitness is dominated by the other one"""
         return tuple(self) > tuple(other)
 
     @staticmethod
-    def sort(fmap: List[Tuple[Any, Type["FitnessTuple"]]]) -> List[Tuple[Any, Type["FitnessTuple"]]]:
+    def sort(fmap: List[Tuple[Any, Type['FitnessTuple']]]) -> List[Tuple[Any, Type['FitnessTuple']]]:
         """Sort a list of tuple (Any, FitnessTuple)
 
         Args:

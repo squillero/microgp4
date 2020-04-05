@@ -31,11 +31,11 @@
 import setuptools
 from microgp import __version__ as ugp_version
 
-with open("../docs/index.md", "r", encoding="utf-8") as fh:
+with open('../docs/index.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
 
 OPTIONAL = ['m2r', 'coloredlogs', 'matplotlib', 'psutil']
-with open("requirements.txt", "r", encoding="utf-8") as fh:
+with open('requirements.txt', 'r', encoding='utf-8') as fh:
     requirements = [r for r in fh.readlines() if not any(o in r for o in OPTIONAL)]
 
 setuptools.setup(
@@ -43,18 +43,18 @@ setuptools.setup(
     version=ugp_version,
     author="Giovanni Squillero",
     author_email="squillero@polito.it",
-    license='Apache-2.0',
+    license="Apache-2.0",
     description="A multi-purpose extensible self-adaptive evolutionary algorithm",
     long_description=long_description,
     #long_description_content_type="text/x-rst",
-    long_description_content_type="text/markdown",
+    long_description_content_type='text/markdown',
     url="https://squillero.github.io/microgp4/",
     project_urls={
-        "Bug Tracker": "https://github.com/squillero/microgp4/issues",
-        "Documentation": "https://microgp4.readthedocs.io/en/pre-alpha/",
-        "Source Code": "https://github.com/squillero/microgp4/tree/pre-alpha",
+        'Bug Tracker': "https://github.com/squillero/microgp4/issues",
+        'Documentation': "https://microgp4.readthedocs.io/en/pre-alpha/",
+        'Source Code': "https://github.com/squillero/microgp4/tree/pre-alpha",
     },
-    keywords='optimization evolutionary-algorithm computational-intelligence',
+    keywords="optimization evolutionary-algorithm computational-intelligence",
     packages=setuptools.find_packages(),
     package_data={'': ['requirements.txt']},
     data_files=[('.', ['requirements.txt'])],

@@ -112,8 +112,8 @@ try:
     coloredlogs.install(
         level='DEBUG',
         logger=DefaultLogger,
-        fmt="%(asctime)s%(levelname)s %(message)s",
-        datefmt="%H:%M:%S",  # TODO! Restore datefmt
+        fmt='%(asctime)s%(levelname)s %(message)s',
+        datefmt='%H:%M:%S',
         field_styles={
             'asctime': {
                 'color': 'cyan'
@@ -157,4 +157,4 @@ except:
     logging.addLevelName(WARNING, ' [WARNING]')
     logging.addLevelName(ERROR, ' [ERROR]')
     logging.addLevelName(CRITICAL, ' [CRITICAL]')
-    logging.basicConfig(level='DEBUG', format="%(asctime)s%(levelname)s %(message)s", datefmt="%H:%M:%S")
+    logging.basicConfig(level='DEBUG', format='%(asctime)s%(levelname)s %(message)s', datefmt='%H:%M:%S')
