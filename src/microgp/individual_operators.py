@@ -24,12 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-try:
-    import matplotlib.cbook
-    import matplotlib.pyplot as plt
-except:
-    plt = None
-
+from typing import Tuple
 from .constraints import SubsectionsSequence, SubsectionsAlternative
 from .individual import *
 from .macro import Macro
@@ -37,6 +32,12 @@ from .parameter import Information
 from .utils import logging
 from microgp import random_generator
 import microgp as ugp4
+
+try:
+    import matplotlib.cbook
+    import matplotlib.pyplot as plt
+except:
+    plt = None
 
 
 def print_individual(individuals: Union[Individual, List[Individual]], msg: str = '', plot=False, score=False):
@@ -336,13 +337,15 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     # Copy all the genes from the primary parent and set internal creation characteristics______________________________
     # Initialize first son (individualC)
     individualC = Individual(parentA.constraints, copy_from=parentA)
-    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualC.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
     # TODO: Merge (operaor, (parents)) in a single field
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_one_cut_point_crossover
     # Initialize second son (individualD)
     individualD = Individual(parentB.constraints, copy_from=parentB)
-    assert all(individualD.graph[n]['frame_path'] for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph[n]['frame_path']
+               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_one_cut_point_crossover
 
@@ -363,8 +366,10 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
                         and len(get_nodes_in_frame(parentB, frame_D)) > 1:
                     candidates.append((frame_C, frame_D))
 
-    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
-    assert all(individualD.graph[n]['frame_path'] for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualC.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph[n]['frame_path']
+               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
 
     if not candidates:
         return [None, None]
@@ -375,8 +380,10 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     nodes_in_frame_C = get_nodes_in_frame(individualC, chosen_frame_C)
     nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
 
-    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
-    assert all(individualD.graph[n]['frame_path'] for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualC.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph[n]['frame_path']
+               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
 
     # __________________________Choose the cut nodes________________________________________________________________
     # Example:
@@ -397,7 +404,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     # __________________________Create movable nodes and fill parameters____________________________________________
     nodes_to_copy_from_C = nodes_in_frame_C[:cut_index_C + 1]
     nodes_to_copy_from_D = nodes_in_frame_D[cut_index_D + 1:]
-    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualC.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
     first_movable_node_C = individualC.create_movable_nodes(individualD, nodes_to_copy_from_D)
     first_movable_node_D = individualD.create_movable_nodes(individualC, nodes_to_copy_from_C)
 
@@ -468,13 +476,15 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     individualC = Individual(parentA.constraints, copy_from=parentA)
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_uniform_crossover
-    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualC.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
 
     # Initialize second son (individualD) from parentB
     individualD = Individual(parentB.constraints, copy_from=parentB)
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_uniform_crossover
-    assert all(individualD.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
 
     # If the individuals are identical -> return the copies
     if parentA == parentB:
@@ -524,11 +534,13 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
 
     individualC.finalize()
     is_valid_C = individualC.is_valid()
-    assert all(individualC.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualC.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
 
     individualD.finalize()
     is_valid_D = individualD.is_valid()
-    assert all(individualD.graph[n]['frame_path'] for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph[n]['frame_path']
+               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
 
     individualC = None if not is_valid_C else individualC
     individualD = None if not is_valid_D else individualD

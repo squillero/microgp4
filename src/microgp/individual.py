@@ -24,8 +24,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Tuple, Set, Dict, Union, Sequence, Optional, Union
+from typing import List, Set, Dict, Sequence, Optional, Union
 from collections import Counter, defaultdict
+from collections import abc
 import warnings
 import copy
 
@@ -42,15 +43,50 @@ from .simple_tree import SimpleTree, _SimpleNode
 from .utils import logging
 
 
+class NodeList(abc.Mapping, abc.Set, abc.Callable):
+    """
+
+    """
+
+    def __init__(self, graph: nx.MultiDiGraph) -> None:
+        self._graph = graph
+        self._nodes = dict(sorted(list(graph.nodes(data=True))))
+
+    # Mapping methods
+    def __len__(self):
+        return len(self._nodes)
+
+    def __iter__(self):
+        return iter(self._nodes)
+
+    def __getitem__(self, key):
+        if not isinstance(key, NodeID):
+            key = NodeID(key)
+        return self._nodes[key]
+
+    # Set methods
+    def __contains__(self, n):
+        return n in self._nodes
+
+    # NodeView
+    def __call__(self, data: Union[str, bool] = False) -> Union[List[NodeID], Dict]:
+        if data is False:
+            return list(self)
+        elif data is True:
+            return self._nodes
+        else:
+            return {k: d[data] for k, d in self._nodes.items() if data in d}
+
+
 class GraphWrapper:
     """Namespace for node-related methods & checks
 
     Args:
-        graph (nx.DiGraph): DiGraph that the GraphWrapper contains
+        graph (nx.MultiDiGraph): MultiDiGraph that the GraphWrapper contains
         individual (Individual): individual to whom the graph belongs
     """
 
-    def __init__(self, graph: nx.DiGraph, individual: 'Individual') -> None:
+    def __init__(self, graph: nx.MultiDiGraph, individual: 'Individual') -> None:
         """GraphWrapper builder"""
         self._graph = graph
         self.in_degree = self._graph.in_degree
@@ -114,7 +150,7 @@ class GraphWrapper:
             return node_dict
         elif data:
             node_data = self._graph.nodes(data=data)
-            return {n: node_data[n] for n in node_list}     # sorted dict
+            return {n: node_data[n] for n in node_list}  # sorted dict
         else:
             return sorted(node_list)
 
@@ -137,7 +173,7 @@ class GraphWrapper:
 
     @property
     def nx_graph(self):
-        warnings.warn("Direct access to the NetworkX DiGraph inside the individual is deprecated",
+        warnings.warn("Direct access to the NetworkX MultiDiGraph inside the individual is deprecated",
                       DeprecationWarning,
                       stacklevel=2)
         return self._graph
@@ -283,7 +319,7 @@ class Individual(Paranoid, Pedantic):
 
             self._parents = {copy_from}
             assert len(self.graph.nodes()) == len(copy_from.graph.nodes()), "Something went wrong"
-
+        self._nodes_list = None
 
     @property
     def id(self) -> int:
@@ -365,6 +401,11 @@ class Individual(Paranoid, Pedantic):
     # @unlinked_nodes.setter
     # def unlinked_nodes(self, key, value):
     #     self._unlinked_nodes[key] = value
+
+    @property
+    def nodes_list(self):
+        self._nodes_list = NodeList(self._graph._graph)
+        return self._nodes_list
 
     def __getattr__(self, attribute: str):
         """Lazy attribute 'fitness' is calculated only when needed using constraint's evaluator
@@ -487,7 +528,7 @@ class Individual(Paranoid, Pedantic):
             self.graph.add_edge(parent_node, new_node, 'next', color='black')
 
         # add frame path information
-        self.graph.nx_graph.nodes[new_node]['frame_path'] = frame_path      # OK
+        self.graph.nx_graph.nodes[new_node]['frame_path'] = frame_path  # OK
 
         # add macro information
         self.graph[new_node]['macro'] = macro
@@ -574,7 +615,7 @@ class Individual(Paranoid, Pedantic):
             The list of NodeID of subsequent nodes, None if there are none
         """
         assert isinstance(node, NodeID), "Node is not a Node!"
-        tmp_g = nx.DiGraph(((f, t) for f, t, k in self.graph.edges(keys=True) if k == 'next'))
+        tmp_g = nx.MultiDiGraph(((f, t) for f, t, k in self.graph.edges(keys=True) if k == 'next'))
         successors = list()
         n = list(tmp_g.successors(node))
         while n:
@@ -594,7 +635,7 @@ class Individual(Paranoid, Pedantic):
             The list of NodeID of preceding nodes, None if there are none
         """
         assert isinstance(node, NodeID), "node is not a Node!"
-        tmp_g = nx.DiGraph(((f, t) for f, t, k in self.graph.edges(keys=True) if k == 'next'))
+        tmp_g = nx.MultiDiGraph(((f, t) for f, t, k in self.graph.edges(keys=True) if k == 'next'))
         if node not in tmp_g.nodes:
             return []
         predecessors = list()
@@ -620,7 +661,8 @@ class Individual(Paranoid, Pedantic):
 
     def _initialize_frames(self) -> None:
         """Initialize the frame tree using the frame paths of the nodes"""
-        assert all([p for p in self.graph.nodes(data='frame_path').values()]), "One or more nodes have frame_path == None"
+        assert all([p for p in self.graph.nodes(data='frame_path').values()
+                   ]), "One or more nodes have frame_path == None"
         # Calculate paths
         for p in self.graph.nodes(data='frame_path').values():
             self._frame_tree.add_path(p)
@@ -700,6 +742,12 @@ class Individual(Paranoid, Pedantic):
             {'macro_list_global': [(d['macro'], d['path']) for n, d in individual.graph.nodes(data=True).items()]})
         self.set_canonical()
         assert all(self._graph[n]['frame_path'] for n in self._graph.nodes()), "Illegal frame_path in individual's node"
+
+        # TODO: Lazy View creation: overload the (class) property on the instance
+        # Then future G.nodes use the existing View
+        # setattr doesn't work because attribute already exists
+        # nodes = NodeView(self)
+        # self.__dict__['nodes'] = nodes
         self._finalized = True
 
     def __str__(self) -> str:
@@ -825,7 +873,7 @@ class Individual(Paranoid, Pedantic):
             # Set the frame path for the movable nodes [[and link the local references if there are any]]
             movable_node_id = head
             while movable_node_id and movable_node_id != first_outside:
-                self.graph.nx_graph.nodes[movable_node_id]['frame_path'] = frame_path              ## PROBLEMA!!!!!!!!!!!!!!!!
+                self.graph.nx_graph.nodes[movable_node_id]['frame_path'] = frame_path  ## PROBLEMA!!!!!!!!!!!!!!!!
                 movable_node_id = self.get_next(movable_node_id)
 
             # Change the destinations of the local references that have been changed after the deletion of the nodes
@@ -946,7 +994,7 @@ class Individual(Paranoid, Pedantic):
         nodes_tot = destination_nodes
         uninitialized_nodes = set(nodes_tot)
         while uninitialized_nodes:
-            for destination_node_id in sorted(uninitialized_nodes): # !!!!!!!!!!!!!!!!!!!!!!
+            for destination_node_id in sorted(uninitialized_nodes):  # !!!!!!!!!!!!!!!!!!!!!!
                 # Create parameters and copy their values
                 l = len(self.graph.nodes())
                 parameters = self.copy_parameters(source_individual, node_translation, destination_node_id)
@@ -1013,7 +1061,8 @@ class Individual(Paranoid, Pedantic):
             if not first_node_id:
                 first_node_id = new_node_id
                 if is_new_proc is True:
-                    assert first_node_id not in self._imported_procs.values(), "Node already in self._imported_procs.values()"
+                    assert first_node_id not in self._imported_procs.values(
+                    ), "Node already in self._imported_procs.values()"
                     source_proc_frame = source_individual.nodes[source_node_id]['frame_path'][1]
                     self._imported_procs[source_proc_frame] = first_node_id
             parent = new_node_id

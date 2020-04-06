@@ -1,5 +1,5 @@
 [MicroGP4](https://squillero.github.io/microgp4/)
-==========
+=================================================
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://opensource.org/licenses/Apache-2.0) 
 [![Status: Actrive](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/squillero/microgp3)
@@ -12,7 +12,7 @@
 MicroGP (µGP, `ugp`) is an evolutionary optimizer able to outperform both human experts and conventional heuristics in finding good solution of hard problems. Different techniques are used to explore efficiently the search space. [**[read more]**](https://squillero.github.io/microgp4/)
 
 > This repo is only useful if you want to hack the code (see: [CONTRIBUTING](CONTRIBUTING.md)).  
-> For using MicroGP4 read [the instructions](https://microgp4.readthedocs.io/).  
+> For using MicroGP4 [read the instructions](https://microgp4.readthedocs.io/).  
 
 #### :warning: MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development
 

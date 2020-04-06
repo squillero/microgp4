@@ -32,7 +32,6 @@ import sys
 import microgp as ugp4
 #warnings.filterwarnings("error", category=DeprecationWarning, module='microgp')
 
-
 if __name__ == "__main__":
     ugp4.show_banner()
     parser = argparse.ArgumentParser()
@@ -52,8 +51,6 @@ if __name__ == "__main__":
         ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.DEBUG)
         ugp4.logging.debug("Verbose level set to DEBUG")
     ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
-
-    ugp4.logging.warning
 
     # Define parameters
     reg_alternatives = ['%eax', '%ebx', '%ecx', '%edx']
@@ -109,10 +106,7 @@ if __name__ == "__main__":
 
     # Create the instruction library
     library = ugp4.Constraints(file_name="solution{id}.s")
-    library['main'] = [
-        prologue_macro, init_macro,
-        ugp4.make_section({section}, size=(1, 50)), epilogue_macro
-    ]
+    library['main'] = [prologue_macro, init_macro, ugp4.make_section({section}, size=(1, 50)), epilogue_macro]
 
     def dummy_fitness(individual):
         return [42]
@@ -124,21 +118,24 @@ if __name__ == "__main__":
     # Add initialization operators
     operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
     # Add mutation operators
-    operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)    # REP ERROR
-    operators += ugp4.GenOperator(ugp4.flat_mutation, 1)            # REP ERROR
-    operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)        # REP ERROR
-    operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)     # REP ERROR
+    operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)  # REP ERROR
+    operators += ugp4.GenOperator(ugp4.flat_mutation, 1)  # REP ERROR
+    operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)  # REP ERROR
+    operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)  # REP ERROR
     # Add crossover operators
     operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+
     #operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
+
 
     def dummy_op(original_individual, sigma, **kwargs):
         return ugp4.create_random_individual(library)
+
     def dummy_op2(original_individual, sigma, **kwargs):
         return ugp4.create_random_individual(library)
+
     operators += ugp4.GenOperator(dummy_op, 1)
     operators += ugp4.GenOperator(dummy_op2, 1)
-
 
     # Create the object that will manage the evolution
     mu = 5

@@ -438,7 +438,7 @@ def make_section(section_definition: Any,
                                       name=name,
                                       label_format=label_format)
     elif isinstance(section_definition, set):
-        tmp = sorted(list(section_definition))      # (!) 20200401 -- pretty important! needed for reproducibility
+        tmp = sorted(list(section_definition))  # (!) 20200401 -- pretty important! needed for reproducibility
         if isinstance(tmp[0], Macro):
             section = MacroPool(macro_pool=tmp, name=name, label_format=label_format)
         else:

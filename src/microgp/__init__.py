@@ -39,7 +39,7 @@ import warnings
 from collections import namedtuple
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 13)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 14)
 
 # hard code
 __name__ = "microgp"
@@ -72,22 +72,25 @@ else:
 author = __author__
 
 # Standard warnings
-WARN_V27 = "The code is quite probably not compatible with Python 2"
-WARN_V37 = "The code is only known to be compatible with Python 3.7+"
-WARN_DBG = "Paranoia checks are active; performances can be significantly impaired (consider using '-O')"
-WARN_DEPR_ACTIVE = "Showing all Deprecation Warnings (tweak with '-W' or PYTHONWARNINGS)"
-
 if sys.version_info < (3,):
-    warnings.warn(WARN_V27, Warning, stacklevel=2)
-elif sys.version_info < (3, 7):
-    warnings.warn(WARN_V37, Warning, stacklevel=2)
+    warnings.warn("The code is quite probably not compatible with Python 2", Warning, stacklevel=2)
+elif sys.version_info[:2] != (3, 7):
+    warnings.warn("The code is only known to be compatible with Python 3.7", Warning, stacklevel=2)
+
+if sys.version_info < (3, 7):
+    warnings.warn(
+        "Dictionary order is not guaranteed to be insertion order before v3.7: Results might be not reproducible",
+        Warning,
+        stacklevel=2)
 
 if sys.flags.optimize == 0:
-    warnings.warn(WARN_DBG, UserWarning, stacklevel=2)
+    warnings.warn("Paranoia checks are active; performances can be significantly impaired (consider using '-O')",
+                  UserWarning,
+                  stacklevel=2)
 
 if version_info.tag == 'a' and not sys.warnoptions and 'PYTHONWARNINGS' not in os.environ:
     warnings.filterwarnings('default', category=DeprecationWarning, module='microgp')
-    warnings.warn(WARN_DEPR_ACTIVE, UserWarning, stacklevel=2)
+    warnings.warn("Showing all Deprecation Warnings (tweak with '-W' or PYTHONWARNINGS)", UserWarning, stacklevel=2)
     # hint: try using "-W error:microgp:DeprecationWarning"
 
 # MicroGP stuff

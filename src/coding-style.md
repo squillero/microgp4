@@ -20,6 +20,8 @@
 
 * Annotate all functions (refer to [PEP-483](https://www.python.org/dev/peps/pep-0483/) and [PEP-484](https://www.python.org/dev/peps/pep-0484/) for details).
 
+* Explicitly derive container classes from `collections.abc`.
+
 * Use English for names, in docstrings and in comments (favor formal language over slang, wit over humor, and American English over British).
 
 * Format source code using [Yapf](https://github.com/google/yapf)'s style `"{based_on_style: google, column_limit=120, blank_line_before_module_docstring=true}"`
