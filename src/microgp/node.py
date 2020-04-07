@@ -32,9 +32,9 @@ import warnings
 class NodeID(int, Pedantic):
     """A node in the directed MultiDiGraph describing the individual.
 
-    Use n = NodeID() to get a unique id.
+    Use `n = NodeID()` to get a unique id.
 
-    Use n = NodeID(int) to get a specific node id. This is deprecated as it could only be useful during debug.
+    Use `n = NodeID(int)` to get a specific node id. This is deprecated as it could only be useful during debug.
     """
 
     _LAST_ID = 0  # global counter of nodes

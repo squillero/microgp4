@@ -47,36 +47,32 @@ class NodeList(abc.Mapping, abc.Set, abc.Callable):
     """A read/write view of the nodes of an individual quite but not completely different from a NetworkX NodeView
 
     When used as a dictionary it allows read/write access to nodes. E.g.,
-    ```
-    for n in ind.node_list;
-        print(ind.node_list[n]['foo'])
-        ind.node_list[n]['bar'] = 'baz'     # nodes can be modified
-    ```
 
-    When used as a function it enable selecting nodes
+        >>> for n in ind.node_list;
+        >>>     print(ind.node_list[n]['foo'])
+        >>>     ind.node_list[n]['bar'] = 'baz'     # nodes can be modified
 
-        Args:
-            data: When data is None, the return value is a list of the NodesID. When data is True, the return value is
-                dictionary of dictionaries {NodeID: "All node properties"}. When data is the key of a node property,
-                the return value is a dictionary {NodeID: <specified fiels>}
+    When `NodeList` is used as a function it allows to select nodes using various filters, e.g.,
 
-            default: When property selected by data does not exists, the node is included in the result withe the
-                specified default value. If defaul is None, the node is not included in the result.
+        >>> ind.node_list(select_section='main', select_heads=False, data=True)
 
-            select_section (str or Section): Only include nodes beloging to the specified section.
+    Args:
+        data: When data is ``None``, the return value is a list of :meth:`microgp.node.NodeID`. When data is ``True``,
+            the return value is dictionary of dictionaries ``{node_id: {<all node properties>}}``. When data is the key
+            of a node property, the return value is a dictionary ``{node_id: <the specified field>}``
 
-            select_frame  (str or Frame): Only include nodes beloging to the specified frame.
+        default: When property selected by data does not exists, the node is included in the result withe the specified
+            value. If ``default`` is ``None``, the node is not included in the result.
 
-            select_heads (None or bool): if specified, return only nodes that are heads of sections (True); or nodes
-                that are internal to sections (Frame)
+        select_section (str or Section): Only include nodes belonging to the specified section.
 
-        Returns:
-            Either a list or a dictionary, see `data`
+        select_frame  (str or Frame): Only include nodes belonging to the specified frame.
 
-    Possible usages:
+        select_heads (None or bool): if specified, return only nodes that are heads of sections (``True``); or nodes that
+            are internal to sections (``False``)
 
-
-    dictionary = ind.node_list(data=True)
+    Returns:
+        Either a list or a dictionary, see `data`
     """
 
     def __init__(self, individual: "Individual") -> None:
@@ -112,6 +108,28 @@ class NodeList(abc.Mapping, abc.Set, abc.Callable):
                  select_section: Union[Section, str] = None,
                  select_frame: Union[Frame, str] = None,
                  select_heads: Optional[bool] = None) -> Union[List[NodeID], Dict[NodeID, Any]]:
+        """
+        When used as a function it enable selecting nodes
+
+            Args:
+                data: When data is None, the return value is a list of the NodesID. When data is True, the return value is
+                dictionary of dictionaries {NodeID: "All node properties"}. When data is the key of a node property,
+                the return value is a dictionary {NodeID: <specified fiels>}
+
+                default: When property selected by data does not exists, the node is included in the result withe the
+                specified default value. If defaul is None, the node is not included in the result.
+
+                select_section (str or Section): Only include nodes beloging to the specified section.
+
+                select_frame  (str or Frame): Only include nodes beloging to the specified frame.
+
+                select_heads (None or bool): if specified, return only nodes that are heads of sections (True); or nodes
+                that are internal to sections (Frame)
+
+            Returns:
+                Either a list or a dictionary, see `data`
+
+        """
         assert not (select_section and select_frame), "Can't filter both by frame and section"
 
         # let's filter node list
@@ -119,12 +137,16 @@ class NodeList(abc.Mapping, abc.Set, abc.Callable):
         if select_section:
             if isinstance(select_section, str):
                 select_section = self._individual.constraints.sections[select_section]
-            selected_node = [n for n in selected_node if select_section in (f.section for f in self._nodes[n]['frame_path'])]
+            selected_node = [
+                n for n in selected_node if select_section in (f.section for f in self._nodes[n]['frame_path'])
+            ]
         if select_frame:
             if isinstance(select_frame, Frame):
                 selected_node = [n for n in selected_node if select_frame in self._nodes[n]['frame_path']]
             else:
-                selected_node = [n for n in selected_node if select_frame in (f.name for f in self._nodes[n]['frame_path'])]
+                selected_node = [
+                    n for n in selected_node if select_frame in (f.name for f in self._nodes[n]['frame_path'])
+                ]
 
         if select_heads is not None:
             internal_nodes = set(t for f, t, k in self._graph.edges(selected_node, keys=True) if k == 'next')
