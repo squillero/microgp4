@@ -6,7 +6,7 @@
 What is MicroGP?
 """"""""""""""""
 
-MicroGP is an :ref:`evolutionary algorithm <Natural and Artificial Evolution>` able to outperform both human experts and conventional heuristics in finding good solution of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques are used to explore efficiently the search space.
+MicroGP is an :ref:`evolutionary algorithm <Natural and Artificial Evolution>` able to outperform both human experts and conventional heuristics in finding good solutions of hard problems. It first creates a set of random solutions, then iteratively refines and enhances them using the result of their evaluations together with structural information. Different techniques are used to explore efficiently the search space.
 
 MicroGP is extremely versatile: it is able to tackle problem those solutions are simple fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines; moreover, candidate solutions can be evaluated using external tools. `Some papers <https://scholar.google.com/scholar?q=%28+MicroGP+OR+%C2%B5GP+OR+ugp3+%29+AND+%28+Squillero+OR+Tonda+OR+Sanchez+OR+Schillaci+%29>`_ discussing possible applications can be found in the scientific literature.
 
