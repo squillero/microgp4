@@ -119,24 +119,18 @@ if __name__ == "__main__":
     operators = ugp4.Operators()
 
     # Add initialization operators
-    init_op1 = ugp4.GenOperator(ugp4.create_random_individual, 0)
-    operators += init_op1
+    operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
 
     # Add mutation operators
-    mutation_op1 = ugp4.GenOperator(ugp4.remove_node_mutation, 1)
-    mutation_op2 = ugp4.GenOperator(ugp4.add_node_mutation, 1)
-    mutation_op3 = ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
-    mutation_op4 = ugp4.GenOperator(ugp4.flat_mutation, 1)
-    operators += mutation_op1
-    operators += mutation_op2
-    operators += mutation_op3
-    operators += mutation_op4
+    #operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
 
     # Add crossover operators
-    crossover_op1 = ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
-    crossover_op2 = ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
-    crossover_op3 = ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
-    operators += crossover_op1
+    #crossover_op2 = ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+    #crossover_op3 = ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
+    #operators += ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
     # operators += crossover_op2
     # operators += crossover_op3
 

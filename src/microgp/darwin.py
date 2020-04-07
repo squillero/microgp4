@@ -207,10 +207,6 @@ class Darwin:
         # Add the offspring to the population
         self._population += set(whole_offspring)
 
-        i = whole_offspring[0]
-        print(i.nodes_list(data=True))
-        print("hey!")
-
         # Remove some individuals based on, for instance, their age, whether or not they are clones, etc.
         self._population.filter_by_age(max_age=self._max_age)
         self._population.filter_clones()

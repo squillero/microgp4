@@ -484,7 +484,7 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_uniform_crossover
     assert all(individualD.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
 
     # If the individuals are identical -> return the copies
     if parentA == parentB:

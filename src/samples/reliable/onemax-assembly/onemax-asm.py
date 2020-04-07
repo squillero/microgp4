@@ -146,13 +146,13 @@ if __name__ == "__main__":
     # Add initialization operators
     operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
     # Add mutation operators
-    #operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
     operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
-    #operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
-    #operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
     # Add crossover operators
-    #operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
-    #operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
+    operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+    operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
 
     # Create the object that will manage the evolution
     mu = 10

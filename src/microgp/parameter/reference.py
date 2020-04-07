@@ -264,7 +264,7 @@ class ExternalReference(Reference):
         assert isinstance(getattr(self, 'section_name', None),
                           str), "Illegal or missing section_name (not using make_parameter?)"
         self._final_destination = None
-        if self.individual.nodes[self.node]['frame_path'] is None or do_not_init:
+        if self.individual.nodes_list[self.node]['frame_path'] is None or do_not_init:
             return
         else:
             # Avoid the mutation in case of this parameter is contained in a movable node. A movable node has not a
@@ -279,40 +279,38 @@ class ExternalReference(Reference):
     def _valid_targets(self) -> List[NodeID]:
         assert self.section_name in self.individual.constraints.sections, "No section named '%s' in constraints. Valid: %s." % (
             self.section_name, self.individual.constraints.sections)
-        nodes = set(self.individual.nodes(section=self.section_name))
-        not_heads = set(t for f, t, k in self.individual.graph.edges(keys=True) if k == 'next')
-        return list(nodes - not_heads)
+        return self.individual.nodes_list(select_section=self.section_name, select_heads=True)
 
     def mutate(self, sigma: float = 0.5) -> None:
         assert 0 <= sigma <= 1, "Invalid strength: " + str(sigma) + " (should be 0 <= s <= 1)"
         if sigma == 0:
             logging.debug("sigma == 0")
-        else:
-            old_target = next((t for f, t, k in self.individual.graph.edges(self.node, keys=True) if k == self.name),
-                              None)
-            potential_targets = self._valid_targets() + [None]
 
-            # Choose the new target
-            new_target = random_generator.choice(potential_targets)
+        old_target = next((t for f, t, k in self.individual.graph.edges(self.node, keys=True) if k == self.name),
+                          None)
+        potential_targets = self._valid_targets() + [None]
 
-            # Create a new procedure
-            if new_target is None:
-                # Let's create a new section
-                nodes = unroll_macro_list(self.individual, self.section_name)
-                macro, frame_path = nodes.pop(0)
-                new_target = self.individual.add_node(parent_node=None, macro=macro, frame_path=frame_path)
-                parent = new_target
-                uninitialized_nodes = {parent}
-                for macro, frame_path in nodes:
-                    parent = self.individual.add_node(parent_node=parent, macro=macro, frame_path=frame_path)
-                    uninitialized_nodes.add(parent)
-                self.individual.randomize_macros(uninitialized_nodes)
+        # Choose the new target
+        new_target = random_generator.choice(potential_targets)
 
-            if old_target:
-                self.individual.graph.remove_edge(self.node, old_target, self.name)
-            self.individual.graph.add_edge(self.node, new_target, self.name, color='green')
+        # Create a new procedure
+        if new_target is None:
+            # Let's create a new section
+            nodes = unroll_macro_list(self.individual, self.section_name)
+            macro, frame_path = nodes.pop(0)
+            new_target = self.individual.add_node(parent_node=None, macro=macro, frame_path=frame_path)
+            parent = new_target
+            uninitialized_nodes = {parent}
+            for macro, frame_path in nodes:
+                parent = self.individual.add_node(parent_node=parent, macro=macro, frame_path=frame_path)
+                uninitialized_nodes.add(parent)
+            self.individual.randomize_macros(uninitialized_nodes)
 
-            self._value = new_target
+        if old_target:
+            self.individual.graph.remove_edge(self.node, old_target, self.name)
+        self.individual.graph.add_edge(self.node, new_target, self.name, color='green')
+
+        self._value = new_target
 
     @property
     def value(self) -> NodeID:
