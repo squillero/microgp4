@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Set, Dict, Sequence, Optional, Union
+from typing import List, Set, Dict, Sequence, Optional, Union, Any
 from collections import Counter, defaultdict
 from collections import abc
 import warnings
@@ -44,13 +44,49 @@ from .utils import logging
 
 
 class NodeList(abc.Mapping, abc.Set, abc.Callable):
+    """A read/write view of the nodes of an individual quite but not completely different from a NetworkX NodeView
+
+    When used as a dictionary it allows read/write access to nodes. E.g.,
+    ```
+    for n in ind.node_list;
+        print(ind.node_list[n]['foo'])
+        ind.node_list[n]['bar'] = 'baz'     # nodes can be modified
+    ```
+
+    When used as a function it enable selecting nodes
+
+        Args:
+            data: When data is None, the return value is a list of the NodesID. When data is True, the return value is
+                dictionary of dictionaries {NodeID: "All node properties"}. When data is the key of a node property,
+                the return value is a dictionary {NodeID: <specified fiels>}
+
+            default: When property selected by data does not exists, the node is included in the result withe the
+                specified default value. If defaul is None, the node is not included in the result.
+
+            select_section (str or Section): Only include nodes beloging to the specified section.
+
+            select_frame  (str or Frame): Only include nodes beloging to the specified frame.
+
+            select_heads (None or bool): if specified, return only nodes that are heads of sections (True); or nodes
+                that are internal to sections (Frame)
+
+        Returns:
+            Either a list or a dictionary, see `data`
+
+    Possible usages:
+
+
+    dictionary = ind.node_list(data=True)
     """
 
-    """
-
-    def __init__(self, graph: nx.MultiDiGraph) -> None:
-        self._graph = graph
-        self._nodes = dict(sorted(list(graph.nodes(data=True))))
+    def __init__(self, individual: "Individual") -> None:
+        self._individual = individual
+        self._graph = individual._graph._raw_nx_graph
+        self._nodes = dict(sorted(list(self._graph.nodes(data=True))))
+        for n in self._nodes:
+            assert self._nodes[n]['frame_path'][
+                0].name == '', f"Internal error: <ROOT> frame is not '' but '{self._nodes[n]['frame_path'][0]}'"
+            self._nodes[n]['path'] = '/'.join(p.name for p in self._nodes[n]['frame_path'])
 
     # Mapping methods
     def __len__(self):
@@ -62,20 +98,55 @@ class NodeList(abc.Mapping, abc.Set, abc.Callable):
     def __getitem__(self, key):
         if not isinstance(key, NodeID):
             key = NodeID(key)
-        return self._nodes[key]
+        assert key in self._nodes, f"Node {key} not in the individual ({list(self._nodes)})"
+        return self._graph.nodes[key]
 
     # Set methods
     def __contains__(self, n):
         return n in self._nodes
 
     # NodeView
-    def __call__(self, data: Union[str, bool] = False) -> Union[List[NodeID], Dict]:
+    def __call__(self,
+                 data: Union[str, bool] = False,
+                 default: Any = None,
+                 select_section: Union[Section, str] = None,
+                 select_frame: Union[Frame, str] = None,
+                 select_heads: Optional[bool] = None) -> Union[List[NodeID], Dict[NodeID, Any]]:
+        assert not (select_section and select_frame), "Can't filter both by frame and section"
+
+        # let's filter node list
+        selected_node = list(self)
+        if select_section:
+            if isinstance(select_section, str):
+                select_section = self._individual.constraints.sections[select_section]
+            selected_node = [n for n in selected_node if select_section in (f.section for f in self._nodes[n]['frame_path'])]
+        if select_frame:
+            if isinstance(select_frame, Frame):
+                selected_node = [n for n in selected_node if select_frame in self._nodes[n]['frame_path']]
+            else:
+                selected_node = [n for n in selected_node if select_frame in (f.name for f in self._nodes[n]['frame_path'])]
+
+        if select_heads is not None:
+            internal_nodes = set(t for f, t, k in self._graph.edges(selected_node, keys=True) if k == 'next')
+            if select_heads:
+                selected_node = [n for n in selected_node if n not in internal_nodes]
+            else:
+                selected_node = [n for n in selected_node if n in internal_nodes]
+
+        # data is False: return a list of NodeID
         if data is False:
-            return list(self)
-        elif data is True:
-            return self._nodes
-        else:
-            return {k: d[data] for k, d in self._nodes.items() if data in d}
+            return selected_node
+
+        # data is either True or str: return a dict NodeID -> Any
+        node_dict = dict()
+        for n in selected_node:
+            if data is True:
+                node_dict[n] = self._nodes[n]
+            elif data in self._nodes[n]:
+                node_dict[n] = self._nodes[n][data]
+            elif default is not None:
+                node_dict[n] = default
+        return node_dict
 
 
 class GraphWrapper:
@@ -88,14 +159,14 @@ class GraphWrapper:
 
     def __init__(self, graph: nx.MultiDiGraph, individual: 'Individual') -> None:
         """GraphWrapper builder"""
-        self._graph = graph
-        self.in_degree = self._graph.in_degree
-        self.out_degree = self._graph.out_degree
-        self.degree = self._graph.degree
+        self._raw_nx_graph = graph
+        self.in_degree = self._raw_nx_graph.in_degree
+        self.out_degree = self._raw_nx_graph.out_degree
+        self.degree = self._raw_nx_graph.degree
         self._individual = individual
 
     def __getitem__(self, node: NodeID):
-        return self._graph.nodes[node]
+        return self._raw_nx_graph.nodes[node]
 
     def nodes(self,
               section: Union[Frame, str] = None,
@@ -133,10 +204,10 @@ class GraphWrapper:
                 frame = next(f for f in self._individual.frame_tree.node_dict if f.name == frame)
             node_list = get_nodes_in_frame(self._individual, frame, frame_path_limit=frame_path_limit)
         else:
-            node_list = list(self._graph.nodes)
+            node_list = list(self._raw_nx_graph.nodes)
 
         if only_heads:
-            internal_nodes = set(t for f, t, k in self._graph.edges(node_list, keys=True) if k == 'next')
+            internal_nodes = set(t for f, t, k in self._raw_nx_graph.edges(node_list, keys=True) if k == 'next')
             node_list = [n for n in node_list if n not in internal_nodes]
             pass
 
@@ -145,50 +216,50 @@ class GraphWrapper:
         if data is True:
             node_dict = dict()
             for n in node_list:
-                node_dict[n] = self._graph.nodes[n]
+                node_dict[n] = self._raw_nx_graph.nodes[n]
                 node_dict[n]['path'] = self.get_fullpath(n)
             return node_dict
         elif data:
-            node_data = self._graph.nodes(data=data)
+            node_data = self._raw_nx_graph.nodes(data=data)
             return {n: node_data[n] for n in node_list}  # sorted dict
         else:
             return sorted(node_list)
 
     def edges(self, *args, **kwargs):
-        return sorted(self._graph.edges(*args, **kwargs))
+        return sorted(self._raw_nx_graph.edges(*args, **kwargs))
 
     @property
     def node_view(self):
         warnings.warn("Direct access to the NetworkX NodeView class inside the individual is deprecated",
                       DeprecationWarning,
                       stacklevel=2)
-        return self._graph.nodes
+        return self._raw_nx_graph.nodes
 
     @property
     def edge_view(self):
         warnings.warn("Direct access to the NetworkX EdgeView class inside the individual is deprecated",
                       DeprecationWarning,
                       stacklevel=2)
-        return self._graph.edges
+        return self._raw_nx_graph.edges
 
     @property
     def nx_graph(self):
         warnings.warn("Direct access to the NetworkX MultiDiGraph inside the individual is deprecated",
                       DeprecationWarning,
                       stacklevel=2)
-        return self._graph
+        return self._raw_nx_graph
 
     def add_node(self, *args, **kwargs):
-        self._graph.add_node(*args, **kwargs)
+        self._raw_nx_graph.add_node(*args, **kwargs)
 
     def remove_node(self, *args, **kwargs):
-        self._graph.remove_node(*args, **kwargs)
+        self._raw_nx_graph.remove_node(*args, **kwargs)
 
     def add_edge(self, *args, **kwargs):
-        self._graph.add_edge(*args, **kwargs)
+        self._raw_nx_graph.add_edge(*args, **kwargs)
 
     def remove_edge(self, *args, **kwargs):
-        self._graph.remove_edge(*args, **kwargs)
+        self._raw_nx_graph.remove_edge(*args, **kwargs)
 
     def get_section(self, node: NodeID) -> Section:
         """Returns the Section a node is in
@@ -199,7 +270,7 @@ class GraphWrapper:
         Returns:
             Section to which the known belongs
         """
-        return self._graph.nodes[node]['frame_path'][-1].section
+        return self._raw_nx_graph.nodes[node]['frame_path'][-1].section
 
     def get_fullpath(self, node: NodeID) -> str:
         """Returns the full path of a node as a string
@@ -210,7 +281,7 @@ class GraphWrapper:
         Returns:
             String of the path of the node
         """
-        path = [f.name for f in self._graph.nodes[node]['frame_path']]
+        path = [f.name for f in self._raw_nx_graph.nodes[node]['frame_path']]
         assert path[0] == '', "Internal error: <ROOT> frame is not '' but '%s'" % (path[0],)
         return "/".join([''] + path[1:])
 
@@ -223,7 +294,7 @@ class GraphWrapper:
         Returns:
             True if it is head, False otherwise
         """
-        incoming_keys = {k for _, _, k in self._graph.in_edges(node, keys=True)}
+        incoming_keys = {k for _, _, k in self._raw_nx_graph.in_edges(node, keys=True)}
         return 'next' not in incoming_keys
 
 
@@ -403,8 +474,8 @@ class Individual(Paranoid, Pedantic):
     #     self._unlinked_nodes[key] = value
 
     @property
-    def nodes_list(self):
-        self._nodes_list = NodeList(self._graph._graph)
+    def nodes_list(self) -> NodeList:
+        self._nodes_list = NodeList(self)
         return self._nodes_list
 
     def __getattr__(self, attribute: str):

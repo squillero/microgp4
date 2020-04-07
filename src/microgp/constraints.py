@@ -284,9 +284,7 @@ class Constraints(Paranoid, Pedantic):
     DEFAULT_LABEL_FORMAT = '{node}:\n'
 
     def __init__(self, file_name: str = "solution{id}.ugp") -> None:
-        self._sections = {
-            # 'main': SubsectionsSequence(name='main', sub_sections=None, label_format=Constraints.DEFAULT_LABEL_FORMAT)
-        }
+        self._sections = dict()
         self._macros = set()
         self._global_properties = Properties()
         self._stats = dict()
@@ -323,11 +321,11 @@ class Constraints(Paranoid, Pedantic):
 
     def add_section(self, section: Section) -> None:
         assert section not in self._sections, "Section already present in constraints"
-        self._sections.add(section)
+        self._sections[section.name] = section
 
     @property
-    def sections(self) -> Set[Section]:
-        return set(self._sections)
+    def sections(self) -> Dict[str, Section]:
+        return self._sections
 
     @property
     def evaluator(self) -> Callable[['Individual'], Base]:

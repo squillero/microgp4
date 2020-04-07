@@ -43,7 +43,7 @@ class NodeID(int, Pedantic):
         pass
 
     def __new__(cls, value: Optional[int] = None) -> None:
-        if not value:
+        if value is None:
             NodeID._LAST_ID += 1
             value = NodeID._LAST_ID
         else:
