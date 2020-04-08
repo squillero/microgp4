@@ -122,17 +122,15 @@ if __name__ == "__main__":
     operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
 
     # Add mutation operators
-    #operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
-    #operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
-    #operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
+    operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
     operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
 
     # Add crossover operators
-    #crossover_op2 = ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
-    #crossover_op3 = ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
-    #operators += ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
-    # operators += crossover_op2
-    # operators += crossover_op3
+    operators += ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
+    operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+    operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
 
     # Create the object that will manage the evolution__________________________________________________________________
     mu = 10
@@ -156,13 +154,13 @@ if __name__ == "__main__":
         darwin.evolve()
         logging.bare("This is the final population:")
         for individual in darwin.population:
-            ugp4.print_individual(individual, plot=True)
+            ugp4.print_individual(individual)
             ugp4.logging.bare(individual.fitness)
             ugp4.logging.bare("")
 
         # Print best individuals
         logging.bare("These are the best ever individuals:")
-        ugp4.print_individual(darwin.archive.individuals)
+        ugp4.print_individual(darwin.archive.individuals, plot=True)
 
     ugp4.logging.log_cpu(ugp4.logging.INFO, "Program completed")
     sys.exit(0)

@@ -206,6 +206,7 @@ def create_random_individual(constraints: Constraints, max_retries: Optional[int
 
 
 # CROSSOVERS____________________________________________________________________________________________________________
+# TODO: Rewrite!
 def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Optional[Individual]]:
     """Let's consider a sequence of nodes connected through edges with label=
     'next', we will call this sequence `next-chain`. This operator selects
@@ -234,10 +235,6 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     individual.parents = {parentA, parentB}
     individual.operator = switch_proc_crossover
 
-    if parentA == parentB:
-        individual.finalize()
-        return [individual]
-
     root_frames_in_primary_parent = set(
         f.frame for f in primary_parent.frame_tree.root.children if f.frame.section.name != 'main')
     root_sections_frames_in_primary_parent = set((f.section, f) for f in root_frames_in_primary_parent)
@@ -255,12 +252,10 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     chosen_section, chosen_frame = random_generator.choice(candidates)
 
     from .parameter import ExternalReference
+
     candidates = list()
-    for node_id in individual.nodes():
-        parameters = individual.nodes[node_id]["parameters"]
-        for parameter in parameters.values():
-            if issubclass(type(parameter), ExternalReference):
-                candidates.append((node_id, parameter.name))
+    for node_id, parameters in individual.nodes_list(data='parameters').items():
+        candidates = candidates + [(node_id, p) for p in parameters if isinstance(parameters[p], ExternalReference)]
 
     chosen_node_id, chosen_parameter_name = random_generator.choice(candidates)
     # Copy the structure of the selected frame and its parameters___________________________________________________
@@ -334,20 +329,22 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     """
     assert all([parentA, parentB]), f"Arity of macro_pool_one_cut_point_crossover is 2"
 
+    assert all(parentA.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+    assert all(parentB.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+
     # Copy all the genes from the primary parent and set internal creation characteristics______________________________
     # Initialize first son (individualC)
     individualC = Individual(parentA.constraints, copy_from=parentA)
-    assert all(individualC.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
     # TODO: Merge (operaor, (parents)) in a single field
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_one_cut_point_crossover
     # Initialize second son (individualD)
     individualD = Individual(parentB.constraints, copy_from=parentB)
-    assert all(individualD.graph[n]['frame_path']
-               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_one_cut_point_crossover
+
+    assert all(individualC.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+    assert all(individualD.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
 
     if parentA == parentB:
         individualC.finalize()
@@ -366,11 +363,6 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
                         and len(get_nodes_in_frame(parentB, frame_D)) > 1:
                     candidates.append((frame_C, frame_D))
 
-    assert all(individualC.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
-    assert all(individualD.graph[n]['frame_path']
-               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
-
     if not candidates:
         return [None, None]
 
@@ -379,11 +371,6 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
 
     nodes_in_frame_C = get_nodes_in_frame(individualC, chosen_frame_C)
     nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
-
-    assert all(individualC.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
-    assert all(individualD.graph[n]['frame_path']
-               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
 
     # __________________________Choose the cut nodes________________________________________________________________
     # Example:
@@ -404,8 +391,6 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     # __________________________Create movable nodes and fill parameters____________________________________________
     nodes_to_copy_from_C = nodes_in_frame_C[:cut_index_C + 1]
     nodes_to_copy_from_D = nodes_in_frame_D[cut_index_D + 1:]
-    assert all(individualC.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
     first_movable_node_C = individualC.create_movable_nodes(individualD, nodes_to_copy_from_D)
     first_movable_node_D = individualD.create_movable_nodes(individualC, nodes_to_copy_from_C)
 
@@ -430,6 +415,9 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     #     print_individual(parentB, 'parentB', plot=True)
     #     print_individual(individualC, 'individualC', plot=True)
     #     print_individual(individualD, 'individualD', plot=True)
+    assert all(individualC.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+    assert all(individualD.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+
     return [individualC, individualD]
 
 
