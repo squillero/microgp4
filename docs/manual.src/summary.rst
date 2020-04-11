@@ -10,13 +10,14 @@ MicroGP is an :ref:`evolutionary algorithm <Natural and Artificial Evolution>` a
 
 MicroGP is extremely versatile: it is able to tackle problem those solutions are simple fixed-length bit strings, as well as to optimize realistic assembly programs including loops, interrupts and recursive sub routines; moreover, candidate solutions can be evaluated using external tools. `Some papers <https://scholar.google.com/scholar?q=%28+MicroGP+OR+%C2%B5GP+OR+ugp3+%29+AND+%28+Squillero+OR+Tonda+OR+Sanchez+OR+Schillaci+%29>`_ discussing possible applications can be found in the scientific literature.
 
-The project :ref:`started around the year 2000 <The story so far...>`, with the creation of a collection of scripts for optimizing assembly-language programs. A fully working version was first coded in C in 2002, and then re-engineered in C++ in 2006; the design of a Python version started in 2018. MicroGP4 would not have been possible without the help and support of :ref:`several people <µCredits>`.
+The project :ref:`started around the year 2000 <The story so far...>`, with the creation of a collection of scripts for optimizing assembly-language programs. A fully working program was first coded in C in 2002, and then re-engineered in C++ in 2006; the design of a Python version started in 2018. MicroGP4 would not have been possible without the help and support of :ref:`several people <µCredits>`.
 
 Audience
 ========
 
 The expected audience for MicroGP4 includes computer scientists, engineers and practitioners.
 
+* MicroGP4 is available as a `PyPi package <https://pypi.org/project/microgp/>`_ and it can be easily installed using `pip <https://en.wikipedia.org/wiki/Pip_%28package_manager%29>`_.
 * MicroGP4 can be used interactively from a Jupyter notebook --- just like `scikit-learn <https://scikit-learn.org/>`_ and `keras <https://keras.io/>`_ --- allowing to quickly assess new ideas and build prototypes.
 * An external tool can be used as evaluator, allowing to handle virtually any problem.
 * The evolutionary code can be tweaked injecting user-defined Python functions, without the need to hack the package itself.

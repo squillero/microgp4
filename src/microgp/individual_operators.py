@@ -269,7 +269,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     individual.arrange_movable_proc(nodes_to_copy_from, source_individual, first_movable_node)
 
     # Change the destination of the external reference of the selected node_____________________________________________
-    original_node = individual.nodes[chosen_node_id]
+    original_node = individual.nodes_list[chosen_node_id]
     from microgp.parameter import ExternalReference
     for parameter_name, parameter in original_node['parameters'].items():
         if parameter.name == chosen_parameter_name and isinstance(parameter, ExternalReference):
@@ -522,13 +522,13 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
 
     individualC.finalize()
     is_valid_C = individualC.is_valid()
-    assert all(individualC.graph[n]['frame_path']
+    assert individualC.is_valid() is False or all(individualC.graph[n]['frame_path']
                for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
 
     individualD.finalize()
     is_valid_D = individualD.is_valid()
-    assert all(individualD.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert individualD.is_valid() is False or all(individualD.graph[n]['frame_path']
+               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
 
     individualC = None if not is_valid_C else individualC
     individualD = None if not is_valid_D else individualD

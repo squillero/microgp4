@@ -75,14 +75,35 @@ class NodeList(abc.Mapping, abc.Set, abc.Callable):
         Either a list or a dictionary, see `data`
     """
 
+    # See <https://stackoverflow.com/questions/472000/usage-of-slots>
+    __slots__ = ('_individual', '_graph', '_nodes')
+
+    def __getstate__(self):
+        return {'_individual': self._individual, '_graph': self._graph, '_nodes': self._nodes}
+
+    def __setstate__(self, state):
+        self._individual = state['_individual']
+        self._graph = state['_graph']
+        self._nodes = state['_nodes']
+
     def __init__(self, individual: "Individual") -> None:
         self._individual = individual
         self._graph = individual._graph._raw_nx_graph
         self._nodes = dict(sorted(list(self._graph.nodes(data=True))))
-        for n in self._nodes:
-            assert self._nodes[n]['frame_path'][
-                0].name == '', f"Internal error: <ROOT> frame is not '' but '{self._nodes[n]['frame_path'][0]}'"
-            self._nodes[n]['path'] = '/'.join(p.name for p in self._nodes[n]['frame_path'])
+        if self._individual._finalized:
+            for n in self._nodes:
+                assert self._nodes[n]['frame_path'][
+                    0].name == '', f"Internal error: <ROOT> frame is not '' but '{self._nodes[n]['frame_path'][0]}'"
+                if self._nodes[n]['frame_path'][0]:
+                    self._nodes[n]['path'] = '/'.join(p.name for p in self._nodes[n]['frame_path'])
+                else:
+                    self._nodes[n]['path'] = None   # floating node!
+            for n1, n2, k in self._graph.edges(keys=True):
+                assert k not in self._nodes[n1] or self._nodes[n1][k] == n2, f"Mismatching node property '{k}': {self._nodes[n1][k]} vs. {n2}"
+                self._nodes[n1][k] = n2
+            for n in (_ for _ in self._nodes if 'next' not in self._nodes[_]):
+                self._nodes[n]['next'] = None
+        pass
 
     # Mapping methods
     def __len__(self):
@@ -108,28 +129,6 @@ class NodeList(abc.Mapping, abc.Set, abc.Callable):
                  select_section: Union[Section, str] = None,
                  select_frame: Union[Frame, str] = None,
                  select_heads: Optional[bool] = None) -> Union[List[NodeID], Dict[NodeID, Any]]:
-        """
-        When used as a function it enable selecting nodes
-
-            Args:
-                data: When data is None, the return value is a list of the NodesID. When data is True, the return value is
-                dictionary of dictionaries {NodeID: "All node properties"}. When data is the key of a node property,
-                the return value is a dictionary {NodeID: <specified fiels>}
-
-                default: When property selected by data does not exists, the node is included in the result withe the
-                specified default value. If defaul is None, the node is not included in the result.
-
-                select_section (str or Section): Only include nodes beloging to the specified section.
-
-                select_frame  (str or Frame): Only include nodes beloging to the specified frame.
-
-                select_heads (None or bool): if specified, return only nodes that are heads of sections (True); or nodes
-                that are internal to sections (Frame)
-
-            Returns:
-                Either a list or a dictionary, see `data`
-
-        """
         assert not (select_section and select_frame), "Can't filter both by frame and section"
 
         # let's filter node list
@@ -169,6 +168,12 @@ class NodeList(abc.Mapping, abc.Set, abc.Callable):
             elif default is not None:
                 node_dict[n] = default
         return node_dict
+
+
+class EdgeList(abc.Mapping, abc.Set, abc.Callable):
+    """A simplified view of the edges of an individual
+    """
+    pass
 
 
 class GraphWrapper:
@@ -495,13 +500,8 @@ class Individual(Paranoid, Pedantic):
     # def unlinked_nodes(self, key, value):
     #     self._unlinked_nodes[key] = value
 
-    @property
-    def nodes_list(self) -> NodeList:
-        self._nodes_list = NodeList(self)
-        return self._nodes_list
-
     def __getattr__(self, attribute: str):
-        """Lazy attribute 'fitness' is calculated only when needed using constraint's evaluator
+        """Lazy attribute 'fitness' and 'nodes_list' are calculated only when needed
 
         Args:
             attribute: attribute to be returned
@@ -509,13 +509,19 @@ class Individual(Paranoid, Pedantic):
         Returns:
             Requested attribute
         """
-        if attribute != 'fitness' and attribute != 'fitness_comment':
+        if attribute == 'fitness' or attribute == 'fitness_comment':
+            fitness, comment = self.constraints.evaluator(self)
+            setattr(self, 'fitness', fitness)
+            setattr(self, 'fitness_comment', comment)
+            return getattr(self, attribute)
+        elif attribute == 'nodes_list':
+            nodes_list = NodeList(self)
+            if self._finalized:
+                setattr(self, attribute, nodes_list)
+            return nodes_list
+        else:
             error_msg = "'%s' object has no attribute '%s'" % (self.__class__.__name__, attribute)
             raise AttributeError(error_msg)
-        fitness, comment = self.constraints.evaluator(self)
-        setattr(self, 'fitness', fitness)
-        setattr(self, 'fitness_comment', comment)
-        return getattr(self, attribute)
 
     def __hash__(self):
         assert self._finalized, "Individual %d is unhashable (not yet finalized)" % (self._id,)
@@ -966,7 +972,7 @@ class Individual(Paranoid, Pedantic):
             # Set the frame path for the movable nodes [[and link the local references if there are any]]
             movable_node_id = head
             while movable_node_id and movable_node_id != first_outside:
-                self.graph.nx_graph.nodes[movable_node_id]['frame_path'] = frame_path  ## PROBLEMA!!!!!!!!!!!!!!!!
+                self.nodes_list[movable_node_id]['frame_path'] = frame_path  ## PROBLEMA!!!!!!!!!!!!!!!!
                 movable_node_id = self.get_next(movable_node_id)
 
             # Change the destinations of the local references that have been changed after the deletion of the nodes
@@ -987,7 +993,7 @@ class Individual(Paranoid, Pedantic):
         # Build the frame path of each node in the proc
         source_frame_paths = list()
         for source_node_id in nodes_to_copy_from:
-            source_frame_paths.append(source_individual.nodes[source_node_id]['frame_path'])
+            source_frame_paths.append(source_individual.nodes_list[source_node_id]['frame_path'])
 
         # Set the frame path of each node in the proc
         nodes_count = 0
@@ -1004,7 +1010,7 @@ class Individual(Paranoid, Pedantic):
                     new_frame = Frame(self.get_unique_frame_name(section), section)
                     frame_translation[frame] = new_frame
                 frame_path = tuple(frame_path) + tuple([frame_translation[frame]])
-            self.graph.nx_graph.nodes[node]['frame_path'] = frame_path
+            self.nodes_list[node]['frame_path'] = frame_path
             node = self.get_next(node)
             nodes_count += 1
 
@@ -1156,7 +1162,7 @@ class Individual(Paranoid, Pedantic):
                 if is_new_proc is True:
                     assert first_node_id not in self._imported_procs.values(
                     ), "Node already in self._imported_procs.values()"
-                    source_proc_frame = source_individual.nodes[source_node_id]['frame_path'][1]
+                    source_proc_frame = source_individual.nodes_list[source_node_id]['frame_path'][1]
                     self._imported_procs[source_proc_frame] = first_node_id
             parent = new_node_id
         return first_node_id
@@ -1179,14 +1185,14 @@ class Individual(Paranoid, Pedantic):
                     # If the parameter is an ExternalReference, then the new proc must be copied
                     first_source_proc_node = parameter.value
 
-                    source_proc_frame = source_individual.nodes[first_source_proc_node]['frame_path'][1]
+                    source_proc_frame = source_individual.nodes_list[first_source_proc_node]['frame_path'][1]
                     if source_proc_frame in self._imported_procs.keys():
                         # Proc already copied, link the current node to the first node of the proc
                         first_movable_node = self._imported_procs[source_proc_frame]
                     else:
                         # Create the structure of the new procedure
                         # nodes_to_copy_from = get_nodes_visit_order(source_individual, first_source_proc_node)
-                        chosen_frame = source_individual.nodes[first_source_proc_node]['frame_path'][1]
+                        chosen_frame = source_individual.nodes_list[first_source_proc_node]['frame_path'][1]
                         nodes_to_copy_from = get_nodes_in_frame(source_individual, chosen_frame)
 
                         # Create movable nodes of the selected proc
