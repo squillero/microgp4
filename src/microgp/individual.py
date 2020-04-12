@@ -32,6 +32,7 @@ import copy
 
 import networkx as nx
 
+from .graph_wrapper import NodeWrapper, NodesCollection
 from .abstract import Paranoid, Pedantic
 from .common_data_structures import Frame
 from .constraints import Constraints, Section, RootSection, MacroPool
@@ -42,138 +43,6 @@ from .properties import Properties
 from .simple_tree import SimpleTree, _SimpleNode
 from .utils import logging
 
-
-class NodeList(abc.Mapping, abc.Set, abc.Callable):
-    """A read/write view of the nodes of an individual quite but not completely different from a NetworkX NodeView
-
-    When used as a dictionary it allows read/write access to nodes. E.g.,
-
-        >>> for n in ind.node_list;
-        >>>     print(ind.node_list[n]['foo'])
-        >>>     ind.node_list[n]['bar'] = 'baz'     # nodes can be modified
-
-    When `NodeList` is used as a function it allows to select nodes using various filters, e.g.,
-
-        >>> ind.node_list(select_section='main', select_heads=False, data=True)
-
-    Args:
-        data: When data is ``None``, the return value is a list of :meth:`microgp.node.NodeID`. When data is ``True``,
-            the return value is dictionary of dictionaries ``{node_id: {<all node properties>}}``. When data is the key
-            of a node property, the return value is a dictionary ``{node_id: <the specified field>}``
-
-        default: When property selected by data does not exists, the node is included in the result withe the specified
-            value. If ``default`` is ``None``, the node is not included in the result.
-
-        select_section (str or Section): Only include nodes belonging to the specified section.
-
-        select_frame  (str or Frame): Only include nodes belonging to the specified frame.
-
-        select_heads (None or bool): if specified, return only nodes that are heads of sections (``True``); or nodes that
-            are internal to sections (``False``)
-
-    Returns:
-        Either a list or a dictionary, see `data`
-    """
-
-    # See <https://stackoverflow.com/questions/472000/usage-of-slots>
-    __slots__ = ('_individual', '_graph', '_nodes')
-
-    def __getstate__(self):
-        return {'_individual': self._individual, '_graph': self._graph, '_nodes': self._nodes}
-
-    def __setstate__(self, state):
-        self._individual = state['_individual']
-        self._graph = state['_graph']
-        self._nodes = state['_nodes']
-
-    def __init__(self, individual: "Individual") -> None:
-        self._individual = individual
-        self._graph = individual._graph._raw_nx_graph
-        self._nodes = dict(sorted(list(self._graph.nodes(data=True))))
-        if self._individual._finalized:
-            for n in self._nodes:
-                assert self._nodes[n]['frame_path'][
-                    0].name == '', f"Internal error: <ROOT> frame is not '' but '{self._nodes[n]['frame_path'][0]}'"
-                if self._nodes[n]['frame_path'][0]:
-                    self._nodes[n]['path'] = '/'.join(p.name for p in self._nodes[n]['frame_path'])
-                else:
-                    self._nodes[n]['path'] = None   # floating node!
-            for n1, n2, k in self._graph.edges(keys=True):
-                assert k not in self._nodes[n1] or self._nodes[n1][k] == n2, f"Mismatching node property '{k}': {self._nodes[n1][k]} vs. {n2}"
-                self._nodes[n1][k] = n2
-            for n in (_ for _ in self._nodes if 'next' not in self._nodes[_]):
-                self._nodes[n]['next'] = None
-        pass
-
-    # Mapping methods
-    def __len__(self):
-        return len(self._nodes)
-
-    def __iter__(self):
-        return iter(self._nodes)
-
-    def __getitem__(self, key):
-        if not isinstance(key, NodeID):
-            key = NodeID(key)
-        assert key in self._nodes, f"Node {key} not in the individual ({list(self._nodes)})"
-        return self._graph.nodes[key]
-
-    # Set methods
-    def __contains__(self, n):
-        return n in self._nodes
-
-    # NodeView
-    def __call__(self,
-                 data: Union[str, bool] = False,
-                 default: Any = None,
-                 select_section: Union[Section, str] = None,
-                 select_frame: Union[Frame, str] = None,
-                 select_heads: Optional[bool] = None) -> Union[List[NodeID], Dict[NodeID, Any]]:
-        assert not (select_section and select_frame), "Can't filter both by frame and section"
-
-        # let's filter node list
-        selected_node = list(self)
-        if select_section:
-            if isinstance(select_section, str):
-                select_section = self._individual.constraints.sections[select_section]
-            selected_node = [
-                n for n in selected_node if select_section in (f.section for f in self._nodes[n]['frame_path'])
-            ]
-        if select_frame:
-            if isinstance(select_frame, Frame):
-                selected_node = [n for n in selected_node if select_frame in self._nodes[n]['frame_path']]
-            else:
-                selected_node = [
-                    n for n in selected_node if select_frame in (f.name for f in self._nodes[n]['frame_path'])
-                ]
-
-        if select_heads is not None:
-            internal_nodes = set(t for f, t, k in self._graph.edges(selected_node, keys=True) if k == 'next')
-            if select_heads:
-                selected_node = [n for n in selected_node if n not in internal_nodes]
-            else:
-                selected_node = [n for n in selected_node if n in internal_nodes]
-
-        # data is False: return a list of NodeID
-        if data is False:
-            return selected_node
-
-        # data is either True or str: return a dict NodeID -> Any
-        node_dict = dict()
-        for n in selected_node:
-            if data is True:
-                node_dict[n] = self._nodes[n]
-            elif data in self._nodes[n]:
-                node_dict[n] = self._nodes[n][data]
-            elif default is not None:
-                node_dict[n] = default
-        return node_dict
-
-
-class EdgeList(abc.Mapping, abc.Set, abc.Callable):
-    """A simplified view of the edges of an individual
-    """
-    pass
 
 
 class GraphWrapper:
@@ -213,7 +82,7 @@ class GraphWrapper:
             section (Section or str): Section nodes belong to
             only_heads (bool): Only returns heads (default False)
             frame_path_limit (int): how much deep must be the path
-            data (bool/str): As data in NetworkX NodeView
+            data (bool/str): As data in NetworkX NodeWrapper
         """
 
         assert not (section and frame), "Can't specify BOTH section_name and frame"
@@ -257,7 +126,7 @@ class GraphWrapper:
 
     @property
     def node_view(self):
-        warnings.warn("Direct access to the NetworkX NodeView class inside the individual is deprecated",
+        warnings.warn("Direct access to the NetworkX NodeWrapper class inside the individual is deprecated",
                       DeprecationWarning,
                       stacklevel=2)
         return self._raw_nx_graph.nodes
@@ -389,7 +258,8 @@ class Individual(Paranoid, Pedantic):
         self._unlinked_nodes = dict()
         self._imported_procs = dict()
         self._canonic_phenotype = None
-        self._graph = GraphWrapper(graph=nx.MultiDiGraph(), individual=self)
+        self._real_nx_graph = nx.MultiDiGraph()
+        self._graph = GraphWrapper(graph=self._real_nx_graph, individual=self)
 
         if not copy_from:
             self._constraints = constraints
@@ -515,7 +385,7 @@ class Individual(Paranoid, Pedantic):
             setattr(self, 'fitness_comment', comment)
             return getattr(self, attribute)
         elif attribute == 'nodes_list':
-            nodes_list = NodeList(self)
+            nodes_list = NodesCollection(self)
             if self._finalized:
                 setattr(self, attribute, nodes_list)
             return nodes_list
@@ -845,7 +715,7 @@ class Individual(Paranoid, Pedantic):
         # TODO: Lazy View creation: overload the (class) property on the instance
         # Then future G.nodes use the existing View
         # setattr doesn't work because attribute already exists
-        # nodes = NodeView(self)
+        # nodes = NodeWrapper(self)
         # self.__dict__['nodes'] = nodes
         self._finalized = True
 

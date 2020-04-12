@@ -183,6 +183,15 @@ class Darwin:
             # [ ind1, ind2, [ ind11, ind12, ind13], [ ind21, [ ind211, ind212], ind23] ], ind4 ]
             final_offspring = self.filter_offspring(temporary_offspring)
 
+            # from microgp.node import NodeID
+            # from microgp import graph_wrapper
+            # o = final_offspring[0]
+            # g = graph_wrapper.NodesCollection(o)
+            # print(g[NodeID(1)].frame_path)
+            # print(g())
+            # print(g(data='frame_path'))
+            # o2 = final_offspring[0]
+
             # if not final_offspring:
             #     logging.warning(f'Operator {operator.function} has not produced a valid individual')
             # elif original_individuals:

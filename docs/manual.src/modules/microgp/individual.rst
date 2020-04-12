@@ -31,10 +31,10 @@ Individual
 .. autoclass:: microgp.individual.Individual
     :members:
 
-NodeList
+NodesCollection
 ********
 
-.. autoclass:: microgp.individual.NodeList
+.. autoclass:: microgp.individual.NodesCollection
     :members:
 
 GraphWrapper

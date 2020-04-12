@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Optional
+from typing import Optional, Any
 from microgp.abstract import Pedantic
 import warnings
 
@@ -46,9 +46,11 @@ class NodeID(int, Pedantic):
         if value is None:
             NodeID._LAST_ID += 1
             value = NodeID._LAST_ID
-        else:
+        elif isinstance(value, NodeID):
             value = int(value)
+        else:
             warnings.warn("Cast from integer to NodeID is deprecated", DeprecationWarning, stacklevel=2)
+            value = int(value)
         return super(NodeID, cls).__new__(cls, value)
 
     def __hash__(self):
@@ -67,6 +69,9 @@ class NodeID(int, Pedantic):
     def __repr__(self) -> str:
         return str(self)
 
+    def is_valid(self, value: Any) -> bool:
+        return isinstance(value, int) and value > 0
+
     def run_paranoia_checks(self) -> bool:
-        assert int(self) > 0, f"Illegal node id: {int(self)}"
+        assert self.is_valid(int(self)), f"Illegal node: {self}"
         return True

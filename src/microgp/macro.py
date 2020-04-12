@@ -48,7 +48,7 @@ class Macro(Paranoid):
         Some parameters are by default available to all macros, the list is in
         Macro.MAGIC_PARAMETERS
     """
-    MAGIC_PARAMETERS = ['info']
+    MAGIC_PARAMETERS = ['info', 'next']
 
     def __init__(self, text: str, parameters_type: dict = None):
         """Macro builder
