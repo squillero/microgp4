@@ -97,7 +97,8 @@ if __name__ == "__main__":
     # library['main'] = [generic_math, [jmp1, add, call1, jmp2], sec_jmp, {jmp1, jmp1}, call2, "\t; ----", generic_math, ""]
     # library['main'] = ["; main starts here", add, sub, call1, ""]
 
-    library['proc1'] = ["proc {info:node} near", generic_math, call2, "endp", ""]
+    #library['proc1'] = ["proc {info:node} near", generic_math, call2, "endp", ""]
+    library['proc1'] = ["proc {info:node} near", generic_math, "endp", ""]
     library['proc2'] = ["proc {info:node} near", generic_math, add, "endp", ""]
     # library['proc2'] = ["proc {info:node} near", {add, sub}, jmp2, "endp", ""]
     library['proc3'] = ["proc {info:node} near", call4, {call2, add}, "endp", ""]
@@ -122,20 +123,20 @@ if __name__ == "__main__":
     operators += ugp4.GenOperator(ugp4.create_random_individual, 0)
 
     # Add mutation operators
-    operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
-    operators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
-    operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
-    operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.remove_node_mutation, 1)
+    #perators += ugp4.GenOperator(ugp4.add_node_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
+    #operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
 
     # Add crossover operators
-    operators += ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
-    operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
+    #operators += ugp4.GenOperator(ugp4.switch_proc_crossover, 2)
+    #operators += ugp4.GenOperator(ugp4.macro_pool_one_cut_point_crossover, 2)
     operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
 
     # Create the object that will manage the evolution__________________________________________________________________
     mu = 10
     nu = 20
-    sigma = 0.5
+    strength = 0.5
     lambda_ = 7
     max_age = 10
 
@@ -146,7 +147,7 @@ if __name__ == "__main__":
             mu=mu,
             nu=nu,
             lambda_=lambda_,
-            sigma=sigma,
+            strength=strength,
             max_age=max_age,
         )
 

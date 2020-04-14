@@ -6,8 +6,8 @@
 
 The study of an evolutionary tool for generating *real* assembly programs started around 2000. The first operational version dates back to 2001: it was composed of a few hundred lines of C code, plus a collection of scripts hacked together to test the feasibility of the idea (DOI: [10.1109/CEC.2002.1004462](http://dx.doi.org/10.1109/CEC.2002.1004462)). It has been retroactively labelled *MicroGP1*, although no specific name was used at the time.
 
-MicroGP1 internally stores an assembly program as a directed acyclic graphs, where  each node encodes a fragment of code with some parameters. Evolution proceeds by tweaking the topology of the graph and modifying the parameters
-inside the nodes. The graph is eventually transformed into a valid assembly-language program in order to be evaluated, that is, assembled, linked and executed.
+MicroGP1 internally stores an assembly program as a directed acyclic graphs, where  each node encodes a fragment of code with some parameters. Evolution proceeds by tweaking the topology of the graph_manager and modifying the parameters
+inside the nodes. The graph_manager is eventually transformed into a valid assembly-language program in order to be evaluated, that is, assembled, linked and executed.
 
 ## MicroGP2
 

@@ -29,10 +29,9 @@ from string import Formatter
 from typing import Type, Dict
 import warnings
 
+from . import parameter
 from .abstract import Paranoid
-from .parameter import Structural
-from .parameter.base import Parameter
-from .parameter.special import Information
+from .parameter.abstract import Parameter
 from .properties import Properties
 
 
@@ -48,7 +47,7 @@ class Macro(Paranoid):
         Some parameters are by default available to all macros, the list is in
         Macro.MAGIC_PARAMETERS
     """
-    MAGIC_PARAMETERS = ['info', 'next']
+    MAGIC_PARAMETERS = ['info']
 
     def __init__(self, text: str, parameters_type: dict = None):
         """Macro builder
@@ -64,7 +63,7 @@ class Macro(Paranoid):
         assert all([p not in Macro.MAGIC_PARAMETERS for p in parameters_type]), "Parameter name is reserved"
         assert all([p[:1] != '$' for p in parameters_type]), "Parameter name can't start with '$'"
         # magic parameters
-        parameters_type['info'] = Information
+        parameters_type['info'] = parameter.Information
         # sanity check
         assert all([p is None or p in parameters_type for _, p, _, _ in Formatter().parse(text)
                    ]), "A parameter in macro's text is missing from the dictionary of parameters' types"
@@ -102,12 +101,13 @@ class Macro(Paranoid):
         assert name not in Macro.MAGIC_PARAMETERS, "Parameter '" + name + "' is reserved for internal use"
         self._parameters_type[name] = parameter_type
 
-    def run_paranoia_checks(self) -> None:
+    def run_paranoia_checks(self) -> bool:
         for name, parameter_type in self._parameters_type.elem():
             assert isinstance(name, str), "Name must be a string"
             assert isinstance(parameter_type, type), "Parameter type should be a 'type' (d'ho!?)"
             assert isinstance(parameter_type(), Parameter), "Parameter type must be of type 'Parameter' (d'ho!?)"
             assert name not in Macro.MAGIC_PARAMETERS, "Parameter '" + name + "' is reserved for internal use"
+            return True
 
     def describe(self) -> str:
         desc = "%r" % (self._text,)

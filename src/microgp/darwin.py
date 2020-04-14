@@ -38,7 +38,7 @@ from .utils import logging, random_generator
 class Darwin:
     """This class manages the evolution, stores the genetic operators, the
     population, and the archive. You can set some evolution parameters
-    (`lambda, tau, nu, sigma, mu`) and a list of stopping conditions.
+    (`lambda, tau, nu, strength, mu`) and a list of stopping conditions.
     A `microgp.population.Population` and a `microgp.population.Archive`
     objects are also initialized.
 
@@ -49,7 +49,7 @@ class Darwin:
         lambda_ (int): Number of operators to pick at each generation (except when the population is empty).
         nu (int): Number of initialization operators to pick when the population is empty. None if you want mu individuals.
         tau (float): Selection pressure. Default value: 2.0
-        sigma (float): Probability and strength of the mutation (to be passed to the mutation GenOperators).
+        strength (float): Probability and strength of the mutation (to be passed to the mutation GenOperators).
         max_age (int): Maximum age that an individual in the population can have. None if you don't want to filter individuals by age.
         stopping_conditions:
 
@@ -59,7 +59,7 @@ class Darwin:
 
         >>> mu = 10
         >>> nu = 20
-        >>> sigma = 0.2
+        >>> strength = 0.2
         >>> lambda_ = 7
         >>> max_age = 10
         >>> darwin = ugp4.Darwin(
@@ -68,7 +68,7 @@ class Darwin:
         >>>     mu=mu,
         >>>     nu=nu,
         >>>     lambda_=lambda_,
-        >>>     sigma=sigma,
+        >>>     strength=strength,
         >>>     max_age=max_age)
 
     - Evolve, print results (`Population`_):
@@ -76,7 +76,7 @@ class Darwin:
         >>> darwin.evolve()
         >>> logging.bare("This is the population:")
         >>> for individual in darwin.population:
-        >>>     msg = 'Printing individual ' + individual.id
+        >>>     msg = 'Printing individual ' + individual.node_id
         >>>     ugp4.print_individual(individual, msg=msg, plot=True)
         >>>     ugp4.logging.bare(individual.fitness)
 
@@ -94,7 +94,7 @@ class Darwin:
                  lambda_: int,
                  nu: int = None,
                  tau: float = 2.0,
-                 sigma: float = 0.5,
+                 strength: float = 0.5,
                  max_age: int = None,
                  stopping_conditions: list = None) -> None:
 
@@ -105,7 +105,7 @@ class Darwin:
         assert nu is None or nu > 0, "nu must be > 0 or None"
         assert lambda_ > 0, "lambda_ must be > 0"
         assert tau > 0, "tau must be > 0"
-        assert 0 <= sigma <= 1, "sigma must be in [0, 1]"
+        assert 0 <= strength <= 1, "strength must be in [0, 1]"
         assert max_age is None or max_age > 0, "max_age must be > 0 or None"
 
         self._constraints = constraints
@@ -113,7 +113,7 @@ class Darwin:
         self._population = Population()
         self._archive = Archive()
 
-        self._sigma = sigma
+        self._strength = strength
         self._max_age = max_age
         # Set population size
         self._mu = mu
@@ -175,7 +175,9 @@ class Darwin:
 
             # Generate the new individuals returned by the selected GenOperator
             #   NOTE: The temporary_offspring may contain None elements
-            temporary_offspring = operator(*original_individuals, sigma=self._sigma, constraints=self._constraints)
+            temporary_offspring = operator(*original_individuals,
+                                           strength=self._strength,
+                                           constraints=self._constraints)
             assert issubclass(type(temporary_offspring),
                               list) or temporary_offspring is None, "temporary_offspring must be a list"
 
@@ -183,14 +185,10 @@ class Darwin:
             # [ ind1, ind2, [ ind11, ind12, ind13], [ ind21, [ ind211, ind212], ind23] ], ind4 ]
             final_offspring = self.filter_offspring(temporary_offspring)
 
-            # from microgp.node import NodeID
-            # from microgp import graph_wrapper
-            # o = final_offspring[0]
-            # g = graph_wrapper.NodesCollection(o)
-            # print(g[NodeID(1)].frame_path)
-            # print(g())
-            # print(g(data='frame_path'))
-            # o2 = final_offspring[0]
+            from microgp.node import NodeID
+            from microgp import graph
+            o = final_offspring[0]
+            o2 = final_offspring[0]
 
             # if not final_offspring:
             #     logging.warning(f'Operator {operator.function} has not produced a valid individual')

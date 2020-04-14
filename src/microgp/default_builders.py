@@ -34,7 +34,7 @@ def default_base_builder(individual: "Individual", frame: Frame, **kwargs) -> Di
     v = dict()
 
     # nodes
-    nodes = individual.graph.nodes(frame=frame, frame_path_limit=-1, data=True)
+    nodes = individual.nodes(frame_selector=frame, data=True)
     v['nodes'] = list(nodes.keys())
     v['macro_counter'] = Counter([d['macro'] for d in nodes.values()])
 
@@ -51,7 +51,7 @@ def default_cumulative_builder(individual: "Individual", frame: Frame, **kwargs)
     """Get base cumulative stats of the frame"""
     v = dict()
     # nodes
-    nodes = individual.graph.nodes(frame=frame, frame_path_limit=-1, data=True)
+    nodes = individual.nodes(frame_selector=frame, data=True)
 
     v['nodes_cumulative'] = list(nodes.keys())
     v['section_counter_cumulative'] = Counter([s.section.name for s in individual.frame_tree.get_sub_frames(frame)])

@@ -25,7 +25,7 @@
 # limitations under the License.
 
 from ..utils import logging
-from .base import Parameter
+from .abstract import Parameter
 from microgp import random_generator
 import microgp as ugp4
 
@@ -42,42 +42,20 @@ class Integer(Parameter):
         max (int): maximum value **not included**.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def is_valid(self, value):
+        """Check if the passed value is in range min, max."""
+        if value is None: return True
+        return self.min <= value < self.max
+
+    def mutate(self, strength: float = 0.5):
+        assert 0 <= strength <= 1, "Invalid strength: " + str(strength) + " (should be 0 <= s <= 1)"
+        if strength == 0:
+            logging.debug("strength == 0")
+        else:
+            self.value = random_generator.randrange(self.min, self.max, loc=self._value, strength=strength)
+
+    def run_paranoia_checks(self) -> bool:
         assert getattr(self, 'min', None) is not None, "Illegal or missing min (not using make_parameter?)"
         assert getattr(self, 'max', None) is not None, "Illegal or missing max (not using make_parameter?)"
-        assert self.min < self.max, "Illegal min/max values"
-        self.mutate(1)
-
-    def is_valid(self, value):
-        """Check if the passed value is in range min, max.
-
-        Args:
-            value: value to be checked.
-
-        Returns:
-            True if it is valid. False otherwise.
-        """
-        if not isinstance(value, int):
-            return False
-        if value < self.min or value >= self.max:
-            return False
-        return True
-
-    def mutate(self, sigma: float = 0.5):
-        assert 0 <= sigma <= 1, "Invalid strength: " + str(sigma) + " (should be 0 <= s <= 1)"
-        if sigma == 0:
-            logging.debug("sigma == 0")
-        elif sigma == 1:
-            self._value = random_generator.randrange(self.min, self.max)
-        else:
-            self._value = random_generator.randrange(self.min, self.max, loc=self._value, strength=sigma)
-
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, new_value):
-        assert self.min <= new_value < self.max, "The given value is not in self.min <= new_value < self.max"
-        self._value = new_value
+        assert self._value is None or isinstance(self._value, int), f"Illegal value type: {type(self._value)}"
+        return super().run_paranoia_checks()

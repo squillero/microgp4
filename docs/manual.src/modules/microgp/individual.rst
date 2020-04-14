@@ -11,7 +11,7 @@ Individual
 The :mod:`microgp.individual.Individual` object represents a possible
 solution, the :mod:`microgp.individual.Individual._graph` attribute is a
 `NetworkX MultiDiGraph`_, the nodes, inside it, are identified by their
-unique id (:mod:`microgp.node.NodeID` object that inherits from `int`).
+unique node_id (:mod:`microgp.node.NodeID` object that inherits from `int`).
 
 Each `node` contains:
 
@@ -37,10 +37,10 @@ NodesCollection
 .. autoclass:: microgp.individual.NodesCollection
     :members:
 
-GraphWrapper
+GraphWrapper_DELETED
 ************
 
-.. autoclass:: microgp.individual.GraphWrapper
+.. autoclass:: microgp.individual.GraphWrapper_DELETED
     :members:
 
 Graph information getter methods

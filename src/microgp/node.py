@@ -25,16 +25,16 @@
 # limitations under the License.
 
 from typing import Optional, Any
-from microgp.abstract import Pedantic
 import warnings
+from microgp.abstract import Pedantic
 
 
 class NodeID(int, Pedantic):
     """A node in the directed MultiDiGraph describing the individual.
 
-    Use `n = NodeID()` to get a unique id.
+    Use `n = NodeID()` to get a unique node_id.
 
-    Use `n = NodeID(int)` to get a specific node id. This is deprecated as it could only be useful during debug.
+    Use `n = NodeID(int)` to get a specific node node_id. This is deprecated as it could only be useful during debug.
     """
 
     _LAST_ID = 0  # global counter of nodes

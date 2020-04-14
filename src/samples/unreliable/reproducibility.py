@@ -92,8 +92,8 @@ if __name__ == "__main__":
         shr_count = 0
         nodes = get_nodes_in_frame(individual, frame)
         for node in nodes:
-            #parameters = individual.graph[node]['parameters']
-            parameters = individual.graph[node]['parameters']
+            #parameters = individual.graph_manager[node]['parameters']
+            parameters = individual.graph_manager[node]['parameters']
             if 'shift' in parameters.keys():
                 if parameters['shift'].value == 'shr':
                     shr_count += 1
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     #section.properties.add_checker(lambda shl_count, shr_count, **v: shl_count == shr_count)
 
     # Create the instruction library
-    library = ugp4.Constraints(file_name="solution{id}.s")
+    library = ugp4.Constraints(file_name="solution{node_id}.s")
     library['main'] = [prologue_macro, init_macro, ugp4.make_section({section}, size=(1, 50)), epilogue_macro]
 
     def dummy_fitness(individual):
@@ -128,10 +128,10 @@ if __name__ == "__main__":
     #operators += ugp4.GenOperator(ugp4.macro_pool_uniform_crossover, 2)
 
 
-    def dummy_op(original_individual, sigma, **kwargs):
+    def dummy_op(original_individual, strength, **kwargs):
         return ugp4.create_random_individual(library)
 
-    def dummy_op2(original_individual, sigma, **kwargs):
+    def dummy_op2(original_individual, strength, **kwargs):
         return ugp4.create_random_individual(library)
 
     operators += ugp4.GenOperator(dummy_op, 1)
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     # Create the object that will manage the evolution
     mu = 5
     nu = 5
-    sigma = 0.7
+    strength = 0.7
     lambda_ = 7
     max_age = 10
 
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         mu=mu,
         nu=nu,
         lambda_=lambda_,
-        sigma=sigma,
+        strength=strength,
         max_age=max_age,
     )
 

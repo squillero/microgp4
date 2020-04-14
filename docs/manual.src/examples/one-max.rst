@@ -101,7 +101,7 @@ that is the sum of `1` in the individual's phenotype.
        darwin.evolve()
        logging.bare("This is the final population:")
        for individual in darwin.population:
-           msg = f"Solution {str(individual.id)} "
+           msg = f"Solution {str(individual.node_id)} "
            ugp.print_individual(individual, msg=msg, plot=True)
            ugp.logging.bare(f"Fitness: {individual.fitness}")
            ugp.logging.bare("")
@@ -197,7 +197,7 @@ exactly 8 macros (``word_macro``) with a parameter (``bit``) of type
        darwin.evolve()
        logging.bare("This is the final population:")
        for individual in darwin.population:
-           msg = f"Solution {str(individual.id)} "
+           msg = f"Solution {str(individual.node_id)} "
            ugp.print_individual(individual, msg=msg, plot=True, score=True)
 
        # Print best individuals
@@ -298,7 +298,7 @@ A possible solution could be:
 
    Fitness score: Lexicographic(29)
 
-The correspondent graph plot is:
+The correspondent graph_manager plot is:
 
 .. image:: ../../images/onemax_assembly_solution_plot.jpg
   :width: 500
@@ -385,7 +385,7 @@ In the figure the black edges are `next` edges and the red ones are ``LocalRefer
        sec1 = ugp.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
 
        # Create a constraints library
-       library = ugp.Constraints(file_name="solution{id}.s")
+       library = ugp.Constraints(file_name="solution{node_id}.s")
        library['main'] = [prologue_macro, init_macro, sec1, epilogue_macro]
 
        # Define the evaluator script and the fitness type

@@ -112,7 +112,7 @@ if __name__ == "__main__":
     sec1 = ugp4.make_section({jmp1, instr_op_macro, shift_op_macro}, size=(1, 50))
 
     # Create the instruction library
-    library = ugp4.Constraints(file_name='solution{id}.s')
+    library = ugp4.Constraints(file_name='solution{node_id}.s')
     library['main'] = [prologue_macro, init_macro, sec1, epilogue_macro]
 
     # Define the evaluator script and the fitness type
@@ -129,8 +129,8 @@ if __name__ == "__main__":
         shr_count = 0
         nodes = get_nodes_in_frame(individual, frame)
         for node in nodes:
-            #parameters = individual.graph[node]['parameters']
-            parameters = individual.graph[node]['parameters']
+            #parameters = individual.graph_manager[node]['parameters']
+            parameters = individual.graph_manager[node]['parameters']
             if 'shift' in parameters.keys():
                 if parameters['shift'].value == 'shr':
                     shr_count += 1
@@ -157,7 +157,7 @@ if __name__ == "__main__":
     # Create the object that will manage the evolution
     mu = 10
     nu = 20
-    sigma = 0.7
+    strength = 0.7
     lambda_ = 7
     max_age = 10
 
@@ -167,7 +167,7 @@ if __name__ == "__main__":
         mu=mu,
         nu=nu,
         lambda_=lambda_,
-        sigma=sigma,
+        strength=strength,
         max_age=max_age,
     )
 

@@ -28,7 +28,7 @@ from typing import Tuple
 from .constraints import SubsectionsSequence, SubsectionsAlternative
 from .individual import *
 from .macro import Macro
-from .parameter import Information
+from . import parameter
 from .utils import logging
 from microgp import random_generator
 import microgp as ugp4
@@ -46,7 +46,7 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
     Args:
         individuals (Individual or List(Individual): individual/s to print/plot
         msg (str): message to print in the first line
-        plot (bool): if True -> plot the graph
+        plot (bool): if True -> plot the graph_manager
         score (bool): if True -> Print fitness score after the printing phenotype
     """
     if isinstance(individuals, set):
@@ -152,7 +152,6 @@ def create_random_individual(constraints: Constraints, max_retries: Optional[int
     """
     assert isinstance(constraints, Constraints), \
         "constraints should be of type Constraints, found %s" % (type(constraints),)
-    assert constraints.run_paranoia_checks()
 
     is_valid = False
     tries = 0
@@ -174,20 +173,8 @@ def create_random_individual(constraints: Constraints, max_retries: Optional[int
         # Get the list of all possible nodes -> list of tuples(node, frame_path)
         nodes = unroll_macro_list(individual, 'main')
 
-        # Take the first macro and its path in frame. Put it in the individual as the first node
-        macro, frame_path = nodes.pop(0)
-        ''' frame_path is a tuple containing Frame. Example:
-            Frame(name='', section=<microgp.constraints.RootSection object at 0x0F66BDB0>),
-            Frame(name='main_1', section=<microgp.constraints.SubsectionsSequence object at 0x0E227AF0>),
-            Frame(name='str1_1', section=<microgp.constraints.MacroPool object at 0x0F66BB90>
-
-            The macro comes from the root section that contains a the SubsectionSequence that contains a
-             macro pool that contains the macro itself
-       '''
-        parent = individual.add_node(parent_node=None, macro=macro, frame_path=frame_path)
-        individual.entry_point = parent
-
         # Take each macro of all nodes and add it in the node set of the individual
+        parent = None
         for macro, frame_path in nodes:
             parent = individual.add_node(parent_node=parent, macro=macro, frame_path=frame_path)
 
@@ -254,7 +241,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     from .parameter import ExternalReference
 
     candidates = list()
-    for node_id, parameters in individual.nodes_list(data='parameters').items():
+    for node_id, parameters in individual.nodes(data='parameters').items():
         candidates = candidates + [(node_id, p) for p in parameters if isinstance(parameters[p], ExternalReference)]
 
     chosen_node_id, chosen_parameter_name = random_generator.choice(candidates)
@@ -269,7 +256,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     individual.arrange_movable_proc(nodes_to_copy_from, source_individual, first_movable_node)
 
     # Change the destination of the external reference of the selected node_____________________________________________
-    original_node = individual.nodes_list[chosen_node_id]
+    original_node = individual.nodes[chosen_node_id]
     from microgp.parameter import ExternalReference
     for parameter_name, parameter in original_node['parameters'].items():
         if parameter.name == chosen_parameter_name and isinstance(parameter, ExternalReference):
@@ -329,8 +316,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     """
     assert all([parentA, parentB]), f"Arity of macro_pool_one_cut_point_crossover is 2"
 
-    assert all(parentA.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
-    assert all(parentB.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+    assert all(parentA.nodes(data='frame_path').values()), "Illegal frame_path in individual's node"
+    assert all(parentB.nodes(data='frame_path').values()), "Illegal frame_path in individual's node"
 
     # Copy all the genes from the primary parent and set internal creation characteristics______________________________
     # Initialize first son (individualC)
@@ -343,8 +330,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_one_cut_point_crossover
 
-    assert all(individualC.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
-    assert all(individualD.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+    assert all(individualC.nodes(data='frame_path').values()), "Illegal frame_path in individual's node"
+    assert all(individualD.nodes(data='frame_path').values()), "Illegal frame_path in individual's node"
 
     if parentA == parentB:
         individualC.finalize()
@@ -399,8 +386,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     #   outside the chosen frame and the frame path of the nodes in frame (they will be used in individualC.finalize())
     first_outside_C = individualC.get_next(nodes_in_frame_C[-1])
     first_outside_D = individualD.get_next(nodes_in_frame_D[-1])
-    frame_path_C = individualC.graph[cut_node_C]['frame_path']
-    frame_path_D = individualD.graph[cut_node_D]['frame_path']
+    frame_path_C = individualC.graph_manager[cut_node_C]['frame_path']
+    frame_path_D = individualD.graph_manager[cut_node_D]['frame_path']
     individualC._unlinked_nodes[first_movable_node_C] = (cut_node_C, first_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (cut_node_D, first_outside_D, frame_path_D)
 
@@ -415,8 +402,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     #     print_individual(parentB, 'parentB', plot=True)
     #     print_individual(individualC, 'individualC', plot=True)
     #     print_individual(individualD, 'individualD', plot=True)
-    assert all(individualC.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
-    assert all(individualD.nodes_list(data='frame_path', default=False).values()), "Illegal frame_path in individual's node"
+    assert all(individualC.nodes(data='frame_path').values()), "Illegal frame_path in individual's node"
+    assert all(individualD.nodes(data='frame_path').values()), "Illegal frame_path in individual's node"
 
     return [individualC, individualD]
 
@@ -459,20 +446,20 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
       """
     assert all([parentA, parentB]), f"Arity of crossover_3 is 2, received {len(parents)} instead"
 
-    # Copy the graph structure from the parents and set internal hereditary characteristics_____________________________
+    # Copy the graph_manager structure from the parents and set internal hereditary characteristics_____________________________
     # Initialize first son (individualC) from parentA
     individualC = Individual(parentA.constraints, copy_from=parentA)
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_uniform_crossover
-    assert all(individualC.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualC.graph_manager[n]['frame_path']
+               for n in individualC.graph_manager.nodes()), "Illegal frame_path in individual's node"
 
     # Initialize second son (individualD) from parentB
     individualD = Individual(parentB.constraints, copy_from=parentB)
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_uniform_crossover
-    assert all(individualD.graph[n]['frame_path']
-               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
+    assert all(individualD.graph_manager[n]['frame_path']
+               for n in individualD.graph_manager.nodes()), "Illegal frame_path in individual's node"
 
     # If the individuals are identical -> return the copies
     if parentA == parentB:
@@ -515,20 +502,22 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     pred_D = individualD.get_predecessors(first_node_id_D)
     pred_C = pred_C[0] if pred_C else None
     pred_D = pred_D[0] if pred_D else None
-    frame_path_C = individualC.graph[first_node_id_C]['frame_path']
-    frame_path_D = individualD.graph[first_node_id_D]['frame_path']
+    frame_path_C = individualC.graph_manager[first_node_id_C]['frame_path']
+    frame_path_D = individualD.graph_manager[first_node_id_D]['frame_path']
     individualC._unlinked_nodes[first_movable_node_C] = (pred_C, first_node_outside_C, frame_path_C)
     individualD._unlinked_nodes[first_movable_node_D] = (pred_D, first_node_outside_D, frame_path_D)
 
     individualC.finalize()
     is_valid_C = individualC.is_valid()
-    assert individualC.is_valid() is False or all(individualC.graph[n]['frame_path']
-               for n in individualC.graph.nodes()), "Illegal frame_path in individual's node"
+    assert individualC.is_valid() is False or all(
+        individualC.graph_manager[n]['frame_path']
+        for n in individualC.graph_manager.nodes()), "Illegal frame_path in individual's node"
 
     individualD.finalize()
     is_valid_D = individualD.is_valid()
-    assert individualD.is_valid() is False or all(individualD.graph[n]['frame_path']
-               for n in individualD.graph.nodes()), "Illegal frame_path in individual's node"
+    assert individualD.is_valid() is False or all(
+        individualD.graph_manager[n]['frame_path']
+        for n in individualD.graph_manager.nodes()), "Illegal frame_path in individual's node"
 
     individualC = None if not is_valid_C else individualC
     individualD = None if not is_valid_D else individualD
@@ -541,14 +530,14 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
 
 
 # MUTATIONS_____________________________________________________________________________________________________________
-def check_muation_parameters(original_individual: Individual, sigma: float):
-    assert issubclass(type(sigma), float), '"sigma" parameter must be a float'
-    assert 0 <= sigma <= 1, '"sigma" parameter must be in [0, 1]'
+def check_muation_parameters(original_individual: Individual, strength: float):
+    assert issubclass(type(strength), float), '"strength" parameter must be a float'
+    assert 0 <= strength <= 1, '"strength" parameter must be in [0, 1]'
     assert original_individual, "Original individual can't be None"
     assert isinstance(original_individual, Individual), "Original individual must be of type Individual"
 
 
-def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
+def remove_node_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
     """Try to remove a node taken from the possible set of nodes in the
     individual. The removal could fail because of the minimum number of nodes
     that the individual must contain. This method returns a modified copy of
@@ -556,20 +545,20 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
 
     Args:
         original_individual (Individual): source individual to mutate
-        sigma (float): mutation strength
+        strength (float): mutation strength
 
     Returns:
         A list with the new mutated individual or None if it is not valid
     """
     # logging.debug("Remove a node mutation has been chosen")
-    check_muation_parameters(original_individual, sigma)
+    check_muation_parameters(original_individual, strength)
 
     new_individual = Individual(original_individual.constraints, copy_from=original_individual)
     new_individual.parents = [original_individual]
     new_individual.operator = remove_node_mutation
 
     while True:
-        if len(new_individual.graph.nodes()) <= 2:
+        if len(new_individual.graph_manager.nodes()) <= 2:
             logging.debug("Individual should have at least two nodes")
             return [None]
 
@@ -590,26 +579,24 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         # Choose randomly the node that will be removed
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
         node_to_remove = random_generator.choice(candidate_nodes)
-        chosen_root_frame = new_individual.graph[node_to_remove]['frame_path'][1]
+        chosen_root_frame = new_individual.graph_manager[node_to_remove]['frame_path'][1]
 
-        # logging.debug(f"Removing node: {node_to_remove}")
-        if node_to_remove == new_individual.entry_point:
-            new_individual.entry_point = new_individual.get_next(node_to_remove)
-        new_individual.delete_node(node_to_remove)
-        assert node_to_remove not in new_individual.graph.nodes(), "Node has not been removed"
+        new_individual.remove_node(node_to_remove)
+        assert node_to_remove not in new_individual.graph_manager.nodes(), "Node has not been removed"
 
         # Example: If the removed NodeID_2 was a destination of a Reference in NodeID_1 and NodeID_6 -> change the value
         #  in parameter of the NodeID_1 and NodeID_6 with a new possible target (mutate(1))
-        from .parameter.reference import LocalReference
-        for node in new_individual.graph.nodes(frame=chosen_root_frame):
-            for parameter_name, parameter in new_individual.graph[node]['parameters'].items():
+        from .parameter import LocalReference
+        for node in new_individual.graph_manager.nodes(frame=chosen_root_frame):
+            for parameter_name, parameter in new_individual.graph_manager[node]['parameters'].items():
                 if isinstance(parameter, LocalReference) and parameter.value == node_to_remove:
                     parameter.mutate(1)
 
-        if sigma == 1.0 or not (random_generator.random() < sigma):
+        if strength == 1.0 or not (random_generator.random() < strength):
             break
 
-    assert len(original_individual.graph.nodes()) > len(new_individual.graph.nodes()), "Something wrong!"
+    assert len(original_individual.graph_manager.nodes()) > len(
+        new_individual.graph_manager.nodes()), "Something wrong!"
     new_individual.finalize()
     if new_individual.is_valid() == False:
         return [None]
@@ -619,20 +606,20 @@ def remove_node_mutation(original_individual: Individual, sigma: float, **kwargs
         return [new_individual]
 
 
-def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
-    """Insert a new node in the individual graph. An insertion of a new node
+def add_node_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
+    """Insert a new node in the individual graph_manager. An insertion of a new node
     could fail because of there are no valid targets for the node that
     contains a LocalReference.
 
     Args:
         original_individual (Individual): source individual to mutate
-        sigma (float): mutation strength
+        strength (float): mutation strength
 
     Returns:
         A list with the new mutated individual or None if it is not valid
     """
     # logging.debug("Insert a new node mutation has been chosen")
-    check_muation_parameters(original_individual, sigma)
+    check_muation_parameters(original_individual, strength)
 
     new_individual = Individual(original_individual.constraints, copy_from=original_individual)
     new_individual.parents = {original_individual}
@@ -656,11 +643,11 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         candidate_nodes = get_nodes_in_section(individual=new_individual, section=chosen_frame[1])
         chosen_parent_node = random_generator.choice(candidate_nodes)
 
-        frame_path = new_individual.graph[chosen_parent_node]['frame_path']
+        frame_path = new_individual.graph_manager[chosen_parent_node]['frame_path']
         candidate_macros = chosen_frame.section.macro_pool
         chosen_macro = random_generator.choice(candidate_macros)
 
-        # Add node to graph
+        # Add node to graph_manager
         node_to_insert = new_individual.add_node(parent_node=chosen_parent_node,
                                                  macro=chosen_macro,
                                                  frame_path=frame_path)
@@ -668,12 +655,13 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         # Initialize parameters of the inserted node
         new_individual.initialize_macros(chosen_macro, node_to_insert)
 
-        assert node_to_insert in new_individual.graph.nodes(), "Node has not been inserted"
+        assert node_to_insert in new_individual.graph_manager.nodes(), "Node has not been inserted"
 
-        if sigma == 1.0 or not (random_generator.random() < sigma):
+        if strength == 1.0 or not (random_generator.random() < strength):
             break
 
-    assert len(original_individual.graph.nodes()) < len(new_individual.graph.nodes()), "Something wrong!"
+    assert len(original_individual.graph_manager.nodes()) < len(
+        new_individual.graph_manager.nodes()), "Something wrong!"
     new_individual.finalize()
     if new_individual.is_valid() == False:
         return [None]
@@ -683,34 +671,34 @@ def add_node_mutation(original_individual: Individual, sigma: float, **kwargs) -
         return [new_individual]
 
 
-def hierarchical_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
-    """Choose a node in the graph, choose a parameter inside the node, mutate it.
+def hierarchical_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
+    """Choose a node in the graph_manager, choose a parameter inside the node, mutate it.
     Each parameter has probability: `1/len(nodes) * 1/len(parameters in that node)`.
 
     Args:
         original_individual (Individual): source individual to mutate
-        sigma (float): mutation strength
+        strength (float): mutation strength
 
     Returns:
         A list with the new mutated individual or None if it is not valid
     """
-    check_muation_parameters(original_individual, sigma)
+    check_muation_parameters(original_individual, strength)
 
     new_individual = Individual(original_individual.constraints, copy_from=original_individual)
     new_individual.parents = {original_individual}
     new_individual.operator = hierarchical_mutation
 
-    # Do while not (rnd.random() < sigma)
+    # Do while not (rnd.random() < strength)
     while True:
         # Use "while loop" to try choosing a node that doesn't contain only the Information parameter or the mutation
         #   had no effect
         while True:
             # Choose a node that contains the parameter to mutate
-            chosen_node = random_generator.choice(new_individual.graph.nodes())
+            chosen_node = random_generator.choice(new_individual.graph_manager.nodes())
 
             # Create a list of parameters contained into the macro
             candidate_parameters = list()
-            for parameter_name, parameter in new_individual.graph[chosen_node]['parameters'].items():
+            for parameter_name, parameter in new_individual.graph_manager[chosen_node]['parameters'].items():
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 
@@ -719,12 +707,12 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
             if candidate_parameters:
                 # Choose only one parameter to mutate in the list of all parameters of the chosen macro
                 chosen_parameter = random_generator.choice(candidate_parameters)
-                assert sigma
-                chosen_parameter.mutate(sigma)
+                assert strength
+                chosen_parameter.mutate(strength)
                 break
 
         # Stop condition
-        if sigma == 1.0 or not (random_generator.random() < sigma):
+        if strength == 1.0 or not (random_generator.random() < strength):
             break
 
     new_individual.finalize()
@@ -736,19 +724,19 @@ def hierarchical_mutation(original_individual: Individual, sigma: float, **kwarg
         return [new_individual]
 
 
-def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> List[Optional[Individual]]:
+def flat_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
     """Build a list of all parameters contained in all nodes then choose one
     of them and mutate it. Each parameter has probability: `1/len(nodes)`.
 
     Args:
         original_individual (Individual): source individual to mutate
-        sigma (float): mutation strength
+        strength (float): mutation strength
 
     Returns:
         A list with the new mutated individual or None if it is not valid
     """
     # logging.debug("Flat mutation has been chosen")
-    check_muation_parameters(original_individual, sigma)
+    check_muation_parameters(original_individual, strength)
 
     new_individual = Individual(original_individual.constraints, copy_from=original_individual)
     new_individual.parents = {original_individual}
@@ -758,10 +746,10 @@ def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> Li
         # Create a list that contains all parameters
         candidate_parameters = list()
         # Iterate for each node in the individual and save a list of parameters
-        for node in new_individual.graph.nodes():
-            for parameter_name in sorted(new_individual.graph[node]['parameters']):
+        for node in new_individual.graph_manager.nodes():
+            for parameter_name in sorted(new_individual.graph_manager[node]['parameters']):
                 # node parameters need to be in predictable order!
-                parameter = new_individual.graph[node]['parameters'][parameter_name]
+                parameter = new_individual.graph_manager[node]['parameters'][parameter_name]
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 
@@ -771,10 +759,10 @@ def flat_mutation(original_individual: Individual, sigma: float, **kwargs) -> Li
 
         # Choose and mutate a parameter
         chosen_parameter = random_generator.choice(candidate_parameters)
-        chosen_parameter.mutate(sigma)
+        chosen_parameter.mutate(strength)
 
         # Stop condition
-        if sigma == 1.0 or not (random_generator.random() < sigma):
+        if strength == 1.0 or not (random_generator.random() < strength):
             break
 
     new_individual.finalize()

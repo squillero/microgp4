@@ -25,7 +25,7 @@
 # limitations under the License.
 
 from ..utils import logging
-from .base import Parameter
+from .abstract import Parameter
 from microgp import random_generator
 import microgp as ugp4
 
@@ -45,7 +45,6 @@ class Bitstring(Parameter):
         super().__init__(*args, **kwargs)
         assert getattr(self, 'len_', None), "Illegal or missing length (not using make_parameter?)"
         assert self.len_ > 0, "Length must be positive"
-        self.mutate(1)
 
     def is_valid(self, value):
         if not isinstance(value, str):
@@ -54,11 +53,11 @@ class Bitstring(Parameter):
             return False
         return all((b == '0' or b == '1') for b in value)
 
-    def mutate(self, sigma: float = 0.5):
-        assert 0 <= sigma <= 1, "Invalid strength: " + str(sigma) + " (should be 0 <= s <= 1)"
-        if sigma == 0:
-            logging.debug("sigma == 0")
-        elif sigma == 1:
+    def mutate(self, strength: float = 0.5):
+        assert 0 <= strength <= 1, "Invalid strength: " + str(strength) + " (should be 0 <= s <= 1)"
+        if strength == 0:
+            logging.debug("strength == 0")
+        elif strength == 1:
             bits_list = random_generator.choices([0, 1], k=self.len_)
             self._value = ''.join(map(str, bits_list))
         else:
@@ -66,7 +65,7 @@ class Bitstring(Parameter):
             value = list(self._value.strip())
             value[i] = str(1 - int(value[i]))
             self.value = ''.join(map(str, value))
-            while random_generator.random() < sigma:
+            while random_generator.random() < strength:
                 i = random_generator.randint(0, self.len_ - 1)
                 value[i] = str(1 - int(value[i]))
                 self.value = ''.join(map(str, value))

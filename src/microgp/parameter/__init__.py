@@ -26,10 +26,9 @@
 
 from .helpers import make_parameter
 
-from .base import Parameter, Structural
-from .special import Information
 from .integer import Integer
 from .bitstring import Bitstring
 from .categorical import Categorical, CategoricalSorted
 from .reference import LocalReference, ExternalReference
-from .special import Special
+from .information import Information
+# from .abstract import Parameter, Structural, Special, Reference

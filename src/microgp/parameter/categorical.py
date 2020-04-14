@@ -26,7 +26,7 @@
 
 from microgp import *
 from ..utils import logging
-from .base import Parameter
+from .abstract import Parameter
 from microgp import random_generator
 import microgp as ugp4
 
@@ -43,40 +43,23 @@ class Categorical(Parameter):
         alternatives (list): list of possible values
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        assert getattr(self, 'alternatives', None), "Illegal or missing alternatives list (not using make_parameter?)"
-        self.mutate(1)
-
     def is_valid(self, value):
+        if value is None: return True
         return value in self.alternatives
 
-    def mutate(self, sigma: float = 0.5):
-        assert 0 <= sigma <= 1, "Invalid strength: " + str(sigma) + " (should be 0 <= s <= 1)"
-        if sigma == 0:
-            logging.debug("sigma == 0")
-            return False
-        elif sigma == 1:
-            new_value = random_generator.choice(self.alternatives)
-            self._value = new_value
+    def mutate(self, strength: float = 0.5):
+        assert 0 <= strength <= 1, "Invalid strength: " + str(strength) + " (should be 0 <= s <= 1)"
+        if strength == 0:
+            logging.debug("strength == 0")
         else:
-            new_value = random_generator.choice(self.alternatives)
-            self._value = new_value
-            while random_generator.random() < sigma:
-                new_value = random_generator.choice(self.alternatives)
-                self._value = new_value
+            self._value = random_generator.choice(self.alternatives)
 
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, new_value):
-        assert new_value in self.alternatives, "The given value is not in self.alternatives"
-        self._value = new_value
+    def run_paranoia_checks(self) -> bool:
+        assert getattr(self, 'alternatives', None), "Illegal or missing alternatives list (not using make_parameter?)"
+        return super().run_paranoia_checks()
 
 
-class CategoricalSorted(Parameter):
+class CategoricalSorted(Categorical):
     """CategoricalSorted parameter. It can take values in 'alternatives'. It
     behaves differently during the mutation phase.
 
@@ -88,33 +71,17 @@ class CategoricalSorted(Parameter):
         alternatives (list): sorted list of possible values
     """
 
-    # TODO: Make categorical an index!
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def mutate(self, strength: float = 0.5):
         assert getattr(self, 'alternatives', None), "Illegal or missing alternatives list (not using make_parameter?)"
-        self.mutate(1)
-
-    def is_valid(self, value):
-        return value in self.alternatives
-
-    def mutate(self, sigma=1):
-        assert 0 <= sigma <= 1, "Invalid strength: " + str(sigma) + " (should be 0 <= s <= 1)"
-        if sigma == 0:
-            logging.debug("sigma == 0")
-        # Mutate with strength: sigma
-        elif sigma == 1:
-            self._value = random_generator.choice(self.alternatives)
+        assert 0 <= strength <= 1, "Invalid strength: " + str(strength) + " (should be 0 <= s <= 1)"
+        if strength == 0:
+            logging.debug("strength == 0")
         else:
-            self._value = random_generator.choice(seq=self.alternatives,
-                                                  last_index=self.alternatives.index(self._value),
-                                                  strength=sigma)
+            self.value = random_generator.choice(self.alternatives,
+                                                 self.alternatives.index(self._value),
+                                                 strength=strength)
 
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, new_value):
-        assert new_value in self.alternatives, "The given value is not in self.alternatives"
-        self._value = new_value
+    def run_paranoia_checks(self) -> bool:
+        assert getattr(self, 'alternatives', None), "Illegal or missing alternatives list (not using make_parameter?)"
+        assert len(self.alternatives) == len(set(self.alternatives)), f"Found duplicated values in alternatives: {self.alternatives}"
+        return super().run_paranoia_checks()

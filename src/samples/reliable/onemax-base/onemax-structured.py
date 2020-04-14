@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # Create the object that will manage the evolution
     mu = 10
     nu = 20
-    sigma = 0.7
+    strength = 0.7
     lambda_ = 7
     max_age = 10
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         mu=mu,
         nu=nu,
         lambda_=lambda_,
-        sigma=sigma,
+        strength=strength,
         max_age=max_age,
     )
 

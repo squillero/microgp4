@@ -48,7 +48,7 @@ class GenOperator:
     - Call the method inside the genetic operator
 
     >>> selected_crossover_genoperator(individual1, individual2)
-    >>> selected_mutation_genoperator(individual, sigma=0.7, constraints=constraints))
+    >>> selected_mutation_genoperator(individual, strength=0.7, constraints=constraints))
     >>> individuals = tuple(ind1, ind2, ind3, ind4, ind5)
     >>> kwargs = {'param1': var1, 'param2': var2, 'param3': [a, b, c, d, e]}
     >>> selected_crossover_5_individuals(*individuals, kwargs)

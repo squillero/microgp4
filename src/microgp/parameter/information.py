@@ -28,8 +28,8 @@ import os
 from datetime import datetime
 
 from .. import version_info
+from .abstract import Special
 from ..node import NodeID
-from .base import Parameter, Structural, Special
 from ..utils import microgp4_process_time
 
 
@@ -56,16 +56,6 @@ class Information(Special):
     """
 
     VALID_INFO = sorted(['node', 'thread_time', 'now', 'path', 'cwd', 'pid', 'version', 'ugp4'])
-
-    def __init__(self, node: NodeID, individual: 'Individual', **kwargs):
-        super().__init__(node=node, individual=individual, **kwargs)
-        assert node is not None, "Node cannot be None"
-        self._node = node
-        self._individual = individual
-
-    @property
-    def node(self) -> NodeID:
-        return self._node
 
     def __format__(self, format_spec: str):
         assert format_spec in Information.VALID_INFO + [''], "Requested information '%s' not in %s" % (
