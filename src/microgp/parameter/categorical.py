@@ -52,7 +52,7 @@ class Categorical(Parameter):
         if strength == 0:
             logging.debug("strength == 0")
         else:
-            self._value = random_generator.choice(self.alternatives)
+            self.value = random_generator.choice(self.alternatives)
 
     def run_paranoia_checks(self) -> bool:
         assert getattr(self, 'alternatives', None), "Illegal or missing alternatives list (not using make_parameter?)"
@@ -83,5 +83,6 @@ class CategoricalSorted(Categorical):
 
     def run_paranoia_checks(self) -> bool:
         assert getattr(self, 'alternatives', None), "Illegal or missing alternatives list (not using make_parameter?)"
-        assert len(self.alternatives) == len(set(self.alternatives)), f"Found duplicated values in alternatives: {self.alternatives}"
+        assert len(self.alternatives) == len(set(
+            self.alternatives)), f"Found duplicated values in alternatives: {self.alternatives}"
         return super().run_paranoia_checks()

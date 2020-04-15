@@ -27,7 +27,7 @@
 from abc import ABC
 from typing import List
 from typing import Optional, Any
-from ..utils import logging
+from ..utils import logging, random_generator
 from ..abstract import Paranoid, Pedantic
 from ..node import NodeID
 
@@ -138,13 +138,6 @@ class Special(Structural, ABC):
 class Reference(Structural, ABC):
     """Base class for references. Inherits from Structural"""
 
-    def _valid_targets(self) -> List[NodeID]:
-        raise NotImplementedError
-
-    def is_valid(self, value: NodeID) -> bool:
-        if value is None: return True
-        return value not in self._valid_targets()
-
     @property
     def value(self) -> NodeID:
         """Get the destination NodeID directly from NetworkX"""
@@ -158,18 +151,28 @@ class Reference(Structural, ABC):
         if new_reference is not None:
             self.individual.graph_manager.add_edge(self.node, new_reference, self.name)
 
+    @property
+    def valid_targets(self):
+        return list(self._get_valid_targets())
+
     def mutate(self, strength: float = 0.5) -> None:
         assert 0 <= strength <= 1, "Invalid strength: " + str(strength) + " (should be 0 <= s <= 1)"
         if strength == 0:
             logging.debug("strength == 0")
-        elif not self._valid_targets():
+        elif not self.valid_targets:
             logging.debug(f"No valid targets for {self.name}")
             self.value = None
         else:
             old_target = self.value
-            valid_targets = self._valid_targets()
+            valid_targets = self.valid_targets
             if old_target in valid_targets:
                 old_index = valid_targets.index(old_target)
             else:
                 old_index = None
             self.value = random_generator.choice(valid_targets, last_index=old_index, strength=strength)
+
+    def _get_valid_targets(self) -> List[NodeID]:
+        raise NotImplementedError
+
+    def is_valid(self, value: NodeID) -> bool:
+        return value in self.valid_targets

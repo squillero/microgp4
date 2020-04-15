@@ -57,6 +57,9 @@ class Information(Special):
 
     VALID_INFO = sorted(['node', 'thread_time', 'now', 'path', 'cwd', 'pid', 'version', 'ugp4'])
 
+    def __str__(self):
+        return f"{self}"
+
     def __format__(self, format_spec: str):
         assert format_spec in Information.VALID_INFO + [''], "Requested information '%s' not in %s" % (
             format_spec, Information.VALID_INFO)

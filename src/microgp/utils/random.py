@@ -59,7 +59,7 @@ class MicroGP_Random():
         assert loc is None or isinstance(loc, int), f"Mean must be int (found: {type(loc)}"
         assert loc is None or strength is not None, f"Strength must be specified if loc is used"
         assert loc is None or a <= loc <= b, f"Illegal loc (loc=f{loc})"
-        assert strength is None or loc is not None, f"Loc must be specified if strength is used"
+        assert strength is None or strength == 1 or loc is not None, f"loc must be specified if a strength < 1 is used"
         assert strength is None or 0 <= strength <= 1, f"Illegal strength (strength={strength})"
 
         if strength is None or strength == 1:
@@ -91,7 +91,6 @@ class MicroGP_Random():
     def shuffle(self, *args, **kwargs):
         """Proxy for random.shuffle()"""
         self._calls += 1
-        warnings.warn("microgp.random_generator.shuffle() is deprecated.", DeprecationWarning, stacklevel=2)
         return self._py_random.shuffle(*args, **kwargs)
 
     def choice(self,
@@ -103,9 +102,9 @@ class MicroGP_Random():
         self._calls += 1
         assert seq, f"seq must be a valid sequence (found: {seq})"
         assert last_index is None or isinstance(last_index, int), f"last_index must be int (found: {type(last_index)})"
-        assert last_index is None or strength is not None, f"Strength must be specified if loc is used"
+        assert last_index is None or strength is not None, f"Strength must be specified if last_index is used"
         assert last_index is None or 0 <= last_index < len(seq), f"Illegal last_index (last_index=f{last_index})"
-        assert strength is None or last_index is not None, f"Loc must be specified if strength is used"
+        assert strength is None or strength == 1 or last_index is not None, f"last_index must be specified if a strength < 1 is used"
         assert strength is None or 0 <= strength <= 1, f"Illegal strength (strength={strength})"
 
         if not last_index or strength == 1:

@@ -182,7 +182,7 @@ def create_random_individual(constraints: Constraints, max_retries: Optional[int
         individual.operator = create_random_individual
         individual.randomize_macros()
         individual.finalize()
-        is_valid = individual.is_valid()
+        is_valid = individual.valid
 
     if not is_valid:
         logging.warning(f"create_random_individual: Unable to create a valid random individual in {tries} attempts")
@@ -263,7 +263,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
             parameter.value = first_movable_node
 
     individual.finalize()
-    is_valid = individual.is_valid()
+    is_valid = individual.valid
     individual = None if not is_valid else individual
     # if is_valid:
     #     print_individual(primary_parent, 'switch_proc crossover: primary parent', plot=True)
@@ -393,8 +393,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
 
     individualC.finalize()
     individualD.finalize()
-    is_valid_C = individualC.is_valid()
-    is_valid_D = individualD.is_valid()
+    is_valid_C = individualC.valid
+    is_valid_D = individualD.valid
     individualC = None if not is_valid_C else individualC
     individualD = None if not is_valid_D else individualD
     # if is_valid_C and is_valid_D:
@@ -508,14 +508,14 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     individualD._unlinked_nodes[first_movable_node_D] = (pred_D, first_node_outside_D, frame_path_D)
 
     individualC.finalize()
-    is_valid_C = individualC.is_valid()
-    assert individualC.is_valid() is False or all(
+    is_valid_C = individualC.valid
+    assert individualC.valid is False or all(
         individualC.graph_manager[n]['frame_path']
         for n in individualC.graph_manager.nodes()), "Illegal frame_path in individual's node"
 
     individualD.finalize()
-    is_valid_D = individualD.is_valid()
-    assert individualD.is_valid() is False or all(
+    is_valid_D = individualD.valid
+    assert individualD.valid is False or all(
         individualD.graph_manager[n]['frame_path']
         for n in individualD.graph_manager.nodes()), "Illegal frame_path in individual's node"
 
@@ -598,7 +598,7 @@ def remove_node_mutation(original_individual: Individual, strength: float, **kwa
     assert len(original_individual.graph_manager.nodes()) > len(
         new_individual.graph_manager.nodes()), "Something wrong!"
     new_individual.finalize()
-    if new_individual.is_valid() == False:
+    if not new_individual.valid:
         return [None]
     else:
         # print_individual(original_individual, 'Original individual', True)
@@ -663,7 +663,7 @@ def add_node_mutation(original_individual: Individual, strength: float, **kwargs
     assert len(original_individual.graph_manager.nodes()) < len(
         new_individual.graph_manager.nodes()), "Something wrong!"
     new_individual.finalize()
-    if new_individual.is_valid() == False:
+    if not new_individual.valid:
         return [None]
     else:
         # print_individual(individual, 'Mutated individual', True)
@@ -716,7 +716,7 @@ def hierarchical_mutation(original_individual: Individual, strength: float, **kw
             break
 
     new_individual.finalize()
-    if new_individual.is_valid() == False:
+    if not new_individual.valid:
         return [None]
     else:
         # print_individual(original_individual, 'ORIGINAL', True)
@@ -766,7 +766,7 @@ def flat_mutation(original_individual: Individual, strength: float, **kwargs) ->
             break
 
     new_individual.finalize()
-    if new_individual.is_valid() == False:
+    if not new_individual.valid:
         return [None]
     else:
         # print_individual(original_individual, 'ORIGINAL', True)

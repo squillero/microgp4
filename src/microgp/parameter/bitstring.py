@@ -59,7 +59,7 @@ class Bitstring(Parameter):
             logging.debug("strength == 0")
         elif strength == 1:
             bits_list = random_generator.choices([0, 1], k=self.len_)
-            self._value = ''.join(map(str, bits_list))
+            self.value = ''.join(map(str, bits_list))
         else:
             i = random_generator.randint(0, self.len_ - 1)
             value = list(self._value.strip())

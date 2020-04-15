@@ -32,6 +32,7 @@ import copy
 
 import networkx as nx
 
+from .utils import random_generator
 from .graph import NodesCollection, EdgesCollection, GraphToolbox
 from .abstract import Paranoid, Pedantic
 from .common_data_structures import Frame
@@ -45,7 +46,7 @@ from .simple_tree import SimpleTree, _SimpleNode
 from .utils import logging
 
 
-class Individual(Paranoid, Pedantic):
+class Individual(Paranoid):
     """A solution encoded in MicroGP, the unit of selection in the evolutive
     process. Individuals are directed multigraph (`MultiDiGraph` in NetworkX),
     that is, more than one directed edges may connect the same pair of nodes.
@@ -141,6 +142,12 @@ class Individual(Paranoid, Pedantic):
         return self._id
 
     @property
+    def valid(self) -> bool:
+        assert self._finalized, "Can't assess the validity of a non-finalized individual"
+        if self._valid is None: self._valid = check_individual_validity(self)
+        return self._valid
+
+    @property
     def graph_manager(self) -> GraphToolbox:
         return self._graph_toolbox
 
@@ -188,6 +195,18 @@ class Individual(Paranoid, Pedantic):
         self._operator = value
 
     @property
+    def valid(self) -> bool:
+        """Test whole set of `checkers` to validate the individual
+
+        Returns:
+            True if the individual have passed all the tests, False otherwise
+        """
+        assert self._finalized, "Can't assess the validity of a non-finalized individual"
+        if self._valid is None:
+            self._valid = check_individual_validity(self)
+        return self._valid
+
+    @property
     def root_frame(self) -> Frame:
         return self.frame_tree.root.frame
 
@@ -203,6 +222,8 @@ class Individual(Paranoid, Pedantic):
 
     @property
     def unlinked_nodes(self):
+        # TODO: CHANGE
+        raise NotImplementedError
         return self._unlinked_nodes
 
     def __getattr__(self, attribute: str):
@@ -231,7 +252,7 @@ class Individual(Paranoid, Pedantic):
         return hash(str(self))
 
     def __lt__(self, other):
-        return self.id < other.node_id
+        return self.id < other.id
 
     def run_paranoia_checks(self) -> bool:
         assert self.graph_manager.run_paranoia_checks()
@@ -241,19 +262,6 @@ class Individual(Paranoid, Pedantic):
         return True
 
     # __________________________________________________________________________________________________________________
-
-    def is_valid(self) -> bool:
-        """Test whole set of `checkers` to validate the individual
-
-        Returns:
-            True if the individual have passed all the tests, False otherwise
-        """
-        if not self._finalized:
-            logging.warning("Assessing the validity of a non-finalized individual")
-            self.finalize()
-        if self._valid is None:
-            self._valid = check_individual_validity(self)
-        return self._valid
 
     def get_unique_frame_name(self, section: Union[Section, str]) -> str:
         """Get a name never used in the individual by any other frame
@@ -377,14 +385,13 @@ class Individual(Paranoid, Pedantic):
             The string that describes the macro and its parameters of the selected node
         """
         vars_ = dict()
-        for parameter_name, parameter in self.nodes[node]['parameters'].items():
+        for parameter_name, parameter in self.nodes[node].parameters.items():
             vars_[parameter_name] = parameter.value
-            pass
-        if self.graph_manager.in_degree(node) > 1 and not self.graph_manager.is_head(node):
-            label = self.graph_manager.get_section(node).label_format.format(node=node)
+        if self.graph_manager.get_referring_nodes(node):
+            label = self.nodes[node].section.label_format.format(node=node)
         else:
             label = ''
-        return label + self.nodes[node]['macro'].text.format(**vars_)
+        return label + self.nodes[node].macro.text.format(**vars_)
 
     def get_next(self, node: NodeID) -> NodeID:
         """Get the successor of node (ie. the next block in the dump)
@@ -486,21 +493,24 @@ class Individual(Paranoid, Pedantic):
                 lambda section_counter_cumulative, **v: section_counter_cumulative[sec] <= max_instances)
 
     def randomize_macros(self) -> None:
-        """Randomize the values of the parameters inside the macros
+        """Randomize the values of the parameters inside the macros"""
 
-        Args:
-            uninitialized_nodes: set of nodes that contain the parameters to initialize
-        """
-        for node in self.nodes(data=True).values():
+        uninitialized_nodes = [n for n in self.nodes if self.nodes[n].parameters is None]
+        random_generator.shuffle(uninitialized_nodes)
+        while uninitialized_nodes:
+            node = uninitialized_nodes.pop(0)
+            macro = self.nodes[node].macro
             parameters = dict()
-            for parameter_name, parameter_type in node.macro.parameters_type.items():
+            for parameter_name, parameter_type in macro.parameters_type.items():
                 kwargs = dict()
                 if issubclass(parameter_type, Structural):
-                    kwargs['node'] = node.node_id
+                    kwargs['node'] = node
                     kwargs['individual'] = self
                 parameters[parameter_name] = parameter_type(name=parameter_name, **kwargs)
+                print(parameters[parameter_name])
                 parameters[parameter_name].initialize()
-            node.parameters = parameters
+                print(parameters[parameter_name])
+            self.nodes[node].parameters = parameters
 
     def finalize(self) -> None:
         """Final setup of an individual: manage the pending movable nodes, remove non-visitable nodes from the graph_manager,
@@ -538,9 +548,9 @@ class Individual(Paranoid, Pedantic):
         known_heads = set(heads)
         while heads:
             new_heads = set()
-            node = heads.pop(0)
-            for node in [node] + self.graph_manager.get_all_successors(node):
-                new_heads |= set(e.dst for e in self.edges(NodeID(1)) if e.key != 'next')
+            first_node = heads.pop(0)
+            for node in [first_node] + self.graph_manager.get_all_successors(first_node):
+                new_heads |= {n for n in self.graph_manager.get_referred_nodes(node) if self.graph_manager.is_head(n)}
                 lines.append(self.stringify_node(node))
             heads += list(new_heads - known_heads)
         return "\n".join(lines)

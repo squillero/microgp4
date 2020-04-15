@@ -81,7 +81,7 @@ class Population:
         """Insert an individual or a set of valid individual if they are not
         in the population and return the population object"""
         for individual in individuals:
-            assert individual.is_valid(), 'Individual must be valid to be added to population'
+            assert individual.valid, 'Individual must be valid to be added to population'
             # Check if the individual is not already in he list
             if not individual in self._individuals:
                 self._individuals.add(individual)

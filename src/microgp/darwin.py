@@ -76,7 +76,7 @@ class Darwin:
         >>> darwin.evolve()
         >>> logging.bare("This is the population:")
         >>> for individual in darwin.population:
-        >>>     msg = 'Printing individual ' + individual.node_id
+        >>>     msg = 'Printing individual ' + individual.id
         >>>     ugp4.print_individual(individual, msg=msg, plot=True)
         >>>     ugp4.logging.bare(individual.fitness)
 
@@ -246,7 +246,7 @@ class Darwin:
         for individual in temporary_offspring:
             if issubclass(type(individual), list):
                 individual = self.get_best_unpacking(individual)
-            if individual is not None and individual.is_valid():
+            if individual is not None and individual.valid:
                 filtered_offspring += [individual]
         return filtered_offspring
 
@@ -256,7 +256,7 @@ class Darwin:
         for individual in individuals:
             if issubclass(type(individual), list):
                 temp += self.get_best_unpacking(individual)
-            elif individual is not None and individual.is_valid():
+            elif individual is not None and individual.valid:
                 temp += individual
         if len(temp) > 0:
             return order_by_fitness(temp)[0]

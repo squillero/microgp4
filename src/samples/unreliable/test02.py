@@ -53,16 +53,31 @@ if __name__ == "__main__":
 
     ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
 
-    ref_fwd = ugp4.make_parameter(ugp4.parameter.LocalReference,
-                                  allow_self=False,
+    generic = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                  allow_self=True,
                                   allow_forward=True,
-                                  allow_backward=False,
-                                  frames_up=1)
-    ref_bcw = ugp4.make_parameter(ugp4.parameter.LocalReference,
-                                  allow_self=False,
-                                  allow_forward=False,
                                   allow_backward=True,
                                   frames_up=1)
+    forward_only = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                       allow_self=False,
+                                       allow_forward=True,
+                                       allow_backward=False,
+                                       frames_up=1)
+    forward_only_loose = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                             allow_self=False,
+                                             allow_forward=True,
+                                             allow_backward=False,
+                                             frames_up=1)
+    backward_only = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                        allow_self=False,
+                                        allow_forward=False,
+                                        allow_backward=True,
+                                        frames_up=1)
+    backward_only_loose = ugp4.make_parameter(ugp4.parameter.LocalReference,
+                                              allow_self=True,
+                                              allow_forward=False,
+                                              allow_backward=True,
+                                              frames_up=1)
 
     # define parameters
     registers = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
@@ -81,8 +96,8 @@ if __name__ == "__main__":
     call3 = ugp4.Macro("    call {reference}", {'reference': proc3})
     call4 = ugp4.Macro("    call {reference}", {'reference': proc4})
     call2 = ugp4.Macro("    call {reference} and then call {reference2}", {'reference': proc2, 'reference2': proc3})
-    jmp1 = ugp4.Macro("    jmp {jmp_ref} \t\t; jump forward", {'jmp_ref': ref_fwd})
-    jmp2 = ugp4.Macro("    jmp {jmp_ref} \t\t; jump backward", {'jmp_ref': ref_bcw})
+    jmp1 = ugp4.Macro("    jmp {jmp_ref} \t\t; jump forward", {'jmp_ref': forward_only})
+    jmp2 = ugp4.Macro("    jmp {jmp_ref} \t\t; jump backward", {'jmp_ref': backward_only})
 
     # define sections
     generic_math = ugp4.make_section({add, sub}, size=(2, 5), instances=(0, 10))
@@ -93,7 +108,8 @@ if __name__ == "__main__":
 
     sec_jmp = ugp4.make_section(jmp1, size=(1, 4), name='sec_jmp')
     sec2_jmp = ugp4.make_section({jmp1, jmp2}, size=(3, 5), name='sec_jmp2')
-    library['main'] = [generic_math, sec_jmp, {call1, call2}, {call3, call4}, call2, "\t; ----", generic_math, ""]
+    library['main'] = ["\t; BEGIN", generic_math, jmp1, generic_math, "\t; ----", "\t; END"]
+    #library['main'] = [generic_math, sec_jmp, {call1, call2}, {call3, call4}, call2, "\t; ----", generic_math, ""]
     # library['main'] = [generic_math, [jmp1, add, call1, jmp2], sec_jmp, {jmp1, jmp1}, call2, "\t; ----", generic_math, ""]
     # library['main'] = ["; main starts here", add, sub, call1, ""]
 

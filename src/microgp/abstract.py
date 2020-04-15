@@ -27,9 +27,10 @@
 """Can you help me occupy my brain? Oh yeah."""
 
 from typing import Any
+from abc import ABC
 
 
-class Paranoid:
+class Paranoid(ABC):
     """Abstract class: Paranoid classes do implement `run_paranoia_checks()`."""
 
     def run_paranoia_checks(self) -> bool:
@@ -53,7 +54,7 @@ class Paranoid:
         raise NotImplementedError
 
 
-class Pedantic:
+class Pedantic(ABC):
     """Abstract class: Pedantic classes do implement `is_valid()`."""
 
     def is_valid(self, obj: Any) -> bool:
@@ -65,8 +66,3 @@ class Pedantic:
             True if the object is valid, False otherwise
         """
         raise NotImplementedError
-
-
-def sabbath(condition: bool) -> bool:
-    assert condition, "Sabbath check fail: Can you help me occupy my brain?"
-    return True

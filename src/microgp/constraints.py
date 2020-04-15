@@ -278,12 +278,12 @@ class Constraints(Paranoid, Pedantic):
     individuals (microgp.constraints.Constraints._evaluator).
 
     Args:
-        file_name (str): default file name of a solution, it must contain "{node_id}"
+        file_name (str): default file name of a solution, it must contain "{id}"
     """
 
     DEFAULT_LABEL_FORMAT = '{node}:\n'
 
-    def __init__(self, file_name: str = "solution{node_id}.ugp") -> None:
+    def __init__(self, file_name: str = "solution{id}.ugp") -> None:
         self._sections = dict()
         self._macros = set()
         self._global_properties = Properties()
@@ -291,7 +291,7 @@ class Constraints(Paranoid, Pedantic):
         self._stats['random_individuals'] = 0
         self._stats['valid_individuals'] = 0
         self._stats['valid_individuals_warn_threshold'] = 0.01
-        assert file_name.find("{node_id}"), "file_name doesn't contain \"{node_id}\"."
+        assert file_name.find("{id}"), "file_name doesn't contain \"{id}\"."
         self._file_name = file_name
         self._evaluator = None
 

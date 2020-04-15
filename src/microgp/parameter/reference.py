@@ -54,25 +54,27 @@ class LocalReference(Reference):
         frames_up (int): How many frame up the reference must be within (optional, default: 0, i.e., only the current frame)
     """
 
-    def _valid_targets(self) -> List[NodeID]:
+    def _get_valid_targets(self) -> List[NodeID]:
         try:
             frames_up = self.frames_up + 1
         except AttributeError:
             frames_up = 1
-        assert len(self.individual.nodes[self.node].frame_path) >= -frames_up, f"Can't go up the requested number of frames"
+        assert len(
+            self.individual.nodes[self.node].frame_path) >= -frames_up, f"Can't go up the requested number of frames"
 
         frame_path = self.individual.nodes[self.node].frame_path[0:frames_up]
         vtargets = list()
         if self.allow_backward:
             vtargets += [
-                n for n in self.individual.nodes[self.nodes].predecessors
+                n for n in self.individual.nodes[self.node].predecessors
                 if self.individual.nodes[n].frame_path[0:len(frame_path)] == frame_path
             ]
         if self.allow_self:
             vtargets += [self.node]
         if self.allow_forward:
             vtargets += [
-                n for n in self.individual.nodes[self.node].successors if self.individual.nodes[n].frame_path[0:len(frame_path)] == frame_path
+                n for n in self.individual.nodes[self.node].successors
+                if self.individual.nodes[n].frame_path[0:len(frame_path)] == frame_path
             ]
         # logging.debug("Valid targets for %s: %s" % (frame_path, vtargets))
         return vtargets
@@ -97,7 +99,7 @@ class ExternalReference(Reference):
         section_name (str): name of the new target section.
     """
 
-    def _valid_targets(self) -> List[NodeID]:
+    def _get_valid_targets(self) -> List[NodeID]:
         return self.individual.nodes(section_selector=self.section_name, heads_selector=True)
 
     def initialize(self, value: Optional[Any] = None) -> None:

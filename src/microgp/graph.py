@@ -24,19 +24,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Optional, Union, Any, Collection, Tuple
+from typing import List, Dict, Optional, Union, Any, Collection, Tuple, Set
 from collections import abc, namedtuple
 
 import networkx as nx
 
-from .abstract import Paranoid
+from .utils import logging
+from .abstract import Paranoid, Pedantic
 from .common_data_structures import Frame
 from .constraints import Section
 from .node import NodeID
 
 
 class NodeWrapper(Paranoid):
-    """Hey"""
+    """Wrapper class for working with nodes inside Individual"""
 
     def __init__(self, node_id: NodeID, graph: nx.MultiDiGraph) -> None:
         # Can't use self. as it would recurse __setattr__
@@ -45,8 +46,22 @@ class NodeWrapper(Paranoid):
         self.__dict__['_data'] = graph.nodes[node_id]
 
     @property  # dynamically-created, read-only attribute
+    def _id(self, other):
+        # TODO: For debug only -- To be removed
+        raise NotImplementedError
+
+    @property  # dynamically-created, read-only attribute
+    def id(self, other):
+        # TODO: For debug only -- To be removed
+        raise NotImplementedError
+
+    @property  # dynamically-created, read-only attribute
     def node_id(self):
         return self.__dict__['_node_id']
+
+    @property  # dynamically-created, read-only attribute
+    def section(self):
+        return self.frame_path[-1].section
 
     @property  # dynamically-created, read-only attribute
     def path(self) -> Optional[str]:
@@ -61,20 +76,24 @@ class NodeWrapper(Paranoid):
         return f"Node({self.node_id})"
 
     def __getattr__(self, attribute: str) -> Any:
+        """Lazy attributes: calculated only if requested."""
         if attribute == 'successors':
-            self.__dict__[attribute] = GraphToolbox(self._graph).get_all_successors(self._id)
+            self.__dict__[attribute] = GraphToolbox(self._graph).get_all_successors(self.node_id)
         elif attribute == 'predecessors':
-            self.__dict__[attribute] = GraphToolbox(self._graph).get_all_predecessors(self._id)
+            self.__dict__[attribute] = GraphToolbox(self._graph).get_all_predecessors(self.node_id)
         elif attribute in self.__dict__['_data']:
             self.__dict__[attribute] = self._data[attribute]
         else:
+            logging.debug(f"Creating empty attribute {attribute} in node {self.node_id}")
             self.__dict__[attribute] = None
         return self.__dict__[attribute]
 
     def __setattr__(self, attribute: str, value: Any) -> None:
+        """Store attribute is nthe dictionary. Quite useful if the node is inside a finalized Individual."""
         self._data[attribute] = value
 
     def __getitem__(self, parameter_name: str) -> Any:
+        """Access attributes as n['name'] and parameters as n['$name']."""
         assert isinstance(parameter_name, str), f"Parameter name should be string (found: {type(parameter_name)})"
         if parameter_name[0] == '$':
             # parameter inside the macro
@@ -87,9 +106,10 @@ class NodeWrapper(Paranoid):
             return getattr(self, parameter_name)
 
     def __setitem__(self, parameter_name: str, value: Any) -> None:
-        assert isinstance(parameter_name, str), f"Attribute name should be string (found: {type(parameter_name)})"
+        """Set attribute n['name']=v or a parameter n['$name']=v."""
+        assert isinstance(parameter_name, str), f"Parameter should be a string (found: {type(parameter_name)})"
         if parameter_name[0] == '$':
-            assert 'parameters' in self._data, "Missing 'parameters'. Uninitialized macro?"
+            assert 'parameters' in self._data, "Missing 'parameters' in NodeWrapper. Uninitialized macro?"
             self._data['parameters'][parameter_name[1:]].value = value
         else:
             self._data[parameter_name] = value
@@ -324,12 +344,38 @@ class GraphToolbox(Paranoid):
     def degree(self, node: NodeID) -> int:
         return self._nx_graph.degree(node)
 
+    def get_referring_nodes(self, node: NodeID) -> Set[NodeID]:
+        """List nodes that refer node in some parameter"""
+        return {s for s, d, k in self._nx_graph.edges(keys=True) if d == node and k[0] == '$'}
+
+    def get_referred_nodes(self, node: NodeID) -> Set[NodeID]:
+        """List nodes that are referred by node in some parameter"""
+        return {d for s, d, k in self._nx_graph.edges(node, keys=True) if k[0] == '$'}
+
+    def is_referenced(self, node: NodeID, parameter: str) -> bool:
+        """Check if node is the target of '$parameter'"""
+        assert parameter[0] == '$', f"Parameter name should start with '$' (found: '{parameter}')"
+        in_parameters = {k for s, d, k in self._nx_graph.edges(keys=True) if d == node}
+        return parameter in in_parameters
+
+    def is_head(self, node: NodeID) -> bool:
+        """Check if node is not the target of a 'next' edge"""
+        return not bool([s for s, d, k in self._nx_graph.edges(keys=True) if d == node and k == 'next'])
+
+    def is_tail(self, node: NodeID) -> bool:
+        """Check if node contains a 'next'"""
+        return not bool([d for s, d, k in self._nx_graph.edges(node, keys=True) if k == 'next'])
+
+    def is_internal(self, node: NodeID) -> bool:
+        raise NotImplementedError
+
     def get_parameter(self, node: Union[NodeWrapper, NodeID], parameter_name: str) -> Optional[NodeID]:
-        assert isinstance(node, NodeID) or isinstance(node, NodeWrapper), f"Parameter is neither NodeID nor NodeWrapper ({type(node)})"
+        assert isinstance(node, NodeID) or isinstance(
+            node, NodeWrapper), f"node is neither NodeID nor NodeWrapper ({type(node)})"
         assert parameter_name[0] == '$', f"Parameter name should start with '$' (found: '{parameter_name}')"
         if isinstance(node, NodeWrapper):
             node = node.node_id
-        return next((f for f, t, k in self._nx_graph.edges(node, keys=True) if k == parameter_name), None)
+        return next((d for s, d, k in self._nx_graph.edges(node, keys=True) if k == parameter_name), None)
 
     def get_predecessor(self, node: NodeID) -> Optional[NodeID]:
         return next((f for f, t, k in self._nx_graph.edges(node, keys=True) if k == 'next'), None)

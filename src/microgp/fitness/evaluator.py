@@ -52,8 +52,8 @@ def _run_script(script: Union[str, callable],
     assert isinstance(script, str) or hasattr(script, '__call__'), "script must be a string (name of the" \
                                                                    "script or a callable (script itself)"
     assert individual, "individual can't be None"
-    filename = individual.constraints.file_name.format(id=individual.node_id)
-    # filename = individual.constraints.file_name.format(node_id=individual.node_id)
+    filename = individual.constraints.file_name.format(id=individual.id)
+    # filename = individual.constraints.file_name.format(node_id=individual.id)
 
     with open(filename, 'w') as file:
         file.write(str(individual))
