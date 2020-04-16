@@ -49,29 +49,3 @@ def make_parameter(base_class: Type[Parameter], **attributes: Any) -> Type:
     """
     signature = ", ".join([str(k) + "=" + str(v) for k, v in attributes.items()])
     return type("{}({})".format(base_class.__name__, signature), (base_class,), attributes)
-
-
-class FloatingLocalReference:
-    """A LocalReference that be almost safely moved between individuals"""
-
-    def __init__(self):
-        self._reference_node = None
-        self._original_target_node = None
-        self._offset = None
-
-    def set(self, target_node: NodeID, reference_node: NodeID, individual: Individual) -> None:
-        self._reference_node = individual.nodes[reference_node]
-        self._original_target_node = individual.nodes[target_node]
-        local_nodes = individual.graph_manager.get_all_predecessors(reference_node) + [
-            reference_node
-        ] + individual.graph_manager.get_all_successors(reference_node)
-        self._offset = local_nodes.index(target_node) - local_nodes.index(reference_node)
-
-    def get(self, reference_node: NodeID, individual: Individual) -> NodeID:
-        local_nodes = individual.graph_manager.get_all_predecessors(reference_node) + [
-            reference_node
-        ] + individual.graph_manager.get_all_successors(reference_node)
-        index = local_nodes.index(reference_node) + self._offset
-        index = min(index, len(local_nodes) - 1)
-        index = max(index, 0)
-        return local_nodes[index]

@@ -27,7 +27,7 @@
 from typing import Union, Set, List
 
 from .individual import Individual
-from .individual_operators import order_by_fitness
+from .genetic_operators import order_by_fitness
 from .utils import logging
 from microgp import random_generator
 

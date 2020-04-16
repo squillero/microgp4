@@ -9,7 +9,7 @@
 [![Documentation Status](https://readthedocs.org/projects/microgp4/badge/?version=pre-alpha)](https://microgp4.readthedocs.io/en/pre-alpha/?badge=pre-alpha)
 ![](https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-28094298-6&cid=4f34399f-f437-4f67-9390-61c649f9b8b2&dp=1)
 
-MicroGP (µGP, `ugp`) is an [evolutionary tool](https://squillero.github.io/microgp4/evolution.html) that can be exploited either as a coverage-driven [fuzzer](https://en.wikipedia.org/wiki/Fuzzing) or as a general-purpose [optimizer](https://en.wikipedia.org/wiki/Engineering_optimization). [**[read more]**](https://squillero.github.io/microgp4/)
+MicroGP (µGP, `ugp`)  is an [evolutionary tool](https://squillero.github.io/microgp4/evolution.html) that has been exploited as a coverage-driven [fuzzer](https://en.wikipedia.org/wiki/Fuzzing), as a general-purpose [optimizer](https://en.wikipedia.org/wiki/Engineering_optimization), and as a framework for prototyping and testing new ideas. [**[read more]**](https://squillero.github.io/microgp4/)
 
 > This repo is only useful if you want to hack the code (see: [CONTRIBUTING](CONTRIBUTING.md)).  
 > For using MicroGP4 [read the instructions](https://microgp4.readthedocs.io/).  

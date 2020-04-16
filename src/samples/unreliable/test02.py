@@ -80,17 +80,21 @@ if __name__ == "__main__":
                                               frames_up=1)
 
     # define parameters
-    registers = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
+    #registers = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=['ax', 'bx', 'cx', 'dx'])
     # registers_ordered = ugp4.make_parameter(ugp4.parameter.CategoricalSorted, alternatives=['a', 'a', 'a', 'd'])
-    int256 = ugp4.make_parameter(ugp4.parameter.Integer, min=0, max=256)
+    #int256 = ugp4.make_parameter(ugp4.parameter.Integer, min=0, max=256)
     proc1 = ugp4.make_parameter(ugp4.parameter.ExternalReference, section_name='proc1', min=5, max=5)
     proc2 = ugp4.make_parameter(ugp4.parameter.ExternalReference, section_name='proc2', min=5, max=5)
     proc3 = ugp4.make_parameter(ugp4.parameter.ExternalReference, section_name='proc3', min=5, max=5)
     proc4 = ugp4.make_parameter(ugp4.parameter.ExternalReference, section_name='proc4', min=5, max=5)
 
     # define macros
-    add = ugp4.Macro("    add {reg}, 0{num:x}h  \t; ie. {reg} += {num}", {'reg': registers, 'num': int256})
-    sub = ugp4.Macro("    sub {reg}, 0{num:x}h  \t; ie. {reg} -= {num}", {'reg': registers, 'num': int256})
+
+    identifiers = ugp4.make_parameter(ugp4.parameter.Categorical, alternatives=['%a', '%b', '%c', '%d'])
+    int256 = ugp4.make_parameter(ugp4.parameter.Integer, min=0, max=256)
+    add = ugp4.Macro("{id0} = add i32 {id1} {id2}", {'id0': identifiers, 'id1': identifiers, 'id2': identifiers})
+    addi = ugp4.Macro("{id0} = add i32 {id1} {num}", {'id0': identifiers, 'id1': identifiers, 'num': int256})
+
     call1 = ugp4.Macro("    call {reference}", {'reference': proc1})
     # call2 = ugp4.Macro("    call {reference}", {'reference': proc2})
     call3 = ugp4.Macro("    call {reference}", {'reference': proc3})

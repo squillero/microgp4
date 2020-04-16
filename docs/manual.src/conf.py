@@ -60,7 +60,7 @@ html_show_sphinx = True
 html_theme = 'sphinx_rtd_theme'
 #html_theme = 'alabaster'
 html_logo = '../images/logo/150x150.png'
-html_favicon = '../images/icons/24x24.ico'
+html_favicon = '../images/icons/favicon.ico'
 html_show_sourcelink = False
 
 html_theme_options = {

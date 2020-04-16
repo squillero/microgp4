@@ -39,7 +39,7 @@ import warnings
 from collections import namedtuple
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 14)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 15)
 
 # hard code
 __name__ = "microgp"
@@ -103,7 +103,7 @@ from .operators import Operators
 from .genoperator import GenOperator
 from .properties import Properties
 from .individual import Individual
-from .individual_operators import flat_mutation, hierarchical_mutation, add_node_mutation, remove_node_mutation, \
+from .genetic_operators import flat_mutation, hierarchical_mutation, add_node_mutation, remove_node_mutation, \
     print_individual, macro_pool_uniform_crossover, macro_pool_one_cut_point_crossover, switch_proc_crossover, \
     create_random_individual
 from . import fitness

@@ -29,10 +29,10 @@ from typing import Union, Set, List, Optional
 from .archive import Archive
 from .constraints import Constraints
 from .individual import Individual
-from .individual_operators import order_by_fitness
+from .genetic_operators import order_by_fitness
 from .operators import Operators
 from .population import Population
-from .utils import logging, random_generator
+from .utils import logging
 
 
 class Darwin:
@@ -188,6 +188,8 @@ class Darwin:
             from microgp.node import NodeID
             from microgp import graph
             o = final_offspring[0]
+            from microgp.individual import clone_individual
+            clone = clone_individual(o)
             o2 = final_offspring[0]
 
             # if not final_offspring:

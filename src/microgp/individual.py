@@ -24,11 +24,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Set, Dict, Sequence, Optional, Union, Any
+from typing import List, Set, Dict, Sequence, Optional, Union
 from collections import Counter, defaultdict
-from collections import abc
 import warnings
-import copy
 
 import networkx as nx
 
@@ -40,7 +38,6 @@ from .constraints import Constraints, Section, RootSection, MacroPool
 from .macro import Macro
 from .node import NodeID
 from .parameter.abstract import Structural
-from . import parameter
 from .properties import Properties
 from .simple_tree import SimpleTree, _SimpleNode
 from .utils import logging
@@ -96,46 +93,27 @@ class Individual(Paranoid):
 
     _COUNTER = 0
 
-    def __init__(self, constraints: Constraints = None, copy_from: 'Individual' = None) -> None:
+    def __init__(self, constraints: Constraints, graph: nx.MultiDiGraph = None) -> None:
         """Individual builder"""
         self._id = Individual._COUNTER
         Individual._COUNTER += 1
+
+        if not graph:
+            graph = nx.MultiDiGraph()
+        self._nx_graph = graph
         self._finalized = False
         self._valid = None
         self._frame_tree = SimpleTree(Frame('', RootSection()))
         self._age = 0
         self._operator = None
-        self._unlinked_nodes = dict()
-        self._imported_procs = dict()
         self._canonic_phenotype = None
-        self._nx_graph = nx.MultiDiGraph()
         self._graph_toolbox = GraphToolbox(self._nx_graph)
-
-        if not copy_from:
-            self._constraints = constraints
-            self._section_counter = Counter()
-            self.properties = defaultdict(Properties)
-            self._parents = None
-            self._canonic_phenotype = None
-            self._parents = set()
-        else:
-            assert isinstance(copy_from, Individual), '"copy_from" parameter must be an Individual object'
-            assert copy_from._finalized, 'The individual to copy from must be finalized'
-            # Copy constraints from the original individual
-            self._constraints = copy_from._constraints
-            self.properties = copy.deepcopy(copy_from.properties)
-
-            # Copy the graph_manager of the "copy_from" individual (only nodes)
-            self._section_counter = None
-            node_translation = self.copy_section_node_structure(copy_from, copy_from.entry_point)
-            self._section_counter = copy.deepcopy(
-                copy_from._section_counter)  # This line must be placed after the copy of the node structure
-
-            destination_nodes = set(self._graph_toolbox.nodes())
-            self.fill_nodes_with_parameters(copy_from, node_translation, destination_nodes)
-
-            self._parents = {copy_from}
-            assert len(self._graph_toolbox.nodes()) == len(copy_from.graph_manager.nodes()), "Something went wrong"
+        self._constraints = constraints
+        self._section_counter = Counter()
+        self._parents = None
+        self._canonic_phenotype = None
+        self._parents = set()
+        self._properties = defaultdict(Properties)
 
     @property
     def id(self) -> int:
@@ -146,6 +124,10 @@ class Individual(Paranoid):
         assert self._finalized, "Can't assess the validity of a non-finalized individual"
         if self._valid is None: self._valid = check_individual_validity(self)
         return self._valid
+
+    @property
+    def properties(self) -> Dict:
+        return self._properties
 
     @property
     def graph_manager(self) -> GraphToolbox:
@@ -507,9 +489,7 @@ class Individual(Paranoid):
                     kwargs['node'] = node
                     kwargs['individual'] = self
                 parameters[parameter_name] = parameter_type(name=parameter_name, **kwargs)
-                print(parameters[parameter_name])
                 parameters[parameter_name].initialize()
-                print(parameters[parameter_name])
             self.nodes[node].parameters = parameters
 
     def finalize(self) -> None:
@@ -517,12 +497,6 @@ class Individual(Paranoid):
             initialize the frame tree and the properties, set the canonical representation of an individual.
             :return: """
         assert not self._finalized, "Individual already finalized"
-
-        if self.link_movable_nodes() == False:
-            # TODO: WTF!?
-            self._valid = False
-            self._finalized = True
-            return
 
         all_nodes = set(self._nx_graph.nodes)
         reachable_nodes = set(nx.dfs_tree(self._nx_graph, self.entry_point))
@@ -730,15 +704,15 @@ class Individual(Paranoid):
             source_node_id = heads.pop(0)
             parent = None
             while source_node_id:
-                source_node = source_individual.graph_manager[source_node_id]
-                frame_path = source_node['frame_path']
+                source_node = source_individual.nodes[source_node_id]
+                frame_path = source_node.frame_path
                 # Create the node and add it in the graph_manager
-                destination_node_id = self.add_node(parent, source_node['macro'], frame_path)
+                destination_node_id = self.add_node(parent, source_node.macro, frame_path)
                 node_translation[source_node_id] = destination_node_id
                 parent = destination_node_id
                 # Pick the next node
-                successors = [(label, target)
-                              for _, target, label in source_individual.graph_manager.edges(source_node_id, keys=True)]
+                successors = [(label, target) for _, target, label in source_individual.edges(source_node_id, keys=True)
+                             ]
                 source_node_id = None
                 for label, target in successors:
                     if label == 'next':
@@ -780,6 +754,7 @@ class Individual(Paranoid):
         Returns:
             Dictionary that contains the parameters of the new copied node
         """
+        raise NotImplementedError
         assert isinstance(source_individual, Individual), "source_individual must be an Individual object"
         parameters = dict()
         # Get the node to be copied
@@ -1005,7 +980,116 @@ def get_macro_pool_nodes_count(individual: Individual, frames: Set[Frame] = None
     return frame_count
 
 
-def check_individual_validity(individual: Individual) -> bool:
+def get_nodes_in_frame(individual: 'Individual', frame: Frame, frame_path_limit: int = None) -> List[NodeID]:
+    """Gets all nodes of an individual inside a given frame
+
+    Args:
+        individual (Individual): the individual
+        frame (Frame): the frame
+        frame_path_limit (int): how deep is the path for matching (positive: from root, negative: from leaf)
+
+    Returns:
+        A list of of Nodes
+    """
+    node_list = list()
+    for node, data in individual.graph_manager.nodes(data='frame_path').items():
+        #TODO: assert data, f"Invalid frame_path for node {node}: {data}"
+        if frame_path_limit:
+            if frame_path_limit > 0:
+                data = data[0:frame_path_limit]
+            else:
+                data = data[len(data) + frame_path_limit:]
+        #TODO: assert data, "Missing frame path"
+        if data and frame in data:
+            node_list.append(node)
+    return node_list
+
+
+def get_nodes_in_section(individual: 'Individual', section: Section, frame_path_limit: int = None,
+                         head: bool = False) -> List[NodeID]:
+    """Gets all nodes of an individual inside a given frame
+
+    If `frame_path_limit` is set to N with N > 0, only the first N frames are
+    considered for the match. If With N < 0, only the last N frames are
+    considered for the match.
+
+    Args:
+        individual (Individual): the individual
+        section (Section): the section
+        frame_path_limit (int): limit the frame path
+        head (bool): returns only the head of the section
+
+    Returns:
+        The list of nodes in the selected section
+    """
+
+    node_list = list()
+    for node, data in individual.graph_manager.nodes(data='frame_path').items():
+        if frame_path_limit:
+            if frame_path_limit > 0:
+                data = data[0:frame_path_limit]
+            else:
+                data = data[len(frame_path_limit) + frame_path_limit:]
+        if section in (f.section for f in data):
+            node_list.append(node)
+    assert all(individual.graph_manager[n]['frame_path'] for n in node_list), "Illegal frame_path in individual's node"
+    return node_list
+
+
+def get_frames(individual: 'Individual', section: Section = None, section_name: str = None) -> Set[Frame]:
+    """Gets all frames of an individuals belonging to a given section
+
+    Args:
+        individual (Individual): the individual
+        section (Section): limit to frames belonging to the section
+        section_name (str): limit to frames belonging to the section (name)
+
+    Returns:
+        A set of frames
+    """
+
+    assert not section or not section_name, "section and section_name cannot be both specified"
+
+    if isinstance(section, str):
+        section = individual.sections[section]
+
+    frames = set()
+    for path in individual.nodes(data='frame_path').values():
+        if path:
+            for frame in path:
+                if section_name and frame.section.name == section_name:
+                    frames.add(frame)
+                elif section and frame.section == section:
+                    frames.add(frame)
+                elif not section and not section_name:
+                    frames.add(frame)
+    assert frames, "Internal panik"
+    return frames
+
+
+def get_macro_pool_nodes_count(individual: 'Individual', frames: Set[Frame] = None) -> Dict[Frame, int]:
+    """Get a dict containing {Frame: number_of_macros}. Selects only MacroPools
+
+    Args:
+        frames (Set[Frame]): set of frames of which I want the number of nodes
+        individual (Frame): individual from which count the nodes
+
+    Returns:
+        Dictionary containing the amount of nodes (value) for each Frame (key)
+
+    :meta private:
+    """
+    frame_count = dict()
+    for node_id, value in individual.graph_manager.nodes(data=True).items():
+        # Get the last frame (it is always a MacroPool)
+        macro_pool = value['frame_path'][len(value['frame_path']) - 1]
+        # Save the number of nodes in that frame
+        if not frames or macro_pool in frames:
+            frame_count[macro_pool] = len(get_nodes_in_frame(individual, frame=macro_pool))
+    return frame_count
+
+
+def check_individual_validity(individual: 'Individual') -> bool:
     """Check an individual against its constraints.
 
     Check the validity of all parameters (e.g., range), then the default
@@ -1050,7 +1134,7 @@ def check_individual_validity(individual: Individual) -> bool:
     return True
 
 
-def _update_values(individual: Individual, node: _SimpleNode) -> None:
+def _update_values(individual: 'Individual', node: _SimpleNode) -> None:
     assert False, "Don't use this function!"
     cumulative_values = dict()
     for n in node.children:
@@ -1068,3 +1152,28 @@ def _update_values(individual: Individual, node: _SimpleNode) -> None:
     individual.properties[node.frame].update_values(individual=individual,
                                                     frame=node.frame,
                                                     cumulative_values=cumulative_values)
+
+
+def clone_individual(individual: 'Individual') -> 'Individual':
+    mapping = {o: n for o, n in zip(individual.nodes, [NodeID() for _ in range(len(individual.nodes))])}
+    clone = Individual(
+        individual.constraints,
+        graph=nx.MultiDiGraph(
+            (mapping[f], mapping[t], k, d) for f, t, k, d in individual._nx_graph.edges(keys=True, data=True)))
+
+    for n in individual.nodes:
+        cn = mapping[n]  # n: node in source, cn: cloned node
+        print(f"{n} -> {cn}")
+        clone._nx_graph.nodes[cn]['macro'] = individual._nx_graph.nodes[n]['macro']
+        clone._nx_graph.nodes[cn]['frame_path'] = individual._nx_graph.nodes[n]['frame_path']
+
+        parameters = dict()
+        for parameter_name, parameter_type in individual._nx_graph.nodes[n]['macro'].parameters_type.items():
+            if issubclass(parameter_type, Structural):
+                # Structural parameters do not need to be initialized as values are stored as edges
+                parameters[parameter_name] = parameter_type(name=parameter_name, node=cn, individual=clone)
+            else:
+                # Non-structural parameters need to be initialized, but do not need node individual/node references
+                parameters[parameter_name] = parameter_type(name=parameter_name)
+                parameters[parameter_name].initialize(individual._nx_graph.nodes[n]['parameters'][parameter_name].value)
+        clone._nx_graph.nodes[cn]['parameters'] = parameters
