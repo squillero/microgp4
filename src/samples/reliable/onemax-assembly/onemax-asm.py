@@ -124,13 +124,10 @@ if __name__ == "__main__":
 
     # Define and set a property. It checks whether the section 'sec1' has or not the same number of 'shr' and 'shl'
     def shift_count(individual, frame, **kk):
-        from microgp.individual import get_nodes_in_frame
         shl_count = 0
         shr_count = 0
-        nodes = get_nodes_in_frame(individual, frame)
-        for node in nodes:
-            #parameters = individual.graph_manager[node]['parameters']
-            parameters = individual.graph_manager[node]['parameters']
+        for node in individual.nodes(frame_selector=frame):
+            parameters = individual.nodes[node].parameters
             if 'shift' in parameters.keys():
                 if parameters['shift'].value == 'shr':
                     shr_count += 1

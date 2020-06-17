@@ -29,6 +29,7 @@ from .constraints import SubsectionsSequence, SubsectionsAlternative
 from .individual import *
 from .macro import Macro
 from . import parameter
+from .parameter import Information
 from .utils import logging
 from microgp import random_generator
 import microgp as ugp4
@@ -218,7 +219,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     primary_parent = random_generator.choice([parentA, parentB])
     source_individual = parentA if primary_parent == parentB else parentB
     # Copy all the genes from the primary parent and set internal creation characteristics______________________________
-    individual = Individual(primary_parent.constraints, copy_from=primary_parent)
+    individual = clone_individual(primary_parent)
     individual.parents = {parentA, parentB}
     individual.operator = switch_proc_crossover
 
@@ -246,7 +247,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
 
     chosen_node_id, chosen_parameter_name = random_generator.choice(candidates)
     # Copy the structure of the selected frame and its parameters___________________________________________________
-    nodes_to_copy_from = get_nodes_in_frame(source_individual, chosen_frame)
+    nodes_to_copy_from = source_individual.nodes(frame_selector=chosen_frame)
     assert len(nodes_to_copy_from) > 0, "No nodes to copy from"
 
     # Create movable nodes of the selected proc
@@ -321,12 +322,12 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
 
     # Copy all the genes from the primary parent and set internal creation characteristics______________________________
     # Initialize first son (individualC)
-    individualC = Individual(parentA.constraints, copy_from=parentA)
+    individualC = clone_individual(parentA)
     # TODO: Merge (operaor, (parents)) in a single field
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_one_cut_point_crossover
     # Initialize second son (individualD)
-    individualD = Individual(parentB.constraints, copy_from=parentB)
+    individualD = clone_individual(parentB)
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_one_cut_point_crossover
 
@@ -346,8 +347,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
         if isinstance(frame_C.section, MacroPool):
             for frame_D in parentB.frame_tree.node_dict:
                 if frame_C.section == frame_D.section \
-                        and len(get_nodes_in_frame(parentA, frame_C)) > 1 \
-                        and len(get_nodes_in_frame(parentB, frame_D)) > 1:
+                        and len(parentA.nodes(frame_selector=frame_C)) > 1 \
+                        and len(parentB.nodes(frame_selector=frame_D)) > 1:
                     candidates.append((frame_C, frame_D))
 
     if not candidates:
@@ -356,8 +357,8 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
     # Chose the frames that will be swapped
     chosen_frame_C, chosen_frame_D = random_generator.choice(candidates)
 
-    nodes_in_frame_C = get_nodes_in_frame(individualC, chosen_frame_C)
-    nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
+    nodes_in_frame_C = individualC.nodes(frame_selector=chosen_frame_C)
+    nodes_in_frame_D = individualD.nodes(frame_selector=chosen_frame_D)
 
     # __________________________Choose the cut nodes________________________________________________________________
     # Example:
@@ -448,14 +449,14 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
 
     # Copy the graph_manager structure from the parents and set internal hereditary characteristics_____________________________
     # Initialize first son (individualC) from parentA
-    individualC = Individual(parentA.constraints, copy_from=parentA)
+    individualC = clone_individual(parentA)
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_uniform_crossover
     assert all(individualC.graph_manager[n]['frame_path']
                for n in individualC.graph_manager.nodes()), "Illegal frame_path in individual's node"
 
     # Initialize second son (individualD) from parentB
-    individualD = Individual(parentB.constraints, copy_from=parentB)
+    individualD = clone_individual(parentB)
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_uniform_crossover
     assert all(individualD.graph_manager[n]['frame_path']
@@ -473,7 +474,7 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
         if isinstance(frame_C.section, MacroPool):
             for frame_D in parentB.frame_tree.node_dict:
                 if frame_C.section == frame_D.section and \
-                        len(get_nodes_in_frame(parentA, frame_C)) == len(get_nodes_in_frame(parentB, frame_D)):
+                        len(parentA.nodes(frame_selector=frame_C)) == len(parentB.nodes(frame_selector=frame_D)):
                     candidates.append((frame_C, frame_D))
 
     if not candidates:
@@ -482,8 +483,8 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     # Choose the frames that will be swapped
     chosen_frame_C, chosen_frame_D = random_generator.choice(candidates)
 
-    nodes_in_frame_C = get_nodes_in_frame(individualC, chosen_frame_C)
-    nodes_in_frame_D = get_nodes_in_frame(individualD, chosen_frame_D)
+    nodes_in_frame_C = individualC.nodes(frame_selector=chosen_frame_C)
+    nodes_in_frame_D = individualD.nodes(frame_selector=chosen_frame_D)
     first_node_id_C = nodes_in_frame_C[0]
     first_node_id_D = nodes_in_frame_D[0]
 
@@ -553,7 +554,7 @@ def remove_node_mutation(original_individual: Individual, strength: float, **kwa
     # logging.debug("Remove a node mutation has been chosen")
     check_muation_parameters(original_individual, strength)
 
-    new_individual = Individual(original_individual.constraints, copy_from=original_individual)
+    new_individual = clone_individual(original_individual)
     new_individual.parents = [original_individual]
     new_individual.operator = remove_node_mutation
 
@@ -621,7 +622,7 @@ def add_node_mutation(original_individual: Individual, strength: float, **kwargs
     # logging.debug("Insert a new node mutation has been chosen")
     check_muation_parameters(original_individual, strength)
 
-    new_individual = Individual(original_individual.constraints, copy_from=original_individual)
+    new_individual = clone_individual(original_individual)
     new_individual.parents = {original_individual}
     new_individual.operator = add_node_mutation
 
@@ -684,7 +685,7 @@ def hierarchical_mutation(original_individual: Individual, strength: float, **kw
     """
     check_muation_parameters(original_individual, strength)
 
-    new_individual = Individual(original_individual.constraints, copy_from=original_individual)
+    new_individual = clone_individual(original_individual)
     new_individual.parents = {original_individual}
     new_individual.operator = hierarchical_mutation
 
@@ -694,11 +695,11 @@ def hierarchical_mutation(original_individual: Individual, strength: float, **kw
         #   had no effect
         while True:
             # Choose a node that contains the parameter to mutate
-            chosen_node = random_generator.choice(new_individual.graph_manager.nodes())
+            chosen_node = random_generator.choice(new_individual.nodes())
 
             # Create a list of parameters contained into the macro
             candidate_parameters = list()
-            for parameter_name, parameter in new_individual.graph_manager[chosen_node]['parameters'].items():
+            for parameter_name, parameter in new_individual.nodes[chosen_node]['parameters'].items():
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 
@@ -738,7 +739,7 @@ def flat_mutation(original_individual: Individual, strength: float, **kwargs) ->
     # logging.debug("Flat mutation has been chosen")
     check_muation_parameters(original_individual, strength)
 
-    new_individual = Individual(original_individual.constraints, copy_from=original_individual)
+    new_individual = clone_individual(original_individual)
     new_individual.parents = {original_individual}
     new_individual.operator = flat_mutation
 
@@ -746,10 +747,10 @@ def flat_mutation(original_individual: Individual, strength: float, **kwargs) ->
         # Create a list that contains all parameters
         candidate_parameters = list()
         # Iterate for each node in the individual and save a list of parameters
-        for node in new_individual.graph_manager.nodes():
-            for parameter_name in sorted(new_individual.graph_manager[node]['parameters']):
+        for node in new_individual.nodes():
+            for parameter_name in sorted(new_individual.nodes[node]['parameters']):
                 # node parameters need to be in predictable order!
-                parameter = new_individual.graph_manager[node]['parameters'][parameter_name]
+                parameter = new_individual.nodes[node]['parameters'][parameter_name]
                 if not isinstance(parameter, Information):
                     candidate_parameters.append(parameter)
 

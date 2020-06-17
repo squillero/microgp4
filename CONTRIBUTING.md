@@ -31,7 +31,7 @@ Anyhow, feel free to write us an email describing your story.
 
 ### Coding
 
-We prepared an oversimplified [stylesheet](src/coding-style.md) to ease contributing to the code.
+We prepared an oversimplified [stylesheet](https://github.com/squillero/style/blob/master/python.md) to ease contributing to the code.
 
 When you download the source from GitHub ([squillero/microgp4](https://github.com/squillero/microgp4)), remember to install all dependencies, including the optional ones (e.g., `colredlogs`, `matplotlib`, `psutils`).
 

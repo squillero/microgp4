@@ -24,7 +24,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Set, Dict, Sequence, Optional, Union
+from typing import List, Set, Dict, Sequence, Optional, Union, Any
 from collections import Counter, defaultdict
 import warnings
 
@@ -121,8 +121,14 @@ class Individual(Paranoid):
 
     @property
     def valid(self) -> bool:
+        """Test whole set of `checkers` to validate the individual
+
+        Returns:
+            True if the individual have passed all the tests, False otherwise
+        """
         assert self._finalized, "Can't assess the validity of a non-finalized individual"
-        if self._valid is None: self._valid = check_individual_validity(self)
+        if self._valid is None:
+            self._valid = check_individual_validity(self)
         return self._valid
 
     @property
@@ -177,18 +183,6 @@ class Individual(Paranoid):
         self._operator = value
 
     @property
-    def valid(self) -> bool:
-        """Test whole set of `checkers` to validate the individual
-
-        Returns:
-            True if the individual have passed all the tests, False otherwise
-        """
-        assert self._finalized, "Can't assess the validity of a non-finalized individual"
-        if self._valid is None:
-            self._valid = check_individual_validity(self)
-        return self._valid
-
-    @property
     def root_frame(self) -> Frame:
         return self.frame_tree.root.frame
 
@@ -208,26 +202,45 @@ class Individual(Paranoid):
         raise NotImplementedError
         return self._unlinked_nodes
 
-    def __getattr__(self, attribute: str):
+    # LAZY PROPERTIES ##################################################################################################
+
+    @property
+    def fitness(self):
+        return self.__fitness
+
+    @property
+    def fitness_comment(self) -> str:
+        return self.__fitness_comment
+
+    @property
+    def nodes(self) -> NodesCollection:
+        return self.__nodes
+
+    @property
+    def edges(self) -> EdgesCollection:
+        return self.__edges
+
+    def __getattr__(self, attribute: str) -> Any:
         """Lazy attributes 'fitness', 'fitness_comment' and 'nodes' are calculated only when needed"""
 
-        if attribute == 'fitness' or attribute == 'fitness_comment':
+        if attribute == '_Individual__fitness' or attribute == '_Individual__fitness_comment':
             fitness, comment = self.constraints.evaluator(self)
-            setattr(self, 'fitness', fitness)
-            setattr(self, 'fitness_comment', comment)
+            setattr(self, '_Individual__fitness', fitness)
+            setattr(self, '_Individual__fitness_comment', comment)
             return getattr(self, attribute)
-        elif attribute == 'nodes':
+        elif attribute == '_Individual__nodes':
             nodes = NodesCollection(individual=self, nx_graph=self._nx_graph)
             if self._finalized:
                 setattr(self, attribute, nodes)
             return nodes
-        elif attribute == 'edges':
+        elif attribute == '_Individual__edges':
             edges = EdgesCollection(individual=self, nx_graph=self._nx_graph)
             if self._finalized:
                 setattr(self, attribute, edges)
             return edges
         else:
-            raise AttributeError(f"Error: '{self.__class__.__name__}' has no attribute '{attribute}'")
+            # can't raise AttributeError(f"Error: '{self.__class__.__name__}' has no attribute '{attribute}'")!
+            return super().__getattribute__(attribute)
 
     def __hash__(self):
         assert self._finalized, f"Individual {self._id} is unhashable (not yet finalized)"
@@ -265,11 +278,11 @@ class Individual(Paranoid):
         will be colored with different colors (max 10 colors).
         """
         if not edge_color:
-            edge_color = [col for _, _, col in self.graph_manager.edges(data='color', default='red')]
+            edge_color = [col if col else 'red' for _, _, col in self.edges(data='color')]
         if not node_color:
-            node_color = self.next_chain_colors()
+            node_color = ['blue'] * len(self.nodes)
         # Node: try to dray with "spring"
-        return nx.draw_circular(self.graph_manager.nx_graph,
+        return nx.draw_circular(self._nx_graph,
                                 *args,
                                 edge_color=edge_color,
                                 with_labels=with_labels,
@@ -277,33 +290,6 @@ class Individual(Paranoid):
                                 node_color=node_color,
                                 font_color='white',
                                 **kwargs)
-
-    def next_chain_colors(self):
-        colors = [
-            'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray',
-            'tab:olive', 'tab:cyan'
-        ]
-        node_colors = [''] * len(self.graph_manager.node_view)
-        heads = self.check_entry_point()
-        known_heads = set(heads)
-        index = 0
-        real_pos = [k for k in self.graph_manager.node_view().keys()]
-        while heads:
-            node = heads.pop(0)
-            while node:
-                real_index = real_pos.index(node)
-                node_colors[real_index] = colors[index]
-                successors = [(label, target) for _, target, label in self.graph_manager.edges(node, keys=True)]
-                node = None
-                for label, target in successors:
-                    if label == 'next':
-                        assert node is None, "Multiple next edges"
-                        node = target
-                    elif self.graph_manager.is_head(target) and target not in known_heads:
-                        heads.append(target)
-                        known_heads.add(target)
-            index = (index + 1) % len(colors)
-        return node_colors
 
     def add_node(self, parent_node: Optional[NodeID], macro: Macro, frame_path: Sequence[Frame]) -> NodeID:
         """Adds a node in the individual and chains it
@@ -991,19 +977,10 @@ def get_nodes_in_frame(individual: 'Individual', frame: Frame, frame_path_limit:
     Returns:
         A list of of Nodes
     """
-    node_list = list()
-    for node, data in individual.graph_manager.nodes(data='frame_path').items():
-        #TODO: assert data, f"Invalid frame_path for node {node}: {data}"
-        if frame_path_limit:
-            if frame_path_limit > 0:
-                data = data[0:frame_path_limit]
-            else:
-                data = data[len(data) + frame_path_limit:]
-        #TODO: assert data, "Missing frame path"
-        if data and frame in data:
-            node_list.append(node)
-    return node_list
-
+    warnings.warn("Functions is going to be removed",
+                  DeprecationWarning,
+                  stacklevel=2)
+    return individual.nodes(frame_selector=frame)
 
 def get_nodes_in_section(individual: 'Individual', section: Section, frame_path_limit: int = None,
                          head: bool = False) -> List[NodeID]:
@@ -1085,7 +1062,7 @@ def get_macro_pool_nodes_count(individual: 'Individual', frames: Set[Frame] = No
         macro_pool = value['frame_path'][len(value['frame_path']) - 1]
         # Save the number of nodes in that frame
         if not frames or macro_pool in frames:
-            frame_count[macro_pool] = len(get_nodes_in_frame(individual, frame=macro_pool))
+            frame_count[macro_pool] = len(individual.nodes(frame_selector=macro_pool))
     return frame_count
 
 
@@ -1155,15 +1132,16 @@ def _update_values(individual: 'Individual', node: _SimpleNode) -> None:
 
 
 def clone_individual(individual: 'Individual') -> 'Individual':
+    """Creates a new individual that clones the structure of the given one"""
     mapping = {o: n for o, n in zip(individual.nodes, [NodeID() for _ in range(len(individual.nodes))])}
-    clone = Individual(
-        individual.constraints,
-        graph=nx.MultiDiGraph(
-            (mapping[f], mapping[t], k, d) for f, t, k, d in individual._nx_graph.edges(keys=True, data=True)))
+    new_graph = nx.MultiDiGraph()
+    new_graph.add_nodes_from(mapping.values())
+    new_graph.add_edges_from((mapping[f], mapping[t], k, d) for f, t, k, d in individual._nx_graph.edges(keys=True, data=True))
+    clone = Individual(individual.constraints, graph=new_graph)
 
     for n in individual.nodes:
         cn = mapping[n]  # n: node in source, cn: cloned node
-        print(f"{n} -> {cn}")
+        ###print(f"Clone map: {n} -> {cn}")
         clone._nx_graph.nodes[cn]['macro'] = individual._nx_graph.nodes[n]['macro']
         clone._nx_graph.nodes[cn]['frame_path'] = individual._nx_graph.nodes[n]['frame_path']
 
@@ -1177,3 +1155,4 @@ def clone_individual(individual: 'Individual') -> 'Individual':
                 parameters[parameter_name] = parameter_type(name=parameter_name)
                 parameters[parameter_name].initialize(individual._nx_graph.nodes[n]['parameters'][parameter_name].value)
         clone._nx_graph.nodes[cn]['parameters'] = parameters
+    return clone
