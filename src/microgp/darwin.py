@@ -95,8 +95,9 @@ class Darwin:
                  nu: int = None,
                  tau: float = 2.0,
                  strength: float = 0.5,
-                 max_age: int = None,
-                 stopping_conditions: list = None) -> None:
+                 max_age: Optional[int] = None,
+                 max_generations: Optional[int] = None,
+                 stopping_conditions: Optional[list] = None) -> None:
 
         assert constraints, "constraints parameter can't be None"
         assert operators, "operators parameter can't be None"
@@ -130,9 +131,16 @@ class Darwin:
         else:
             self._stopping_conditions = stopping_conditions
 
+        if max_generations:
+            self._stopping_conditions.append(lambda: self.generation >= max_generations)
+
     @property
     def mu(self):
         return self._mu
+
+    @property
+    def generation(self) -> int:
+        return self._generation
 
     def evolve(self) -> None:
         """Evolve the population until at least one of the stopping conditions
@@ -142,12 +150,8 @@ class Darwin:
 
         # Continue until one or more of the stopping condition in the list is true
         # while all((not f(self) for f in self._stopping_conditions)):
-        # i = 0
-        while self._generation < 3:
+        while all(not s() for s in self._stopping_conditions):
             self.do_generation()
-            # i += 1
-            # if i % 20 == 0:
-            #     logging.bare(f"Starting generation {i}")
 
     def do_generation(self) -> None:
         """Perform a generation of the evolution. Pick lambda (or nu)
