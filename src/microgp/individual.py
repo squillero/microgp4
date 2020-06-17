@@ -977,10 +977,9 @@ def get_nodes_in_frame(individual: 'Individual', frame: Frame, frame_path_limit:
     Returns:
         A list of of Nodes
     """
-    warnings.warn("Functions is going to be removed",
-                  DeprecationWarning,
-                  stacklevel=2)
+    warnings.warn("Functions is going to be removed", DeprecationWarning, stacklevel=2)
     return individual.nodes(frame_selector=frame)
+
 
 def get_nodes_in_section(individual: 'Individual', section: Section, frame_path_limit: int = None,
                          head: bool = False) -> List[NodeID]:
@@ -1136,7 +1135,8 @@ def clone_individual(individual: 'Individual') -> 'Individual':
     mapping = {o: n for o, n in zip(individual.nodes, [NodeID() for _ in range(len(individual.nodes))])}
     new_graph = nx.MultiDiGraph()
     new_graph.add_nodes_from(mapping.values())
-    new_graph.add_edges_from((mapping[f], mapping[t], k, d) for f, t, k, d in individual._nx_graph.edges(keys=True, data=True))
+    new_graph.add_edges_from(
+        (mapping[f], mapping[t], k, d) for f, t, k, d in individual._nx_graph.edges(keys=True, data=True))
     clone = Individual(individual.constraints, graph=new_graph)
 
     for n in individual.nodes:
