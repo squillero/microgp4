@@ -56,19 +56,13 @@ if __name__ == "__main__":
     word_macro = ugp4.Macro("{bit}", {'bit': bit})
 
     # Create a section containing 8 macros
-    word_section = ugp4.make_section(word_macro, size=(8, 8), name='word_sec')
+    word_section = ugp4.make_section(word_macro, size=(32, 32), name='word_sec')
 
     # Create a constraints library
     library = ugp4.Constraints()
-    library['main'] = ["Bitstring:", word_section]
+    library['main'] = [word_section]
 
-    # Define the evaluator method and the fitness type
-    def evaluator_function(data: str):
-        count = data.count('1')
-        return list(str(count))
-
-    library.evaluator = ugp4.fitness.make_evaluator(evaluator=evaluator_function,
-                                                    fitness_type=ugp4.fitness.Lexicographic)
+    library.evaluator = ugp4.fitness.make_evaluator(evaluator=lambda s: s.count('1'), fitness_type=ugp4.fitness.Simple)
 
     # Create a list of operators with their arity
     operators = ugp4.Operators()
@@ -96,17 +90,15 @@ if __name__ == "__main__":
         lambda_=lambda_,
         strength=strength,
         max_age=max_age,
+        max_generations=10
     )
-
-    # Evolve and print individuals in population
     darwin.evolve()
-    logging.bare("This is the final population:")
-    for individual in darwin.population:
-        msg = f"Solution {str(individual.id)} "
-        ugp4.print_individual(individual, msg=msg, plot=False, score=True)
 
-    # Print best individuals
-    ugp4.print_individual(darwin.archive.individuals, msg="These are the best ever individuals:", plot=False)
+    # That's all
+    ugp4.logging.bare("Final archive:")
+    for i in darwin.archive.individuals:
+        ind = f"{i}".replace("\n", "-")
+        ugp4.logging.bare(f"{i.id}: {ind} [{i.fitness}]")
 
     ugp4.logging.log_cpu(ugp4.logging.INFO, "Program completed")
     sys.exit(0)

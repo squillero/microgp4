@@ -96,7 +96,7 @@ class Darwin:
                  tau: float = 2.0,
                  strength: float = 0.5,
                  max_age: Optional[int] = None,
-                 max_generations: Optional[int] = None,
+                 max_generations: Optional[int] = 42,
                  stopping_conditions: Optional[list] = None) -> None:
 
         assert constraints, "constraints parameter can't be None"

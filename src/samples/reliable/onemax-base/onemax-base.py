@@ -48,27 +48,20 @@ if __name__ == "__main__":
     elif args.verbose > 1:
         ugp4.logging.DefaultLogger.setLevel(level=ugp4.logging.DEBUG)
         ugp4.logging.debug("Verbose level set to DEBUG")
-    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
 
+    ugp4.logging.log_cpu(ugp4.logging.INFO, "Program started")
     # Define a parameter of type ugp4.parameter.Bitstring and length = 8
-    word8 = ugp4.make_parameter(ugp4.parameter.Bitstring, len_=8)
+    bitstring = ugp4.make_parameter(ugp4.parameter.Bitstring, len_=64)
     # Define a macro that contains a parameter of type ugp4.parameter.Bitstring
-    word_macro = ugp4.Macro("{word8}", {'word8': word8})
+    word_macro = ugp4.Macro("{x}", {'x': bitstring})
     # Create a section containing a macro
     word_section = ugp4.make_section(word_macro, size=(1, 1), name='word_sec')
-
     # Create a constraints library
     library = ugp4.Constraints()
     # Define the sections in the library
     library['main'] = [word_macro]
-
-    # Define the evaluator method and the fitness type
-    def evaluator_function(data: str):
-        count = data.count('1')
-        return list(str(count))
-
-    library.evaluator = ugp4.fitness.make_evaluator(evaluator=evaluator_function,
-                                                    fitness_type=ugp4.fitness.Lexicographic)
+    # Fitness (simple)
+    library.evaluator = ugp4.fitness.make_evaluator(evaluator=lambda s: s.count('1'), fitness_type=ugp4.fitness.Simple)
 
     # Create a list of operators with their aritiy
     operators = ugp4.Operators()
@@ -78,34 +71,23 @@ if __name__ == "__main__":
     operators += ugp4.GenOperator(ugp4.hierarchical_mutation, 1)
     operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
 
-    # Create the object that will manage the evolution
-    mu = 10
-    nu = 20
-    strength = 0.7
-    lambda_ = 7
-    max_age = 10
-
+    # Evolution core
     darwin = ugp4.Darwin(
         constraints=library,
         operators=operators,
-        mu=mu,
-        nu=nu,
-        lambda_=lambda_,
-        strength=strength,
-        max_age=max_age,
+        mu=50,
+        nu=50,
+        lambda_=10,
+        strength=.7,
+        max_age=50,
+        max_generations=10
     )
-
-    # Evolve and print individuals in population
     darwin.evolve()
-    logging.bare("Final population:")
-    for individual in darwin.population:
-        msg = f"Solution {str(individual.id)} "
-        ugp4.print_individual(individual, msg=msg, plot=False)
-        ugp4.logging.bare(f"Fitness: {individual.fitness}")
-        ugp4.logging.bare("")
 
-    # Print best individuals
-    ugp4.print_individual(darwin.archive.individuals, msg="Archive:", plot=True, score=True)
+    # That's all
+    ugp4.logging.bare("Final archive:")
+    for i in darwin.archive.individuals:
+        ugp4.logging.bare(f"{i.id}: {i} [{i.fitness}]")
 
     ugp4.logging.log_cpu(ugp4.logging.INFO, "Program completed")
     sys.exit(0)
