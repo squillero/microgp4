@@ -26,12 +26,13 @@
 
 # MEMO
 # https://packaging.python.org/tutorials/packaging-projects/
+## pandoc index.md --o index.srt
 # del /q dist\* & python .\setup.py sdist & twine upload dist\*
 
 import setuptools
 from microgp import __version__ as ugp_version
 
-with open('../docs/index.md', 'r', encoding='utf-8') as fh:
+with open('index.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
 
 OPTIONAL = ['m2r', 'coloredlogs', 'matplotlib', 'psutil']
@@ -56,8 +57,8 @@ setuptools.setup(
     },
     keywords="optimization evolutionary-algorithm computational-intelligence",
     packages=setuptools.find_packages(),
-    package_data={'': ['requirements.txt']},
-    data_files=[('.', ['requirements.txt'])],
+    package_data={'': ['requirements.txt', 'index.md']},
+    data_files=[('.', ['requirements.txt', 'index.md'])],
     classifiers=[
         "Programming Language :: Python :: 3", "Operating System :: OS Independent",
         "Development Status :: 2 - Pre-Alpha", "Intended Audience :: Science/Research",

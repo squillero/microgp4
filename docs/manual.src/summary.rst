@@ -26,7 +26,7 @@ In the past, due to its ability to handle realistic assembly programs and to exp
 History
 =======
 
-The MicroGP project :ref:`started around the year 2000 <The story so far...>`, with the creation of a collection of scripts for optimizing assembly-language programs. A fully working program was first coded in C in 2002, and then re-engineered in C++ in 2006; the design of a Python version started in 2018. MicroGP4 would not have been possible without the help and support of :ref:`several people <µCredits>`.
+The MicroGP project :ref:`started around the year 2000 <microgp1>`, with the creation of a collection of scripts for optimizing assembly-language programs. A fully working program was first coded :ref:`in C in 2002 <microgp2>`, and then re-engineered :ref:`in C++ in 2006 <microgp3>`; the design of a Python version started :ref:`in 2018 <microgp4>`. MicroGP4 would not have been possible without the help and support of :ref:`several people <µCredits>`.
 
 Alternatives
 ============

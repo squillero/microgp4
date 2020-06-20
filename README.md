@@ -1,5 +1,5 @@
-[MicroGP4](https://squillero.github.io/microgp4/)
-=================================================
+MicroGP4
+========
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://opensource.org/licenses/Apache-2.0) 
 [![Status: Actrive](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/squillero/microgp3)
@@ -9,7 +9,7 @@
 [![Documentation Status](https://readthedocs.org/projects/microgp4/badge/?version=pre-alpha)](https://microgp4.readthedocs.io/en/pre-alpha/?badge=pre-alpha)
 ![](https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-28094298-6&cid=4f34399f-f437-4f67-9390-61c649f9b8b2&dp=1)
 
-MicroGP (µGP, `ugp`)  is an [evolutionary tool](https://squillero.github.io/microgp4/evolution.html) created around 2001. Over the years it has been exploited as a coverage-driven [fuzzer](https://en.wikipedia.org/wiki/Fuzzing), as a general-purpose [optimizer](https://en.wikipedia.org/wiki/Engineering_optimization), and as a framework for prototyping and testing new ideas. [Some hundreds documents](https://scholar.google.com/scholar?q=%28+MicroGP+OR+%C2%B5GP+OR+ugp3+OR+ugp2+%29+AND+%28+Squillero+OR+Tonda+OR+Sanchez+OR+Schillaci+%29) discussing it and possible application can be found in the scientific literature. [**[read more]**](https://squillero.github.io/microgp4/)
+MicroGP (µGP, `ugp`)  is an [evolutionary tool](https://squillero.github.io/microgp4/evolution.html) created around 2001. Over the years it has been exploited as a coverage-driven [fuzzer](https://en.wikipedia.org/wiki/Fuzzing), as a general-purpose [optimizer](https://en.wikipedia.org/wiki/Engineering_optimization), and as a framework for prototyping and testing new ideas. [Some hundreds documents](https://scholar.google.com/scholar?q=%28+MicroGP+OR+%C2%B5GP+OR+ugp3+OR+ugp2+%29+AND+%28+Squillero+OR+Tonda+OR+Sanchez+OR+Schillaci+%29) discussing it and possible application can be found in the scientific literature. [**[read more]**](https://microgp4.readthedocs.io/en/pre-alpha/summary.html)
 
 #### :warning: MicroGP4 v1.0 is currently in [pre-alpha](https://en.wikipedia.org/wiki/Software_release_life_cycle#Pre-alpha) and under active development
 

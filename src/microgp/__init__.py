@@ -39,7 +39,7 @@ import warnings
 from collections import namedtuple
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 16)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 23)
 
 # hard code
 __name__ = "microgp"

@@ -8,8 +8,11 @@
 #                                                                           #
 #############################################################################
 
+# PARANOIA: Never upload a pypirc :-)
+.pypirc
+
 # IDE files
 .idea/
 
-# PARANOIA: Never upload a pypirc :-)
-.pypirc
+# local (development)
+publish.cmd
