@@ -39,7 +39,7 @@ import warnings
 from collections import namedtuple
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 23)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 24)
 
 # hard code
 __name__ = "microgp"
@@ -74,8 +74,8 @@ author = __author__
 # Standard warnings
 if sys.version_info < (3,):
     warnings.warn("The code is quite probably not compatible with Python 2", Warning, stacklevel=2)
-elif sys.version_info[:2] != (3, 7):
-    warnings.warn("The code is only known to be compatible with Python 3.7", Warning, stacklevel=2)
+elif sys.version_info[:2] != (3, 8):
+    warnings.warn("The code is only known to be compatible with Python 3.8", Warning, stacklevel=2)
 
 if sys.version_info < (3, 7):
     warnings.warn(
