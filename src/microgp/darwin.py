@@ -36,6 +36,7 @@ from .utils import logging
 
 
 class Darwin:
+    # TODO: Double Check
     """This class manages the evolution, stores the genetic operators, the
     population, and the archive. You can set some evolution parameters
     (`lambda, tau, nu, strength, mu`) and a list of stopping conditions.
@@ -139,6 +140,10 @@ class Darwin:
         return self._mu
 
     @property
+    def lambda_(self):
+        return self._lambda
+
+    @property
     def generation(self) -> int:
         return self._generation
 
@@ -154,34 +159,27 @@ class Darwin:
             self.do_generation()
 
     def do_generation(self) -> None:
+        # TODO: Rewrite!
         """Perform a generation of the evolution. Pick lambda (or nu)
         operators, clean the resulting set of individuals given by the
         operators, join it to population and keep the best mu individuals"""
 
         # Initialize the list of individuals that compose the offspring of the current generation
-        whole_offspring = list()
+        offspring = list()
 
-        # Select operators
-        if len(self._population) == 0:
-            # Example: generate 10.000 (nu) individuals and then keep only the best 10 (mu) individuals
-            selected_operators = self._operators.select(max_arity=0, k=self._nu)
-        else:
-            selected_operators = self._operators.select(min_arity=1, k=self._lambda)
+        for l in range(self.lambda_):
+            if len(self._population) == 0:
+                # Use generation operators only
+                operator = self._operators.select(max_arity=0)
+            else:
+                operator = self._operators.select(min_arity=1)
 
-        # Run operators
-        for operator in selected_operators:
-            arity = operator.arity
+            # Create the list of parent individual
+            parents = [self._population.select(tau=self._tau) for _ in range(operator.arity)]
 
-            # Get the list of individuals to work with
-            original_individuals = list()
-            for _ in range(arity):
-                original_individuals.append(self._population.select(tau=self._tau))
-
-            # Generate the new individuals returned by the selected GenOperator
-            #   NOTE: The temporary_offspring may contain None elements
-            temporary_offspring = operator(*original_individuals,
-                                           strength=self._strength,
-                                           constraints=self._constraints)
+            # Generate the offspring with the selected GenOperator
+            temporary_offspring = operator(*parents, strength=self._strength, constraints=self._constraints)
+            # TODO: Incomplete!
             assert issubclass(type(temporary_offspring),
                               list) or temporary_offspring is None, "temporary_offspring must be a list"
 
@@ -198,27 +196,27 @@ class Darwin:
 
             # if not final_offspring:
             #     logging.warning(f'Operator {operator.function} has not produced a valid individual')
-            # elif original_individuals:
-            #     print_individual(original_individuals[0])
+            # elif parents:
+            #     print_individual(parents[0])
             #     print_individual(final_offspring[0])
 
             # Update the number of successes of the selected GenOperator
             if final_offspring is not None:
                 ln = len(final_offspring)
-                whole_offspring += final_offspring
+                offspring += final_offspring
             else:
                 ln = 0
             operator.update_successes(ln)
 
             # Update stats and join offspring to population (if valid)
             # offspring = self.update_stats_and_offspring(operator, temporary_offspring)
-            # whole_offspring += offspring
+            # offspring += offspring
 
         # if len(self._population) == 0:
-        #     print_individual(whole_offspring)
+        #     print_individual(offspring)
 
         # Add the offspring to the population
-        self._population += set(whole_offspring)
+        self._population += set(offspring)
 
         # Remove some individuals based on, for instance, their age, whether or not they are clones, etc.
         self._population.filter_by_age(max_age=self._max_age)

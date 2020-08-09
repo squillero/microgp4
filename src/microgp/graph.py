@@ -37,6 +37,7 @@ from .node import NodeID
 
 
 class NodeWrapper(Paranoid):
+    # TODO: Double Check
     """Wrapper class for working with nodes inside Individual"""
 
     def __init__(self, node_id: NodeID, graph: nx.MultiDiGraph) -> None:
@@ -120,6 +121,7 @@ class NodeWrapper(Paranoid):
 
 
 class NodesCollection(abc.Mapping, abc.Set, abc.Callable):
+    # TODO: Double Check
     """Collection of nodes of an individual; quite but not completely different from a NetworkX node view.
 
     When used as a dictionary it allows read-only access to NodeViews. E.g.,
@@ -242,9 +244,11 @@ class NodesCollection(abc.Mapping, abc.Set, abc.Callable):
 
 
 EdgeWrapper = namedtuple('EdgeWrapper', ['src', 'dst', 'key', 'data'])
+# TODO: Double Check
 
 
 class EdgesCollection(abc.Mapping):
+    # TODO: Double Check
     """Collection of nodes of an individual; quite but not completely different from a NetworkX node view.
     """
 
@@ -274,7 +278,10 @@ class EdgesCollection(abc.Mapping):
     def __getitem__(self, key) -> EdgeWrapper:
         return self._edges[key]
 
-    def __call__(self, src: NodeID = None, dst: NodeID = None, key: str = None,
+    def __call__(self,
+                 src: NodeID = None,
+                 dst: NodeID = None,
+                 key: str = None,
                  data: Union[str, bool] = False) -> List[Tuple[NodeID, NodeID, str, Any]]:
         edges = list(self)
 
@@ -300,6 +307,7 @@ class EdgesCollection(abc.Mapping):
 
 
 class GraphToolbox(Paranoid):
+    # TODO: Double Check
     """A safe wrapper around common operation on a NetworkX MultiDiGraph"""
 
     __slots__ = ('_nx_graph',)

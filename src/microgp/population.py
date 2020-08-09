@@ -33,6 +33,7 @@ from microgp import random_generator
 
 
 class Population:
+    # TODO: Double Check
     """This class contains the set of individuals composing the population and
     manages the selection, insertion, removal of the individuals based on the
     age or whether their phenotype is already in the population. A non-valid

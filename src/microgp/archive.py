@@ -29,6 +29,7 @@ from .individual import Individual
 
 
 class Archive:
+    # TODO: Double Check
     """This class manages the set of individuals not dominated by all other
     individuals currently or previously contained in the
     :mod:`microgp.darwin.Darwin._population`.

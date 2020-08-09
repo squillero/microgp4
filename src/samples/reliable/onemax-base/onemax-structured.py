@@ -82,16 +82,14 @@ if __name__ == "__main__":
     lambda_ = 7
     max_age = 10
 
-    darwin = ugp4.Darwin(
-        constraints=library,
-        operators=operators,
-        mu=mu,
-        nu=nu,
-        lambda_=lambda_,
-        strength=strength,
-        max_age=max_age,
-        max_generations=10
-    )
+    darwin = ugp4.Darwin(constraints=library,
+                         operators=operators,
+                         mu=mu,
+                         nu=nu,
+                         lambda_=lambda_,
+                         strength=strength,
+                         max_age=max_age,
+                         max_generations=10)
     darwin.evolve()
 
     # That's all

@@ -27,12 +27,13 @@
 """Can you help me occupy my brain? Oh yeah."""
 
 from typing import Any
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Paranoid(ABC):
     """Abstract class: Paranoid classes do implement `run_paranoia_checks()`."""
 
+    @abstractmethod
     def run_paranoia_checks(self) -> bool:
         """Checks the internal consistency of a "paranoid" object.
 
@@ -51,12 +52,12 @@ class Paranoid(ABC):
         Raise:
             AssertionError if some internal data structure is incoherent
         """
-        raise NotImplementedError
 
 
 class Pedantic(ABC):
     """Abstract class: Pedantic classes do implement `is_valid()`."""
 
+    @abstractmethod
     def is_valid(self, obj: Any) -> bool:
         """Checks an object against a specification. The function may be used
         to check a value against a parameter definition, a node against a
@@ -65,4 +66,3 @@ class Pedantic(ABC):
         Returns:
             True if the object is valid, False otherwise
         """
-        raise NotImplementedError

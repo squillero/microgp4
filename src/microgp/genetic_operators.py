@@ -42,6 +42,8 @@ except:
 
 
 def print_individual(individuals: Union[Individual, List[Individual]], msg: str = '', plot=False, score=False):
+    # TODO: Double Check
+    # TODO: Refactor
     """Prints one or more individuals and plots their graphs
 
     Args:
@@ -72,6 +74,7 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
 
 def unroll_macro_list(individual: Individual, section_name: str, frame_path: Sequence[Frame] = None) \
         -> List[Tuple[Macro, Tuple[Frame]]]:
+    # TODO: Double Check
     """Generate a list of (macro, frame_path) from a given section (=section_name).
 
     Args:
@@ -115,6 +118,7 @@ def unroll_macro_list(individual: Individual, section_name: str, frame_path: Seq
 
 
 def order_by_fitness(individuals_pool: Union[Set[Individual], List[Individual]]) -> List[Individual]:
+    # TODO: Double Check
     """Sort individuals based on the fitness.
 
     Args:
@@ -134,6 +138,7 @@ def order_by_fitness(individuals_pool: Union[Set[Individual], List[Individual]])
 # TODO: Separate the 'create_random_individual -> Individual' from an 'init_random_individual -> [Individual]'
 def create_random_individual(constraints: Constraints, max_retries: Optional[int] = 100, **kwargs) -> \
         List[Optional[Individual]]:
+    # TODO: Double Check
     """Creates a random individual.
 
     Individuals are created starting from section `main`. The new individual is
@@ -196,6 +201,7 @@ def create_random_individual(constraints: Constraints, max_retries: Optional[int
 # CROSSOVERS____________________________________________________________________________________________________________
 # TODO: Rewrite!
 def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Optional[Individual]]:
+    # TODO: Double Check
     """Let's consider a sequence of nodes connected through edges with label=
     'next', we will call this sequence `next-chain`. This operator selects
     the `next-chains` belonging to the common sections between the two parents
@@ -275,6 +281,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
 
 def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
                                        **kwargs) -> List[Optional[Individual]]:
+    # TODO: Double Check
     """This crossover builds two lists of MacroPools in parentA and parentB
     belonging to common sections, chooses one element for each list and
     chooses one node (called cut_node). parentA and parentB are cloned and
@@ -410,6 +417,7 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
 
 
 def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Optional[Individual]]:
+    # TODO: Double Check
     """This crossover builds two lists of MacroPools in parentA and parentB
       belonging to common sections, chooses one element for each list.
       parentA and parentB are cloned and subsequently modified (in individualC
@@ -452,15 +460,13 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
     individualC = clone_individual(parentA)
     individualC.parents = {parentA, parentB}
     individualC.operator = macro_pool_uniform_crossover
-    assert all(individualC.nodes[n]['frame_path']
-               for n in individualC.nodes), "Illegal frame_path in individual's node"
+    assert all(individualC.nodes[n]['frame_path'] for n in individualC.nodes), "Illegal frame_path in individual's node"
 
     # Initialize second son (individualD) from parentB
     individualD = clone_individual(parentB)
     individualD.parents = {parentA, parentB}
     individualD.operator = macro_pool_uniform_crossover
-    assert all(individualD.nodes[n]['frame_path']
-               for n in individualD.nodes), "Illegal frame_path in individual's node"
+    assert all(individualD.nodes[n]['frame_path'] for n in individualD.nodes), "Illegal frame_path in individual's node"
 
     # If the individuals are identical -> return the copies
     if parentA == parentB:
@@ -532,6 +538,7 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
 
 # MUTATIONS_____________________________________________________________________________________________________________
 def check_muation_parameters(original_individual: Individual, strength: float):
+    # TODO: Double Check
     assert issubclass(type(strength), float), '"strength" parameter must be a float'
     assert 0 <= strength <= 1, '"strength" parameter must be in [0, 1]'
     assert original_individual, "Original individual can't be None"
@@ -539,6 +546,7 @@ def check_muation_parameters(original_individual: Individual, strength: float):
 
 
 def remove_node_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
+    # TODO: Double Check
     """Try to remove a node taken from the possible set of nodes in the
     individual. The removal could fail because of the minimum number of nodes
     that the individual must contain. This method returns a modified copy of
@@ -608,6 +616,7 @@ def remove_node_mutation(original_individual: Individual, strength: float, **kwa
 
 
 def add_node_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
+    # TODO: Double Check
     """Insert a new node in the individual graph_manager. An insertion of a new node
     could fail because of there are no valid targets for the node that
     contains a LocalReference.
@@ -673,6 +682,7 @@ def add_node_mutation(original_individual: Individual, strength: float, **kwargs
 
 
 def hierarchical_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
+    # TODO: Double Check
     """Choose a node in the graph_manager, choose a parameter inside the node, mutate it.
     Each parameter has probability: `1/len(nodes) * 1/len(parameters in that node)`.
 
@@ -726,6 +736,7 @@ def hierarchical_mutation(original_individual: Individual, strength: float, **kw
 
 
 def flat_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
+    # TODO: Double Check
     """Build a list of all parameters contained in all nodes then choose one
     of them and mutate it. Each parameter has probability: `1/len(nodes)`.
 
