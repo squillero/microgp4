@@ -27,6 +27,7 @@
 from .fitness.base import is_dominated
 from .individual import Individual
 
+# TODO: Check. Urgent. (fall 2020)
 
 class Archive:
     """This class manages the set of individuals not dominated by all other

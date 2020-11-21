@@ -45,14 +45,14 @@ version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 24)
 __name__ = "microgp"
 __version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}.dev{version_info.dev}"
 __author__ = "Giovanni Squillero and Alberto Tonda"
-__copyright__ = """Copyright (c) 2002-2006 Giovanni Squillero.
-All Rights Reserved. Licensed under GPL2.
+__copyright__ = """Copyright (c) 2020 Giovanni Squillero and Alberto Tonda.
+All Rights Reserved. MicroGP v4 is licensed under Apache-2.0.
 
 Copyright (c) 2006-2016 Giovanni Squillero.
-All Rights Reserved. Licensed under GPL3.
+All Rights Reserved. MicroGP v3 is licensed under GPL3.
 
-Copyright (c) 2020 Giovanni Squillero and Alberto Tonda.
-All Rights Reserved. Licensed under Apache-2.0.
+Copyright (c) 2002-2006 Giovanni Squillero.
+All Rights Reserved. MicroGP v2 is licensed under GPL2.
 """
 
 #almost human-readable

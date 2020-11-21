@@ -34,6 +34,7 @@ from .properties import Properties
 from .fitness.base import Base
 from . import default_builders, standard_checkers
 
+# TODO: Check. (fall 2020)
 
 class Section(Paranoid):
     """Base structural unit. A section can be composed by one or more macros,

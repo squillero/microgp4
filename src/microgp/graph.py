@@ -36,6 +36,7 @@ from .constraints import Section
 from .node import NodeID
 
 
+# TODO: Check. (fall 2020)
 class NodeWrapper(Paranoid):
     """Wrapper class for working with nodes inside Individual"""
 
@@ -119,6 +120,7 @@ class NodeWrapper(Paranoid):
         return True
 
 
+# TODO: Check. (fall 2020)
 class NodesCollection(abc.Mapping, abc.Set, abc.Callable):
     """Collection of nodes of an individual; quite but not completely different from a NetworkX node view.
 
@@ -241,9 +243,11 @@ class NodesCollection(abc.Mapping, abc.Set, abc.Callable):
         return node_dict
 
 
+# TODO: Check. (fall 2020)
 EdgeWrapper = namedtuple('EdgeWrapper', ['src', 'dst', 'key', 'data'])
 
 
+# TODO: Check. (fall 2020)
 class EdgesCollection(abc.Mapping):
     """Collection of nodes of an individual; quite but not completely different from a NetworkX node view.
     """
@@ -299,6 +303,7 @@ class EdgesCollection(abc.Mapping):
             return result
 
 
+# TODO: Check. (fall 2020)
 class GraphToolbox(Paranoid):
     """A safe wrapper around common operation on a NetworkX MultiDiGraph"""
 

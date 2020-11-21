@@ -34,6 +34,7 @@ from .operators import Operators
 from .population import Population
 from .utils import logging
 
+# TODO: Check. Urgent. (fall 2020)
 
 class Darwin:
     """This class manages the evolution, stores the genetic operators, the

@@ -20,8 +20,8 @@ MicroGP (µGP, `ugp`)  is an [evolutionary tool](https://squillero.github.io/mic
 
 * The default branch is always the more stable
 * Do not clone experimental branches `exp/*` unless you know what you are doing
-* Follow this [style guide](https://github.com/squillero/style/blob/master/python.md)
-* It may be wise to contact Alberto or Giovanni before digging in
+* Follow the [style guide](https://github.com/squillero/style/blob/master/python.md)
+* It may be wise to contact Alberto or Giovanni
 
 ### Documentation and Previous Versions
 

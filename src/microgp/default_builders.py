@@ -28,6 +28,7 @@ from typing import Dict, Any
 
 from .common_data_structures import Frame
 
+# TODO: Check. (fall 2020)
 
 def default_base_builder(individual: "Individual", frame: Frame, **kwargs) -> Dict[str, Any]:
     """Get base stats of the frame"""

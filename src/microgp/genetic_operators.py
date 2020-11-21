@@ -34,6 +34,7 @@ from .utils import logging
 from microgp import random_generator
 import microgp as ugp4
 
+# TODO: Add comments!
 try:
     import matplotlib.cbook
     import matplotlib.pyplot as plt
@@ -41,6 +42,8 @@ except:
     plt = None
 
 
+# TODO: Not here!
+# TODO: Check. Urgent. (fall 2020)
 def print_individual(individuals: Union[Individual, List[Individual]], msg: str = '', plot=False, score=False):
     """Prints one or more individuals and plots their graphs
 
@@ -70,6 +73,8 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
             ugp4.logging.bare(f"Fitness score: {individual.fitness}\n")
 
 
+# TODO: Check. Urgent. (fall 2020)
+# TODO: Make private?
 def unroll_macro_list(individual: Individual, section_name: str, frame_path: Sequence[Frame] = None) \
         -> List[Tuple[Macro, Tuple[Frame]]]:
     """Generate a list of (macro, frame_path) from a given section (=section_name).
@@ -114,6 +119,8 @@ def unroll_macro_list(individual: Individual, section_name: str, frame_path: Seq
     return nodes
 
 
+# TODO: Check. Urgent. (fall 2020)
+# TODO: Refactor. Move to population?
 def order_by_fitness(individuals_pool: Union[Set[Individual], List[Individual]]) -> List[Individual]:
     """Sort individuals based on the fitness.
 
@@ -132,6 +139,7 @@ def order_by_fitness(individuals_pool: Union[Set[Individual], List[Individual]])
 
 # INITIALIZATION________________________________________________________________________________________________________
 # TODO: Separate the 'create_random_individual -> Individual' from an 'init_random_individual -> [Individual]'
+# TODO: Check. Urgent. (fall 2020)
 def create_random_individual(constraints: Constraints, max_retries: Optional[int] = 100, **kwargs) -> \
         List[Optional[Individual]]:
     """Creates a random individual.
@@ -195,6 +203,7 @@ def create_random_individual(constraints: Constraints, max_retries: Optional[int
 
 # CROSSOVERS____________________________________________________________________________________________________________
 # TODO: Rewrite!
+# TODO: Check. Urgent. (fall 2020)
 def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Optional[Individual]]:
     """Let's consider a sequence of nodes connected through edges with label=
     'next', we will call this sequence `next-chain`. This operator selects
@@ -272,7 +281,7 @@ def switch_proc_crossover(parentA: Individual, parentB: Individual, **kwargs) ->
     #     print_individual(individual, 'switch_proc crossover: individual', plot=True)
     return [individual]
 
-
+# TODO: Check. Urgent. (fall 2020)
 def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
                                        **kwargs) -> List[Optional[Individual]]:
     """This crossover builds two lists of MacroPools in parentA and parentB
@@ -408,7 +417,7 @@ def macro_pool_one_cut_point_crossover(parentA: Individual, parentB: Individual,
 
     return [individualC, individualD]
 
-
+# TODO: Check. Urgent. (fall 2020)
 def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwargs) -> List[Optional[Individual]]:
     """This crossover builds two lists of MacroPools in parentA and parentB
       belonging to common sections, chooses one element for each list.
@@ -531,6 +540,7 @@ def macro_pool_uniform_crossover(parentA: Individual, parentB: Individual, **kwa
 
 
 # MUTATIONS_____________________________________________________________________________________________________________
+# TODO: Check. Urgent. (fall 2020)
 def check_muation_parameters(original_individual: Individual, strength: float):
     assert issubclass(type(strength), float), '"strength" parameter must be a float'
     assert 0 <= strength <= 1, '"strength" parameter must be in [0, 1]'
@@ -538,6 +548,7 @@ def check_muation_parameters(original_individual: Individual, strength: float):
     assert isinstance(original_individual, Individual), "Original individual must be of type Individual"
 
 
+# TODO: Check. Urgent. (fall 2020)
 def remove_node_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
     """Try to remove a node taken from the possible set of nodes in the
     individual. The removal could fail because of the minimum number of nodes
@@ -607,6 +618,7 @@ def remove_node_mutation(original_individual: Individual, strength: float, **kwa
         return [new_individual]
 
 
+# TODO: Check. Urgent. (fall 2020)
 def add_node_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
     """Insert a new node in the individual graph_manager. An insertion of a new node
     could fail because of there are no valid targets for the node that
@@ -672,6 +684,7 @@ def add_node_mutation(original_individual: Individual, strength: float, **kwargs
         return [new_individual]
 
 
+# TODO: Check. Urgent. (fall 2020)
 def hierarchical_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
     """Choose a node in the graph_manager, choose a parameter inside the node, mutate it.
     Each parameter has probability: `1/len(nodes) * 1/len(parameters in that node)`.
@@ -725,6 +738,7 @@ def hierarchical_mutation(original_individual: Individual, strength: float, **kw
         return [new_individual]
 
 
+# TODO: Check. Urgent. (fall 2020)
 def flat_mutation(original_individual: Individual, strength: float, **kwargs) -> List[Optional[Individual]]:
     """Build a list of all parameters contained in all nodes then choose one
     of them and mutate it. Each parameter has probability: `1/len(nodes)`.
