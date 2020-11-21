@@ -36,6 +36,7 @@ from .properties import Properties
 
 
 class Macro(Paranoid):
+    # TODO: Double Check
     """The blueprint of macro.
 
     A "macro" is a fragment of text with zero or more variable parameters. it

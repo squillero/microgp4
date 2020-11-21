@@ -72,16 +72,14 @@ if __name__ == "__main__":
     operators += ugp4.GenOperator(ugp4.flat_mutation, 1)
 
     # Evolution core
-    darwin = ugp4.Darwin(
-        constraints=library,
-        operators=operators,
-        mu=50,
-        nu=50,
-        lambda_=10,
-        strength=.7,
-        max_age=50,
-        max_generations=10
-    )
+    darwin = ugp4.Darwin(constraints=library,
+                         operators=operators,
+                         mu=50,
+                         nu=50,
+                         lambda_=10,
+                         strength=.7,
+                         max_age=50,
+                         max_generations=10)
     darwin.evolve()
 
     # That's all

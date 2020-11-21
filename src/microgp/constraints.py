@@ -223,7 +223,10 @@ class SubsectionsAlternative(Section):
 class MacroPool(Section):
     """A pool of macros."""
 
-    def __init__(self, macro_pool: Collection[Macro] = None, name: str = None, size: Tuple[int, int] = (1, 1),
+    def __init__(self,
+                 macro_pool: Collection[Macro] = None,
+                 name: str = None,
+                 size: Tuple[int, int] = (1, 1),
                  **kwargs) -> None:
         if not name:
             name = Section.anonymous('mp')

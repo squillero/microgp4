@@ -44,7 +44,8 @@ class Integer(Parameter):
 
     def is_valid(self, value):
         """Check if the passed value is in range min, max."""
-        if value is None: return True
+        if value is None:
+            return True
         return self.min <= value < self.max
 
     def mutate(self, strength: float = 0.5):

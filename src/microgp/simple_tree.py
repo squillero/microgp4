@@ -32,6 +32,7 @@ from .utils import logging
 
 
 class _SimpleNode:
+    # TODO: Double Check
     """Oversimplified tree node"""
 
     def __init__(self, frame: Frame) -> None:
@@ -61,6 +62,7 @@ class _SimpleNode:
 
 
 class SimpleTree:
+    # TODO: Double Check
     """Oversimplified tree for managing frame structure"""
 
     def __init__(self, root: Frame) -> None:

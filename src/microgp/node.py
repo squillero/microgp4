@@ -30,6 +30,7 @@ from microgp.abstract import Pedantic
 
 
 class NodeID(int, Pedantic):
+    # TODO: Double Check
     """A node in the directed MultiDiGraph describing the individual.
 
     Use `n = NodeID()` to get a unique node_id.

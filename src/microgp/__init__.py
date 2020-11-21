@@ -55,7 +55,9 @@ Copyright (c) 2002-2006 Giovanni Squillero.
 All Rights Reserved. MicroGP v2 is licensed under GPL2.
 """
 
-#almost human-readable
+##############################################################################
+# Almost human-readable infos
+
 name = f"MicroGP{version_info.epoch}"
 if version_info.tag == "a" and version_info.micro == 0:
     version = f"v{version_info.major}.{version_info.minor}_{version_info.dev} pre-alpha \"{version_info.codename}\""
@@ -71,28 +73,19 @@ else:
     version = "unknown"
 author = __author__
 
+##############################################################################
 # Standard warnings
 if sys.version_info < (3,):
     warnings.warn("The code is quite probably not compatible with Python 2", Warning, stacklevel=2)
-elif sys.version_info[:2] != (3, 8):
-    warnings.warn("The code is only known to be compatible with Python 3.8", Warning, stacklevel=2)
-
+elif sys.version_info < (3,7):
+    warnings.warn("The code has never been tested with Python prior to v3.7", Warning, stacklevel=2)
 if sys.version_info < (3, 7):
     warnings.warn(
-        "Dictionary order is not guaranteed to be insertion order before v3.7: Results might be not reproducible",
+        "Dictionary order is not guaranteed to be insertion order: Results are likely to be not reproducible",
         Warning,
         stacklevel=2)
 
-if sys.flags.optimize == 0:
-    warnings.warn("Paranoia checks are active; performances can be significantly impaired (consider using '-O')",
-                  UserWarning,
-                  stacklevel=2)
-
-if version_info.tag == 'a' and not sys.warnoptions and 'PYTHONWARNINGS' not in os.environ:
-    warnings.filterwarnings('default', category=DeprecationWarning, module='microgp')
-    warnings.warn("Showing all Deprecation Warnings (tweak with '-W' or PYTHONWARNINGS)", UserWarning, stacklevel=2)
-    # hint: try using "-W error:microgp:DeprecationWarning"
-
+##############################################################################
 # MicroGP stuff
 from .utils import logging, random_generator
 from .parameter import make_parameter
@@ -109,12 +102,32 @@ from .genetic_operators import flat_mutation, hierarchical_mutation, add_node_mu
 from . import fitness
 
 
+##############################################################################
+# Helpers
 def show_banner() -> None:
     """Shows the "official" MicroGP banner"""
+    sys.stderr.flush()
     logging.bare(f"This is {name} {version}")
     logging.bare("Copyright © 2020 by Giovanni Squillero and Alberto Tonda")
-
+    sys.stderr.flush()
 
 def copyright():
     """Lists contributors and copyright notices."""
-    print(__copyright__)
+    sys.stderr.flush()
+    logging.bare(__copyright__)
+    sys.stderr.flush()
+
+##############################################################################
+# Welcome!
+
+#show_banner()
+
+if sys.flags.optimize == 0:
+    warnings.warn("Paranoia checks are active; performances can be significantly impaired (consider using '-O')",
+                  UserWarning,
+                  stacklevel=2)
+
+if version_info.tag == 'a' and not sys.warnoptions and 'PYTHONWARNINGS' not in os.environ:
+    warnings.filterwarnings('default', category=DeprecationWarning, module='microgp')
+    warnings.warn("Showing all Deprecation Warnings (tweak with '-W' or PYTHONWARNINGS)", UserWarning, stacklevel=2)
+    # hint: try using "-W error:microgp:DeprecationWarning"
