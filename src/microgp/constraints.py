@@ -34,6 +34,7 @@ from .properties import Properties
 from .fitness.base import Base
 from . import default_builders, standard_checkers
 
+# TODO: Check. (fall 2020)
 
 class Section(Paranoid):
     """Base structural unit. A section can be composed by one or more macros,
@@ -222,7 +223,10 @@ class SubsectionsAlternative(Section):
 class MacroPool(Section):
     """A pool of macros."""
 
-    def __init__(self, macro_pool: Collection[Macro] = None, name: str = None, size: Tuple[int, int] = (1, 1),
+    def __init__(self,
+                 macro_pool: Collection[Macro] = None,
+                 name: str = None,
+                 size: Tuple[int, int] = (1, 1),
                  **kwargs) -> None:
         if not name:
             name = Section.anonymous('mp')

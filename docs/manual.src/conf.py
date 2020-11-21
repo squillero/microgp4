@@ -31,7 +31,7 @@ copyright = f"2020 Giovanni Squillero & Alberto Tonda"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['m2r',
+extensions = ['recommonmark',
               'sphinx.ext.autosectionlabel',
               'sphinx.ext.autodoc',
               'sphinx.ext.coverage',

@@ -27,8 +27,10 @@
 from .fitness.base import is_dominated
 from .individual import Individual
 
+# TODO: Check. Urgent. (fall 2020)
 
 class Archive:
+    # TODO: Double Check
     """This class manages the set of individuals not dominated by all other
     individuals currently or previously contained in the
     :mod:`microgp.darwin.Darwin._population`.

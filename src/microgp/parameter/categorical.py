@@ -44,7 +44,8 @@ class Categorical(Parameter):
     """
 
     def is_valid(self, value):
-        if value is None: return True
+        if value is None:
+            return True
         return value in self.alternatives
 
     def mutate(self, strength: float = 0.5):

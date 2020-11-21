@@ -29,8 +29,10 @@ from collections import Callable
 
 from .individual import Individual
 
-
+# TODO: Check. Urgent. (fall 2020)
+# TODO: Change name!?!?! (get rid of Gen)
 class GenOperator:
+    # TODO: Double Check
     """Wrapper of a method that implements the algorithm manipulating or
     building one or more individuals. This class will also manage (in the
     future versions) the statistics applied to the assigned method. The method

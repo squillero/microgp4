@@ -32,6 +32,7 @@ from .utils import logging
 
 
 class Properties:
+    # TODO: Double Check
     """Updates a dictionary of `values` and runs `checks` against them.
 
     Properties are used to check if a frame (ie. the portion of the individual

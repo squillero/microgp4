@@ -32,6 +32,7 @@ from microgp import random_generator
 
 
 class Operators:
+    # TODO: Double Check
     """This class wraps all operators, manages statistics, and GenOperator
     selection. The selection is made on the basis of the arity and the
     success and failure statistics of the operator.
@@ -87,7 +88,7 @@ class Operators:
                 return True
         return False
 
-    def select(self, min_arity: int = 0, max_arity: int = None, k: int = 1) -> List[GenOperator]:
+    def select(self, min_arity: int = 0, max_arity: int = None) -> GenOperator:
         """Select a set of operators with arity in [min_arity, max_arity]
 
         Args:
@@ -96,11 +97,10 @@ class Operators:
             k (int): number of genetic operators to return
 
         Returns:
-            list of valid genetic operators
+            a valid genetic operator
         """
         assert max_arity is None or min_arity <= max_arity, "min_arity must be <= then max_arity"
         assert min_arity >= 0 and (max_arity is None or max_arity >= 0), "Both min_arity and max_arity must be >= 0"
-        assert k > 0, "k must be > 0"
         assert len(self._gen_operators) > 0, "No operators available"
 
         valid_operators = list()
@@ -110,13 +110,9 @@ class Operators:
 
         assert len(valid_operators) > 0, "No operators available for the given set of arities"
 
-        selected_operators = list()
-        for _ in range(k):
-            # TODO: consider statistics in future implementations
-            operator = random_generator.choice(valid_operators)
-            selected_operators.append(operator)
-
-        return selected_operators
+        # TODO: consider statistics in future implementations
+        operator = random_generator.choice(valid_operators)
+        return operator
 
     @property
     def functions(self):

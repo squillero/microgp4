@@ -32,7 +32,7 @@
 import setuptools
 from microgp import __version__ as ugp_version
 
-with open('index.md', 'r', encoding='utf-8') as fh:
+with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
 
 OPTIONAL = ['m2r', 'coloredlogs', 'matplotlib', 'psutil']
@@ -57,8 +57,8 @@ setuptools.setup(
     },
     keywords="optimization evolutionary-algorithm computational-intelligence",
     packages=setuptools.find_packages(),
-    package_data={'': ['requirements.txt', 'index.md']},
-    data_files=[('.', ['requirements.txt', 'index.md'])],
+    package_data={'': ['requirements.txt', 'README.md']},
+    data_files=[('.', ['requirements.txt', 'README.md'])],
     classifiers=[
         "Programming Language :: Python :: 3", "Operating System :: OS Independent",
         "Development Status :: 2 - Pre-Alpha", "Intended Audience :: Science/Research",

@@ -44,6 +44,8 @@ from .utils import logging
 
 
 class Individual(Paranoid):
+    # TODO: Double Check
+    # TODO: Reove all these getters?
     """A solution encoded in MicroGP, the unit of selection in the evolutive
     process. Individuals are directed multigraph (`MultiDiGraph` in NetworkX),
     that is, more than one directed edges may connect the same pair of nodes.
@@ -882,7 +884,9 @@ def get_nodes_in_frame(individual: Individual, frame: Frame, frame_path_limit: i
     return node_list
 
 
-def get_nodes_in_section(individual: Individual, section: Section, frame_path_limit: int = None,
+def get_nodes_in_section(individual: Individual,
+                         section: Section,
+                         frame_path_limit: int = None,
                          head: bool = False) -> List[NodeID]:
     """Gets all nodes of an individual inside a given frame
 
@@ -967,6 +971,7 @@ def get_macro_pool_nodes_count(individual: Individual, frames: Set[Frame] = None
 
 
 def get_nodes_in_frame(individual: 'Individual', frame: Frame, frame_path_limit: int = None) -> List[NodeID]:
+    # TODO: Double Check
     """Gets all nodes of an individual inside a given frame
 
     Args:
@@ -981,8 +986,11 @@ def get_nodes_in_frame(individual: 'Individual', frame: Frame, frame_path_limit:
     return individual.nodes(frame_selector=frame)
 
 
-def get_nodes_in_section(individual: 'Individual', section: Section, frame_path_limit: int = None,
+def get_nodes_in_section(individual: 'Individual',
+                         section: Section,
+                         frame_path_limit: int = None,
                          head: bool = False) -> List[NodeID]:
+    # TODO: Double Check
     """Gets all nodes of an individual inside a given frame
 
     If `frame_path_limit` is set to N with N > 0, only the first N frames are
@@ -1013,6 +1021,7 @@ def get_nodes_in_section(individual: 'Individual', section: Section, frame_path_
 
 
 def get_frames(individual: 'Individual', section: Section = None, section_name: str = None) -> Set[Frame]:
+    # TODO: Double Check
     """Gets all frames of an individuals belonging to a given section
 
     Args:
@@ -1044,6 +1053,7 @@ def get_frames(individual: 'Individual', section: Section = None, section_name: 
 
 
 def get_macro_pool_nodes_count(individual: 'Individual', frames: Set[Frame] = None) -> Dict[Frame, int]:
+    # TODO: Double Check
     """Get a dict containing {Frame: number_of_macros}. Selects only MacroPools
 
     Args:
@@ -1066,6 +1076,7 @@ def get_macro_pool_nodes_count(individual: 'Individual', frames: Set[Frame] = No
 
 
 def check_individual_validity(individual: 'Individual') -> bool:
+    # TODO: Double Check
     """Check an individual against its constraints.
 
     Check the validity of all parameters (e.g., range), then the default
@@ -1111,6 +1122,7 @@ def check_individual_validity(individual: 'Individual') -> bool:
 
 
 def _update_values(individual: 'Individual', node: _SimpleNode) -> None:
+    # TODO: Double Check
     assert False, "Don't use this function!"
     cumulative_values = dict()
     for n in node.children:
@@ -1131,6 +1143,7 @@ def _update_values(individual: 'Individual', node: _SimpleNode) -> None:
 
 
 def clone_individual(individual: 'Individual') -> 'Individual':
+    # TODO: Double Check
     """Creates a new individual that clones the structure of the given one"""
     mapping = {o: n for o, n in zip(individual.nodes, [NodeID() for _ in range(len(individual.nodes))])}
     new_graph = nx.MultiDiGraph()

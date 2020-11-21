@@ -39,23 +39,25 @@ import warnings
 from collections import namedtuple
 
 VersionInfo = namedtuple('VersionInfo', ['epoch', 'major', 'minor', 'tag', 'micro', 'codename', 'dev'])
-version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 23)
+version_info = VersionInfo(4, 1, 0, 'a', 0, 'Kiwi', 24)
 
 # hard code
 __name__ = "microgp"
 __version__ = f"{version_info.epoch}!{version_info.major}.{version_info.minor}{version_info.tag}{version_info.micro}.dev{version_info.dev}"
 __author__ = "Giovanni Squillero and Alberto Tonda"
-__copyright__ = """Copyright (c) 2002-2006 Giovanni Squillero.
-All Rights Reserved. Licensed under GPL2.
+__copyright__ = """Copyright (c) 2020 Giovanni Squillero and Alberto Tonda.
+All Rights Reserved. MicroGP v4 is licensed under Apache-2.0.
 
 Copyright (c) 2006-2016 Giovanni Squillero.
-All Rights Reserved. Licensed under GPL3.
+All Rights Reserved. MicroGP v3 is licensed under GPL3.
 
-Copyright (c) 2020 Giovanni Squillero and Alberto Tonda.
-All Rights Reserved. Licensed under Apache-2.0.
+Copyright (c) 2002-2006 Giovanni Squillero.
+All Rights Reserved. MicroGP v2 is licensed under GPL2.
 """
 
-#almost human-readable
+##############################################################################
+# Almost human-readable infos
+
 name = f"MicroGP{version_info.epoch}"
 if version_info.tag == "a" and version_info.micro == 0:
     version = f"v{version_info.major}.{version_info.minor}_{version_info.dev} pre-alpha \"{version_info.codename}\""
@@ -71,28 +73,19 @@ else:
     version = "unknown"
 author = __author__
 
+##############################################################################
 # Standard warnings
 if sys.version_info < (3,):
     warnings.warn("The code is quite probably not compatible with Python 2", Warning, stacklevel=2)
-elif sys.version_info[:2] != (3, 7):
-    warnings.warn("The code is only known to be compatible with Python 3.7", Warning, stacklevel=2)
-
+elif sys.version_info < (3,7):
+    warnings.warn("The code has never been tested with Python prior to v3.7", Warning, stacklevel=2)
 if sys.version_info < (3, 7):
     warnings.warn(
-        "Dictionary order is not guaranteed to be insertion order before v3.7: Results might be not reproducible",
+        "Dictionary order is not guaranteed to be insertion order: Results are likely to be not reproducible",
         Warning,
         stacklevel=2)
 
-if sys.flags.optimize == 0:
-    warnings.warn("Paranoia checks are active; performances can be significantly impaired (consider using '-O')",
-                  UserWarning,
-                  stacklevel=2)
-
-if version_info.tag == 'a' and not sys.warnoptions and 'PYTHONWARNINGS' not in os.environ:
-    warnings.filterwarnings('default', category=DeprecationWarning, module='microgp')
-    warnings.warn("Showing all Deprecation Warnings (tweak with '-W' or PYTHONWARNINGS)", UserWarning, stacklevel=2)
-    # hint: try using "-W error:microgp:DeprecationWarning"
-
+##############################################################################
 # MicroGP stuff
 from .utils import logging, random_generator
 from .parameter import make_parameter
@@ -109,12 +102,32 @@ from .genetic_operators import flat_mutation, hierarchical_mutation, add_node_mu
 from . import fitness
 
 
+##############################################################################
+# Helpers
 def show_banner() -> None:
     """Shows the "official" MicroGP banner"""
+    sys.stderr.flush()
     logging.bare(f"This is {name} {version}")
     logging.bare("Copyright © 2020 by Giovanni Squillero and Alberto Tonda")
-
+    sys.stderr.flush()
 
 def copyright():
     """Lists contributors and copyright notices."""
-    print(__copyright__)
+    sys.stderr.flush()
+    logging.bare(__copyright__)
+    sys.stderr.flush()
+
+##############################################################################
+# Welcome!
+
+#show_banner()
+
+if sys.flags.optimize == 0:
+    warnings.warn("Paranoia checks are active; performances can be significantly impaired (consider using '-O')",
+                  UserWarning,
+                  stacklevel=2)
+
+if version_info.tag == 'a' and not sys.warnoptions and 'PYTHONWARNINGS' not in os.environ:
+    warnings.filterwarnings('default', category=DeprecationWarning, module='microgp')
+    warnings.warn("Showing all Deprecation Warnings (tweak with '-W' or PYTHONWARNINGS)", UserWarning, stacklevel=2)
+    # hint: try using "-W error:microgp:DeprecationWarning"
