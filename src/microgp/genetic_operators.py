@@ -74,6 +74,7 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
                     plt.show()
                 else:
                     plt.savefig(str(individual.id))
+                    plt.close()
         if score:
             ugp4.logging.bare(f"Fitness score: {individual.fitness}\n")
 
