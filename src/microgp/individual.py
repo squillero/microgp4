@@ -280,7 +280,7 @@ class Individual(Paranoid):
         will be colored with different colors (max 10 colors).
         """
         if not edge_color:
-            edge_color = [col if col else 'red' for _, _, col in self.edges(data='color')]
+            edge_color = [col if col else 'red' for _, col in self.edges(data='color').items()]
         if not node_color:
             node_color = ['blue'] * len(self.nodes)
         # Node: try to dray with "spring"

@@ -70,7 +70,11 @@ def print_individual(individuals: Union[Individual, List[Individual]], msg: str 
                 warnings.warn(WARN_PLT, RuntimeWarning)
             else:
                 individual.draw()
-                plt.show()
+                if matplotlib.is_interactive():
+                    plt.show()
+                else:
+                    plt.savefig(str(individual.id))
+                    plt.close()
         if score:
             ugp4.logging.bare(f"Fitness score: {individual.fitness}\n")
 
