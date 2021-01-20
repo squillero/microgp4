@@ -195,7 +195,7 @@ class Individual(Paranoid):
     @property
     def entry_point(self) -> NodeID:
         entry_points = self.nodes(section_selector='main', heads_selector=True)
-        assert len(entry_points) == 1, f"Multiple entry points: {entry_points}"
+        assert len(entry_points) == 1, f"Multiple entry points: {entry_points}" # TODO please double check
         return entry_points[0]
 
     @property
@@ -1008,7 +1008,7 @@ def get_nodes_in_section(individual: 'Individual',
     """
 
     node_list = list()
-    for node, data in individual.graph_manager.nodes(data='frame_path').items():
+    for node, data in individual.nodes(data='frame_path').items():
         if frame_path_limit:
             if frame_path_limit > 0:
                 data = data[0:frame_path_limit]
@@ -1016,7 +1016,7 @@ def get_nodes_in_section(individual: 'Individual',
                 data = data[len(frame_path_limit) + frame_path_limit:]
         if section in (f.section for f in data):
             node_list.append(node)
-    assert all(individual.graph_manager[n]['frame_path'] for n in node_list), "Illegal frame_path in individual's node"
+    assert all(individual.nodes[n].frame_path for n in node_list), "Illegal frame_path in individual's node"
     return node_list
 
 
@@ -1066,7 +1066,7 @@ def get_macro_pool_nodes_count(individual: 'Individual', frames: Set[Frame] = No
     :meta private:
     """
     frame_count = dict()
-    for node_id, value in individual.graph_manager.nodes(data=True).items():
+    for node_id, value in individual.nodes(data=True).items():
         # Get the last frame (it is always a MacroPool)
         macro_pool = value['frame_path'][len(value['frame_path']) - 1]
         # Save the number of nodes in that frame
