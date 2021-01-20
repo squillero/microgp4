@@ -1020,38 +1020,6 @@ def get_nodes_in_section(individual: 'Individual',
     return node_list
 
 
-def get_frames(individual: 'Individual', section: Section = None, section_name: str = None) -> Set[Frame]:
-    # TODO: Double Check
-    """Gets all frames of an individuals belonging to a given section
-
-    Args:
-        individual (Individual): the individual
-        section (Section): limit to frames belonging to the section
-        section_name (str): limit to frames belonging to the section (name)
-
-    Returns:
-        A set of frames
-    """
-
-    assert not section or not section_name, "section and section_name cannot be both specified"
-
-    if isinstance(section, str):
-        section = individual.sections[section]
-
-    frames = set()
-    for path in individual.nodes(data='frame_path').values():
-        if path:
-            for frame in path:
-                if section_name and frame.section.name == section_name:
-                    frames.add(frame)
-                elif section and frame.section == section:
-                    frames.add(frame)
-                elif not section and not section_name:
-                    frames.add(frame)
-    assert frames, "Internal panik"
-    return frames
-
-
 def get_macro_pool_nodes_count(individual: 'Individual', frames: Set[Frame] = None) -> Dict[Frame, int]:
     # TODO: Double Check
     """Get a dict containing {Frame: number_of_macros}. Selects only MacroPools
