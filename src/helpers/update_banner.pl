@@ -1,4 +1,13 @@
 #!/usr/bin/env perl -w-
+#############################################################################
+#          __________                                                       #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#  / / / / / __/ /_/ / // /   A versatile evolutionary optimizer & fuzzer   #
+# / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
+# \__  /\____/_/   /__  __/                                                 #
+#   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!"  #
+#                                                                           #
+#############################################################################
 
 use utf8;
 undef $/;
@@ -33,6 +42,7 @@ foreach $f (@ARGV) {
     $_ = <FILE>;
     close FILE;
 
+    s|Copyright 2020 |Copyright 2021 |gs;
     s|$old|$new|gs;
 
     open FILE, ">$f" or die "Yeuch. Can't open $f:\n\t$!";
