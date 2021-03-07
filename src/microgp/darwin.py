@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 #          __________                                                       #
-#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0 "Kiwi"     #
-#  / / / / / __/ /_/ / // /   (!) by Giovanni Squillero and Alberto Tonda   #
+#   __  __/ ____/ __ \__ __   This file is part of MicroGP4 v1.0a1 "Kiwi"   #
+#  / / / / / __/ /_/ / // /   A versatile evolutionary optimizer & fuzzer   #
 # / /_/ / /_/ / ____/ // /_   https://github.com/squillero/microgp4         #
 # \__  /\____/_/   /__  __/                                                 #
-#   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!!" #
+#   /_/ --MicroGP4-- /_/      "You don't need a big goal, be μ-ambitious!"  #
 #                                                                           #
 #############################################################################
+
 # Copyright 2020 Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
